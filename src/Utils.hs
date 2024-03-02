@@ -23,8 +23,8 @@ invertRule (Rule rule) = Rule (\tileMap pos -> case rule tileMap pos of
 
 mustBeNextTo :: [Tile] -> Shape -> Rule
 mustBeNextTo tiles shape = Rule (\(TileMap tileMap) pos -> 
-    CanPlace $ any (\tile -> 
-        case M.lookup pos tileMap of
+    CanPlace $ any (\nPos -> 
+        case M.lookup nPos tileMap of
             Just tile -> tile `elem` tiles
             _ -> False
         ) (shape pos))

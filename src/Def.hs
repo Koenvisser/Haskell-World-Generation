@@ -26,22 +26,22 @@ data RuleResult = CanPlace Bool | ChancePlace Float
 
 instance Monoid Rule where
     mempty = Rule (\_ _ -> CanPlace True)
-    mappend (Rule rule1) (Rule rule2) = Rule (\tileMap pos -> rule1 tileMap pos <> rule2 tileMap pos)    
+    mappend = (<>)  
 
 instance Semigroup Rule where
-    (<>) = mappend
+    (Rule rule1) <> (Rule rule2) = Rule (\tileMap pos -> rule1 tileMap pos <> rule2 tileMap pos) 
 
 instance Monoid RuleResult where
     mempty = CanPlace True
-    mappend (CanPlace b1) (CanPlace b2) = CanPlace (b1 && b2)
-    mappend (CanPlace True) (ChancePlace f) = ChancePlace f
-    mappend (CanPlace False) (ChancePlace f) = CanPlace False
-    mappend (ChancePlace f) (CanPlace True) = ChancePlace f
-    mappend (ChancePlace f) (CanPlace False) = CanPlace False
-    mappend (ChancePlace f1) (ChancePlace f2) = ChancePlace (f1 * f2)
+    mappend = (<>)
 
 instance Semigroup RuleResult where
-    (<>) = mappend
+    (CanPlace b1) <> (CanPlace b2) = CanPlace (b1 && b2)
+    (CanPlace True) <> (ChancePlace f) = ChancePlace f
+    (CanPlace False) <> (ChancePlace f) = CanPlace False
+    (ChancePlace f) <> (CanPlace True) = ChancePlace f
+    (ChancePlace f) <> (CanPlace False) = CanPlace False
+    (ChancePlace f1) <> (ChancePlace f2) = ChancePlace (f1 * f2)
 
 type Pos = (Int, Int, Int)
 type Size = ((Int, Int, Int), (Int, Int, Int))
