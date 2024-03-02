@@ -1,8 +1,10 @@
 module Main where
 
-import qualified MyLib (someFunc)
+import Examples
+import Gen (generate)
 
 main :: IO ()
 main = do
-  putStrLn "Hello, Haskell!"
-  MyLib.someFunc
+  let tileMap = generate allTiles
+  putStr $ show tileMap
+
