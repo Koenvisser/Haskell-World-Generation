@@ -1,10 +1,10 @@
 module Main where
 
-import Examples
-import Gen (generate)
+import ExamplesChance (allTiles)
+import Gen (waveFuncCollapse)
 
 main :: IO ()
 main = do
-  let tileMap = generate allTiles
+  tileMap <- waveFuncCollapse allTiles ((0, 0, 0), (3, 3, 3))
   putStr $ show tileMap
 

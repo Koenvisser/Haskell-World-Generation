@@ -1,4 +1,4 @@
-module Examples where
+module ExamplesChance where
 
 import Def
 import Utils
@@ -6,28 +6,28 @@ import Utils
 redTile :: Tile
 redTile = Tile {
     textureLoc = "red.png",
-    rules = (<!>) $ mustBeNextTo [blueTile, redTile, purpleTile, airTile] allNeighbours,
+    rules = (<!>) $ chanceRule 0.95,
     charRep = 'r'
 }
 
 blueTile :: Tile
 blueTile = Tile {
     textureLoc = "blue.png",
-    rules = (<!>) $ mustBeNextTo [purpleTile, blueTile] allNeighbours,
+    rules = (<||>) (chanceRule 0.0) $ chanceRule 0.1,
     charRep = 'b'
 }
 
 purpleTile :: Tile
 purpleTile = Tile {
     textureLoc = "purple.png",
-    rules = (<!>) $ mustBeNextTo [purpleTile, redTile] allNeighbours,
+    rules = (<&&>) (chanceRule 0.1) $ chanceRule 0.1,
     charRep = 'p'
 }
 
 airTile :: Tile
 airTile = Tile {
     textureLoc = "air.png",
-    rules = (<!>) $ mustBeNextTo [] allNeighbours,
+    rules = chanceRule 0.3,
     charRep = 'a'
 }
 
