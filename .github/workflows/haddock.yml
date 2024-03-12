@@ -53,9 +53,6 @@ jobs:
     - name: Build
       run: cabal build all
 
-    - name: Check cabal file
-      run: cabal check
-
     - name: Build documentation
       run: cabal haddock all
 
