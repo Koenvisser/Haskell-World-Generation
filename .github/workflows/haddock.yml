@@ -1,9 +1,8 @@
 name: Haddock
 
-# on:
-#   push:
-#     branches: [ master ]
 on:
+  push:
+    branches: [ master ]
   workflow_dispatch:
 
 permissions:
