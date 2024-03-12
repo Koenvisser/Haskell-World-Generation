@@ -13,56 +13,113 @@ import Debug.Trace (trace)
 -- | The wave function collapse algorithm is a way to generate a tilemap based on a set of rules.
 --   The algorithm works by starting with a completely empty tilemap and then collapsing the wave function
 --   of each tile based on the rules and the surrounding tiles. This is done until the entire tilemap is filled.
+
+-- | Weights is a tuple of a float and a list of floats (Total weight, [Weights])
+type Weights = (Float, [Float])
+type ShannonEntropy = Float
+type Env = M.Map Pos ([Tile], Weights, ShannonEntropy)
+
+
 waveFuncCollapse :: [Tile] -> Size -> IO TileMap
 waveFuncCollapse tiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
-  let superPos = superPosition tiles ((minX, minY, minZ), (maxX, maxY, maxZ))
   let emptyTileMap = TileMap M.empty
-  waveFuncCollapse' allPos emptyTileMap superPos
+  let env = createEnv tiles emptyTileMap allPos
+  waveFuncCollapse' emptyTileMap env
 
-takeAndRemove :: Int -> [a] -> (a, [a])
-takeAndRemove n xs = (xs !! n, take n xs ++ drop (n+1) xs)
+createEnv :: [Tile] -> TileMap -> [Pos] -> Env
+createEnv tiles tileMap = M.fromList . (map posToEnv) 
+  where
+    posToEnv :: Pos -> (Pos, ([Tile], Weights, ShannonEntropy))
+    posToEnv pos = do
+      let weights = map (resultToFloat . (\(Rule f) -> f tileMap pos) . rules) tiles
+      let newTiles = map fst $ filter (\m -> snd m > 0) $ zip tiles weights      
+      let totWeight = sum weights
+      (pos, (newTiles, (totWeight, weights), shannonEntropy (totWeight, weights)))
 
-waveFuncCollapse' :: [Pos] -> TileMap -> M.Map Pos [Tile] -> IO TileMap
-waveFuncCollapse' [] tileMap _ = return tileMap
-waveFuncCollapse' allPos (TileMap tileMap) tilesMap = do
-  randomNum <- randomRIO (0, length allPos - 1)
-  let (pos, newAllPos) = takeAndRemove randomNum allPos
-  waveFuncCollapseStep pos (TileMap tileMap) tilesMap >>= \case
-    Nothing -> return (TileMap tileMap) -- Reset wave function collapse?
-    Just (newTileMap, newTilesMap) -> waveFuncCollapse' newAllPos newTileMap newTilesMap 
+shannonEntropy :: Weights -> ShannonEntropy
+shannonEntropy (totWeight, weights) = log totWeight - (h / totWeight)
+  where
+    h = foldr (\weight prev -> prev + (weight *  log weight)) 0 weights
 
-superPosition :: [Tile] -> Size -> M.Map Pos [Tile]
-superPosition tiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = 
-        M.fromList [(pos, tiles) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ], let pos = (x, y, z)]
 
-waveFuncCollapseStep :: Pos -> TileMap -> M.Map Pos [Tile] -> IO (Maybe (TileMap, M.Map Pos [Tile]))
-waveFuncCollapseStep pos (TileMap tileMap) tilesMap = do
-  tile <- randomTile pos (tilesMap M.! pos) (TileMap tileMap)
+waveFuncCollapse' :: TileMap -> Env -> IO TileMap
+waveFuncCollapse' tileMap env
+  | M.null env = return tileMap
+  | otherwise = do
+    randomPos <- shannonPos env
+    waveFuncCollapseStep randomPos tileMap env >>= \case
+      Nothing -> resetWaveFuncCollapse
+      Just (newTileMap, newEnv) -> waveFuncCollapse' newTileMap newEnv
+
+resetWaveFuncCollapse :: IO TileMap
+resetWaveFuncCollapse = undefined
+
+shannonPos :: Env -> IO Pos
+shannonPos env = getRandomElement (snd (M.foldrWithKey minList (0, []) env))
+  where
+    minList pos (_, _, entropy) list  = case list of
+      (0, []) -> (entropy, [pos])
+      (minEntropy, ys)
+        | entropy < minEntropy -> (entropy, [pos])
+        | entropy == minEntropy -> (minEntropy, pos : ys)
+        | otherwise -> list
+
+getRandomElement :: [a] -> IO a
+getRandomElement xs = do
+    i <- randomRIO (0, length xs - 1)
+    return (xs !! i)
+
+waveFuncCollapseStep :: Pos -> TileMap -> Env -> IO (Maybe (TileMap, Env))
+waveFuncCollapseStep pos (TileMap tileMap) env = do
+  let (tiles, weight, _) = env M.! pos
+  tile <- randomTile tiles weight
   case tile of
     Nothing -> return Nothing
     Just tile -> return $ do
-      (newTilesMap, newTileMap) <- M.foldrWithKey (\p tiles maps -> case maps of
-            Nothing -> Nothing
-            Just (newTilesMap, newTileMap) -> 
-              if p == pos then Just (newTilesMap, M.insert p tile newTileMap) else do
-                    let newTiles = filter ((\(Rule f) -> resultToBool (f (TileMap tileMap) pos)) . rules) tiles
-                    case newTiles of
-                      [] -> Nothing
-                      [tile] -> Just (newTilesMap, M.insert p tile newTileMap)
-                      _ -> Just (M.insert p newTiles newTilesMap, newTileMap)
-                ) (Just (M.empty, tileMap)) tilesMap
+      (newTilesMap, newTileMap) <- do
+        let newTilesMap = 
+      -- Apply tile to tilemap
+      -- Remove position from env
+      -- roep createEnv aan
+
+
+
+        -- M.foldrWithKey (\p tiles maps -> case maps of
+        -- Nothing -> Nothing
+        -- Just (newTilesMap, newTileMap) -> 
+        --   if p == pos then Just (newTilesMap, M.insert p tile newTileMap) else do
+        --         let newTiles = filter ((\(Rule f) -> resultToBool (f (TileMap tileMap) pos)) . rules) tiles
+        --         case newTiles of
+        --           [] -> Nothing
+        --           [tile] -> Just (newTilesMap, M.insert p tile newTileMap)
+        --           _ -> Just (M.insert p newTiles newTilesMap, newTileMap)
+        --           -- calc weights
+        --           -- calc shannon entropy
+        --     ) (Just (M.empty, tileMap)) tilesMap
       return (TileMap newTileMap, newTilesMap)
 
-randomTile :: Pos -> [Tile] -> TileMap -> IO (Maybe Tile)
-randomTile pos tiles tileMap = if totalWeight == 0.0 then return Nothing else do
+updateEnv :: [Tile] -> TileMap -> [Pos] -> Maybe (TileMap, Env)
+updateEnv tiles tileMap poss = do 
+  envList <- (map posToEnv)
+  M.fromList envList
+  where
+    posToEnv :: Pos -> (Pos, ([Tile], Weights, ShannonEntropy))
+    posToEnv pos = do
+      let weights = map (resultToFloat . (\(Rule f) -> f tileMap pos) . rules) tiles
+      let newTiles = map fst $ filter (\m -> snd m > 0) $ zip tiles weights
+      case newTiles of
+        [] -> Nothing
+        [tile] -> Just 
+        _ -> do
+          totWeight = sum weights
+          (pos, (newTiles, (totWeight, weights), shannonEntropy (totWeight, weights)))
+
+
+randomTile :: [Tile] -> Weights -> IO (Maybe Tile)
+randomTile tiles (totalWeight, tilesWeight) = if totalWeight == 0.0 then return Nothing else do
         randomNum <- randomRIO (0.0, totalWeight)
         return $ weightToTile tiles tilesWeight randomNum
-        where
-        rulesResults = map ((\(Rule f) -> f tileMap pos) . rules) tiles
-        tilesWeight = map resultToFloat rulesResults
-        totalWeight :: Float
-        totalWeight = sum tilesWeight
 
 weightToTile :: [Tile] -> [Float] -> Float -> Maybe Tile
 weightToTile [] [] _ = Nothing
