@@ -4,7 +4,6 @@ import Def
 
 import qualified Data.Map as M
 import System.Random
-import System.IO.Unsafe
 import Debug.Trace (trace)
 
 -- TODO
