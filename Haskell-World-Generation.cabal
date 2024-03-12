@@ -58,6 +58,7 @@ library
     exposed-modules:  Def 
                     , Utils
                     , Gen
+                    , Output
                       
     -- Modules included in this library but not exported.
     other-modules:  
