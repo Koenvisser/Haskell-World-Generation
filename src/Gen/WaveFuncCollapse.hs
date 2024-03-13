@@ -1,7 +1,7 @@
-module Gen.WaveFuncCollapse where
 -- | The wave function collapse algorithm is a way to generate a tilemap based on a set of rules.
 --   The algorithm works by starting with a completely empty tilemap and then collapsing the wave function
 --   of each tile based on the rules and the surrounding tiles. This is done until the entire tilemap is filled.
+module Gen.WaveFuncCollapse where
 
 import Def
 

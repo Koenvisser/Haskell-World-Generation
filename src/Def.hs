@@ -7,8 +7,12 @@ import qualified Data.Map as M
 --   The rules are used to determine if a tile can be placed at a certain position.
 --   The character representation is only used for debugging purposes.
 data Tile = Tile { 
-    textureLoc :: FilePath,
-    rules :: Rule,
+    -- | The `FilePath` to a texture location, which is used in the `Output`.
+    textureLoc :: FilePath, 
+    -- | The `Rule` that determines if a tile can be placed. 
+    -- Rules can be composed using the functions from the `CompareRule` type class.
+    rules :: Rule, 
+    -- | The character representation is only used for debugging purposes. 
     charRep :: Char
 }
 
@@ -27,12 +31,22 @@ newtype Rule = Rule (TileMap -> Pos -> RuleResult)
 -- | The result of a rule is defined as a `RuleResult`. It is represented either as a 
 --   `CanPlace Bool` which means the rule guaranteed passes or fails. Or as 
 --   `ChancePlace Float` which gives a chance between 0 and 1 that the rule passes (1 being 100%).
-data RuleResult = CanPlace Bool | ChancePlace Float
+data RuleResult 
+    -- | `CanPlace` simply specifies if a tile can be placed at a position or not. When it is true,
+    --   it has weight 1, when it is false it has weight 0
+    = CanPlace Bool 
+    -- | `ChancePlace` specifies the chance that a tile can be placed at a position. If it is 0, it will
+    --   never be placed. Otherwise, it represents the weight that is used in the generator.
+    | ChancePlace Float
 
+-- | Converts a `RuleResult` to a boolean, which is true if the result is true or 
+--   the chance that it is placed is greater than 0. 
 resultToBool :: RuleResult -> Bool
 resultToBool (CanPlace b) = b
 resultToBool (ChancePlace f) = f > 0
 
+-- | Convrts a `RuleResult` to a float, which returns the chance if it is a chance or
+--   when it is a boolean it returns 1 for true and 0 for false. 
 resultToFloat :: RuleResult -> Float
 resultToFloat (CanPlace b) = if b then 1.0 else 0.0
 resultToFloat (ChancePlace f) = f
