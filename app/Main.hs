@@ -1,7 +1,7 @@
 module Main where
 
 import ExamplesChance (allTiles)
-import Gen (waveFuncCollapse)
+import Gen.WaveFuncCollapse (waveFuncCollapse)
 
 main :: IO ()
 main = do
