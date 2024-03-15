@@ -34,5 +34,4 @@ tileToObj (x, y, z) _ fCount = (unlines $
           (fCount,     fCount + 2, fCount + 6, fCount + 4), 
           (fCount + 1, fCount + 3, fCount + 7, fCount + 5), 
           (fCount,     fCount + 1, fCount + 5, fCount + 4), 
-          (fCount + 2, fCount + 3, fCount + 7, fCount + 6)
-          ]
+          (fCount + 2, fCount + 3, fCount + 7, fCount + 6)]

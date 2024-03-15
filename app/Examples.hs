@@ -5,28 +5,28 @@ import Utils
 
 redTile :: Tile
 redTile = Tile {
-    textureLoc = "red.png",
+    material = undefined,
     rules = (<!>) $ mustBeNextTo [blueTile, redTile, purpleTile, airTile] allNeighbours,
     charRep = 'r'
 }
 
 blueTile :: Tile
 blueTile = Tile {
-    textureLoc = "blue.png",
+    material = undefined,
     rules = (<!>) $ mustBeNextTo [purpleTile, blueTile] allNeighbours,
     charRep = 'b'
 }
 
 purpleTile :: Tile
 purpleTile = Tile {
-    textureLoc = "purple.png",
+    material = undefined,
     rules = (<!>) $ mustBeNextTo [purpleTile, redTile] allNeighbours,
     charRep = 'p'
 }
 
 airTile :: Tile
 airTile = Tile {
-    textureLoc = "air.png",
+    material = undefined,
     rules = (<!>) $ mustBeNextTo [] allNeighbours,
     charRep = 'a'
 }
