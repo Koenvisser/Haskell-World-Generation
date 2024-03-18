@@ -12,40 +12,6 @@ test_WaveFuncCollapse = [
     testProperty "All positions are placed" (ioProperty allPosArePlaced)
     ]
 
-instance Arbitrary Tile where
-    arbitrary = do
-        textureLoc <- arbitrary
-        rules <- arbitrary >>= \result -> return $ Rule (\_ _ -> result) 
-        charRep <- arbitrary
-        return $ Tile textureLoc rules charRep
-
-instance Arbitrary Rule where
-    arbitrary = arbitrary >>= \result -> return $ Rule (\_ _ -> result)
-
-instance Arbitrary TileMap where
-    arbitrary = do
-        tileMap <- arbitrary
-        return $ TileMap tileMap
-
-instance Arbitrary RuleResult where
-    arbitrary = do
-        b <- arbitrary :: Gen Bool
-        f <- arbitrary `suchThat` (\f -> f >= 0 && f <= 1) :: Gen Float
-        elements [CanPlace b, ChancePlace f]
-
-instance CoArbitrary RuleResult where
-    coarbitrary (CanPlace b) = coarbitrary b
-    coarbitrary (ChancePlace f) = coarbitrary f
-
-instance CoArbitrary TileMap where
-    coarbitrary (TileMap tileMap) = coarbitrary tileMap
-
-instance CoArbitrary Tile where
-    coarbitrary (Tile textureLoc rules charRep) = coarbitrary (textureLoc, rules, charRep)
-
-instance CoArbitrary Rule where
-    coarbitrary (Rule rule) = coarbitrary rule
-
 -- | Generate a size for the world, given a minimum and maximum size for the world
 genSize :: Size -> Gen Size
 genSize ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
@@ -61,11 +27,28 @@ genSize ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
 --   and a size for the world, where the rule for each tile is that it can be placed at any position.
 allPosArePlaced :: IO Property
 allPosArePlaced = do
-    tiles <- generate (listOf arbitrary) :: IO [Tile]
+    -- Generate a list of tiles that is not empty
+    tiles <- generate (listOf1 genTile) :: IO [Tile]
     size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
+    -- Execute the wave function collapse algorithm
     (TileMap tileMap) <- waveFuncCollapse tiles size
+    -- Generate all positions in the world
     let ((minX, minY, minZ), (maxX, maxY, maxZ)) = size
     let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
+    -- Test if all positions are placed
     return $ forAll (elements allPos) $ \pos -> 
         M.member pos tileMap
-
+    where
+        -- | Generate a tile, which can be placed at any position
+        genTile :: Gen Tile
+        genTile = do
+            textureLoc <- arbitrary
+            rules <- genRule
+            charRep <- arbitrary
+            return $ Tile textureLoc rules charRep
+        -- | Generate a rule, which can be placed at any position
+        genRule :: Gen Rule
+        genRule = genRuleResult >>= \result -> return $ Rule (\_ _ -> result)
+        -- | Generate a rule result, which is always true or has a chance greater than 0 of being placed
+        genRuleResult :: Gen RuleResult
+        genRuleResult = oneof [return $ CanPlace True, ChancePlace <$> (arbitrary `suchThat` (\f -> f > 0 && f <= 1))]
