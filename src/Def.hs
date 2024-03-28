@@ -6,7 +6,7 @@ import qualified Data.Map as M
 -- | A tile is a 3D object with a texture, a set of rules and a character representation.
 data Tile = Tile { 
     -- | The `FilePath` to a texture location, which is used in the `Output`.
-    material :: Material, 
+    materials :: M.Map Side Material, 
     -- | The `Rule` that determines if a tile can be placed. 
     -- Rules can be composed using the functions from the `CompareRule` type class.
     rules :: Rule, 
@@ -23,6 +23,8 @@ data Material = Material {
     illuminationModel :: Int,
     texture :: Maybe FilePath
 } deriving (Show, Eq)
+
+data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded)
 
 instance Default Material where
     def = Material {
@@ -42,7 +44,7 @@ instance Show Tile where
 -- | The Eq instance of a tile is based on its texture location, since no 
 --   two tiles should have the same texture
 instance Eq Tile where
-    (==) tile1 tile2 = material tile1 == material tile2
+    (==) tile1 tile2 = materials tile1 == materials tile2
 
 -- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
 newtype Rule = Rule (TileMap -> Pos -> RuleResult)

@@ -5,28 +5,28 @@ import Utils
 
 redTile :: Tile
 redTile = Tile {
-    material = undefined,
+    materials = undefined,
     rules = (<!>) $ chanceRule 0.95,
     charRep = 'r'
 }
 
 blueTile :: Tile
 blueTile = Tile {
-    material = undefined,
+    materials = undefined,
     rules = (<||>) (chanceRule 0.0) $ chanceRule 0.1,
     charRep = 'b'
 }
 
 purpleTile :: Tile
 purpleTile = Tile {
-    material = undefined,
+    materials = undefined,
     rules = (<&&>) (chanceRule 0.1) $ chanceRule 0.1,
     charRep = 'p'
 }
 
 airTile :: Tile
 airTile = Tile {
-    material = undefined,
+    materials = undefined,
     rules = chanceRule 0.3,
     charRep = 'a'
 }
