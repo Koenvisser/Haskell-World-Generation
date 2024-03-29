@@ -21,7 +21,9 @@ data Material = Material {
     transparency :: Float,
     specularExponent :: Float,
     illuminationModel :: Int,
-    texture :: Maybe FilePath
+    texture :: Maybe FilePath,
+    extraFields :: [String],
+    extraFiles :: [FilePath]
 } deriving (Show, Eq)
 
 data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded)
@@ -34,7 +36,9 @@ instance Default Material where
         transparency = 1.0,
         specularExponent = 10.0,
         illuminationModel = 2,
-        texture = Nothing
+        texture = Nothing,
+        extraFields = [],
+        extraFiles = []
     }
 
 -- | The show instance of a tile is its character representation

@@ -72,6 +72,8 @@ library
                     , containers
                     , random
                     , data-default
+                    , directory
+                    , filepath
 
     -- Directories containing source files.
     hs-source-dirs:   src
