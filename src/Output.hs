@@ -1,3 +1,5 @@
+-- | This module contains functions to convert a world to an obj file, which can be used to render the world in a 3D renderer.
+--   The obj file can be saved, without materials, to a file using the `saveWorldToObj` function, or with materials to a folder using the `saveWorldToObjAndMtl` function.
 module Output (saveWorldToObj, saveWorldToObjAndMtl) where
 
 import Def
@@ -9,8 +11,8 @@ import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName, takeDirectory)
 
 -- TODO: Scale the texture coordinates to the size of the tile
---       Restrict functions exported by this module
 --       Add option to not save the textures in a separate folder, but refer to original location
+--       Improve the code quality
 
 exampleWorld :: World
 exampleWorld = World (((0,0,0), (1,1,1)), TileMap $ M.fromList [
@@ -24,7 +26,10 @@ exampleWorld = World (((0,0,0), (1,1,1)), TileMap $ M.fromList [
   ((1,1,1), Tile (M.fromList [(PosX, def), (NegX, def), (PosY, def), (NegY, def), (PosZ, def), (NegZ, def)]) (Rule (\_ _ -> CanPlace True)) 'h')])
 
 -- | Converts a world to an obj file, which can be used to render the world in a 3D renderer.
-saveWorldToObj :: World -> FilePath -> IO ()
+--   The obj file is saved to the given path
+saveWorldToObj :: World
+               -> FilePath -- ^ The 'FilePath' to save the obj file to
+               -> IO ()
 saveWorldToObj world path = do 
   let directory = takeDirectory path
   putStrLn $ "Creating directory " ++ directory ++ " if it does not exist"
@@ -32,7 +37,11 @@ saveWorldToObj world path = do
   putStrLn $ "Writing obj file to " ++ path
   writeFile path $ worldToObj world
 
-saveWorldToObjAndMtl :: World -> FilePath -> IO ()
+-- | Converts a world to an obj file and a mtl file, which can be used to render the world in a 3D renderer.
+--   The obj file and mtl file are saved to the given path to a folder, and the textures are copied to a textures folder in the given path
+saveWorldToObjAndMtl :: World 
+                     -> FilePath -- ^ The 'FilePath' that refers to the folder where the obj and mtl files are saved, as well as the textures folder
+                     -> IO ()
 saveWorldToObjAndMtl world path = do
   let (objString, mtlString, files) = worldToObjAndMtl world
   putStrLn $ "Checking if all files exist..."
