@@ -5,8 +5,13 @@ import Def
 import qualified Data.Map as M
 import Data.Default (def)
 import Data.Maybe (maybeToList)
-import System.Directory (createDirectoryIfMissing, copyFile)
+import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName)
+
+-- TODO: Scale the texture coordinates to the size of the tile
+--       Add option to only save the obj file
+--       Restrict functions exported by this module
+--       Add option to not save the textures in a separate folder, but refer to original location
 
 exampleWorld :: World
 exampleWorld = World (((0,0,0), (1,1,1)), TileMap $ M.fromList [
@@ -26,12 +31,19 @@ saveWorldToObj world path = let (objString, _, _) = undefined in writeFile path 
 saveWorldToObjAndMtl :: World -> FilePath -> IO ()
 saveWorldToObjAndMtl world path = do
   let (objString, mtlString, files) = worldToObjAndMtl world
+  putStrLn $ "Checking if all files exist..."
+  mapM_ (\file -> do
+    exists <- doesFileExist file
+    if exists then return () else error $ "File " ++ file ++ " does not exist") files
+  putStrLn $ "Creating directory " ++ path ++ " if it does not exist"
   createDirectoryIfMissing True path
+  putStrLn $ "Writing obj file to " ++ path ++ "/obj.obj"
   writeFile (path ++ "/obj.obj") $ "mtllib mat.mtl\n\n" ++ objString
+  putStrLn $ "Writing mtl file to " ++ path ++ "/mat.mtl"
   writeFile (path ++ "/mat.mtl") mtlString
+  putStrLn $ "Copying textures to " ++ path ++ "/textures"
   createDirectoryIfMissing True $ path ++ "/textures"
   mapM_ (\file -> copyFile file $ path ++ "/textures/" ++ (takeFileName file)) files
-  
 
 -- | Converts a world to a tuple of strings, where the first string is the obj file, the second string is the mtl file and 
 --   the third is a list of file paths to the textures used in the mtl file
@@ -47,10 +59,15 @@ worldToObjAndMtl (World (_, TileMap tileMap)) =
 tileToObjAndMtl :: Pos -> Tile -> Int -> (String, Int, String, [FilePath])
 tileToObjAndMtl pos tile fCount | M.null $ materials tile = ("", fCount, "", []) 
                                 | otherwise = let 
+  -- Get the vertices of the tile, and convert each of them to a string
   verticeLines = map (\(x', y', z') -> "v " ++ show x' ++ " " ++ show y' ++ " " ++ show z') (vertices pos)
+  -- Filter out the faces that don't have a material
   facesWithMaterial = filter (\(_, _, _, _, side) -> M.member side $ materials tile) $ faces fCount
+  -- Name converts a side to a string, which is used to name the material
   name side = show pos ++ show side
+  -- Convert the faces to a string, where each face is a string of 4 vertices. Also add the material to the face
   faceLines = map (\(v1, v2, v3, v4, side) -> "usemtl " ++ (name side) ++ "\nf " ++ show v1 ++ " " ++ show v2 ++ " " ++ show v3 ++ " " ++ show v4) facesWithMaterial
+  -- Generate the mtl string and the list of files used in the mtl string
   (mtlString, files) = foldl (\(accMtlString, accFiles) (_, _, _, _, side) -> 
     let (newMtlString, newFiles) = materialToMtl (materials tile M.! side) (name side)
     in (accMtlString ++ "\n" ++ newMtlString, accFiles ++ newFiles)
