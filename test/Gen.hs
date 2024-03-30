@@ -23,6 +23,12 @@ genSize ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
     maxZ' <- choose (minZ', maxZ)
     return ((minX', minY', minZ'), (maxX', maxY', maxZ'))
 
+instance Arbitrary Side where
+    arbitrary = arbitraryBoundedEnum
+
+instance Arbitrary Material where
+    arbitrary = Material <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+
 -- | Test if all positions are placed in the tilemap if the wave function collapse algorithm is run with a list of tiles 
 --   and a size for the world, where the rule for each tile is that it can be placed at any position.
 allPosArePlaced :: IO Property
@@ -42,10 +48,10 @@ allPosArePlaced = do
         -- | Generate a tile, which can be placed at any position
         genTile :: Gen Tile
         genTile = do
-            textureLoc <- arbitrary
+            materials <- arbitrary
             rules <- genRule
             charRep <- arbitrary
-            return $ Tile textureLoc rules charRep
+            return $ Tile materials rules charRep
         -- | Generate a rule, which can be placed at any position
         genRule :: Gen Rule
         genRule = genRuleResult >>= \result -> return $ Rule (\_ _ -> result)

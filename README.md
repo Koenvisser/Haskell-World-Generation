@@ -1,5 +1,5 @@
 [![tests workflow](https://github.com/KoenVisser/Haskell-World-Generation/actions/workflows/tests.yml/badge.svg)]()
-[![tests workflow](https://github.com/KoenVisser/Haskell-World-Generation/actions/workflows/haddock.yml/badge.svg)](https://koenvisser.github.io/Haskell-World-Generation/)
+[![tests workflow](https://img.shields.io/static/v1?label=Documentation&message=Available&color=success)](https://koenvisser.github.io/Haskell-World-Generation/)
 
 [Haddock documentation can be viewed online here](https://koenvisser.github.io/Haskell-World-Generation/)
 

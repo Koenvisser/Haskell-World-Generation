@@ -1,20 +1,45 @@
 module Def where
 
+import Data.Default
 import qualified Data.Map as M
 
 -- | A tile is a 3D object with a texture, a set of rules and a character representation.
---   The texture is a file path to the texture of the tile.
---   The rules are used to determine if a tile can be placed at a certain position.
---   The character representation is only used for debugging purposes.
 data Tile = Tile { 
     -- | The `FilePath` to a texture location, which is used in the `Output`.
-    textureLoc :: FilePath, 
+    materials :: M.Map Side Material, 
     -- | The `Rule` that determines if a tile can be placed. 
     -- Rules can be composed using the functions from the `CompareRule` type class.
     rules :: Rule, 
     -- | The character representation is only used for debugging purposes. 
     charRep :: Char
 }
+
+data Material = Material {
+    ambientColor :: (Float, Float, Float),
+    diffuseColor :: (Float, Float, Float),
+    specularColor :: (Float, Float, Float),
+    transparency :: Float,
+    specularExponent :: Float,
+    illuminationModel :: Int,
+    texture :: Maybe FilePath,
+    extraFields :: [String],
+    extraFiles :: [FilePath]
+} deriving (Show, Eq)
+
+data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded)
+
+instance Default Material where
+    def = Material {
+        ambientColor = (1.0, 1.0, 1.0),
+        diffuseColor = (1.0, 1.0, 1.0),
+        specularColor = (0.0, 0.0, 0.0),
+        transparency = 1.0,
+        specularExponent = 10.0,
+        illuminationModel = 2,
+        texture = Nothing,
+        extraFields = [],
+        extraFiles = []
+    }
 
 -- | The show instance of a tile is its character representation
 instance Show Tile where
@@ -23,7 +48,7 @@ instance Show Tile where
 -- | The Eq instance of a tile is based on its texture location, since no 
 --   two tiles should have the same texture
 instance Eq Tile where
-    (==) tile1 tile2 = textureLoc tile1 == textureLoc tile2
+    (==) tile1 tile2 = materials tile1 == materials tile2
 
 -- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
 newtype Rule = Rule (TileMap -> Pos -> RuleResult)
