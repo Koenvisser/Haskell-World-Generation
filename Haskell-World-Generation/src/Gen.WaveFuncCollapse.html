@@ -401,7 +401,7 @@ forall a. HasCallStack =&gt; [a] -&gt; Int -&gt; a
 </span><a href="#local-6989586621679055535"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679055536"><span class="annot"><span class="annottext">Env
 </span><a href="#local-6989586621679055536"><span class="hs-identifier hs-var">env</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-103"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679055541"><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679055541"><span class="hs-identifier hs-var">tiles</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679055542"><span class="annot"><span class="annottext">Weights
+</span><a href="#local-6989586621679055541"><span class="hs-identifier hs-var">newTiles</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679055542"><span class="annot"><span class="annottext">Weights
 </span><a href="#local-6989586621679055542"><span class="hs-identifier hs-var">weight</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Env
 </span><a href="#local-6989586621679055536"><span class="hs-identifier hs-var">env</span></a></span><span> </span><span class="annot"><span class="annottext">Env -&gt; Pos -&gt; ([Tile], Weights, Float)
@@ -411,7 +411,7 @@ forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span id="line-104"></span><span>  </span><span id="local-6989586621679055544"><span class="annot"><span class="annottext">Maybe Tile
 </span><a href="#local-6989586621679055544"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Weights -&gt; IO (Maybe Tile)
 </span><a href="Gen.WaveFuncCollapse.html#randomTile"><span class="hs-identifier hs-var">randomTile</span></a></span><span> </span><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679055541"><span class="hs-identifier hs-var">tiles</span></a></span><span> </span><span class="annot"><span class="annottext">Weights
+</span><a href="#local-6989586621679055541"><span class="hs-identifier hs-var">newTiles</span></a></span><span> </span><span class="annot"><span class="annottext">Weights
 </span><a href="#local-6989586621679055542"><span class="hs-identifier hs-var">weight</span></a></span><span>
 </span><span id="line-105"></span><span>  </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Maybe Tile
 </span><a href="#local-6989586621679055544"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="hs-keyword">of</span><span>
@@ -445,7 +445,7 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; TileMap -&gt; [Pos] -&gt; Maybe (TileMap, Env)
 </span><a href="Gen.WaveFuncCollapse.html#createEnv"><span class="hs-identifier hs-var">createEnv</span></a></span><span> </span><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679055541"><span class="hs-identifier hs-var">tiles</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Map Pos Tile -&gt; TileMap
+</span><a href="#local-6989586621679055533"><span class="hs-identifier hs-var">tiles</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Map Pos Tile -&gt; TileMap
 </span><a href="Def.html#TileMap"><span class="hs-identifier hs-var">TileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
 </span><a href="#local-6989586621679055551"><span class="hs-identifier hs-var">newTileMap</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Env -&gt; [Pos]
 forall k a. Map k a -&gt; [k]
