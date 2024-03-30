@@ -100,8 +100,8 @@ getRandomElement xs = do
 --  and the environment will be updated with the new possible tiles.
 waveFuncCollapseStep :: [Tile] -> Pos -> TileMap -> Env -> IO (Maybe (TileMap, Env))
 waveFuncCollapseStep tiles pos (TileMap tileMap) env = do
-  let (tiles, weight, _) = env M.! pos
-  tile <- randomTile tiles weight
+  let (newTiles, weight, _) = env M.! pos
+  tile <- randomTile newTiles weight
   case tile of
     Nothing -> return Nothing
     Just tile -> do 

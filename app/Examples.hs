@@ -6,28 +6,28 @@ import Utils
 redTile :: Tile
 redTile = Tile {
     materials = undefined,
-    rules = (<!>) $ mustBeNextTo [blueTile, redTile, purpleTile, airTile] allNeighbours,
+    rules = (<!>) $ nextToAny [blueTile, redTile, purpleTile, airTile] allNeighbours,
     charRep = 'r'
 }
 
 blueTile :: Tile
 blueTile = Tile {
     materials = undefined,
-    rules = (<!>) $ mustBeNextTo [purpleTile, blueTile] allNeighbours,
+    rules = (<!>) $ nextToAny [purpleTile, blueTile] allNeighbours,
     charRep = 'b'
 }
 
 purpleTile :: Tile
 purpleTile = Tile {
     materials = undefined,
-    rules = (<!>) $ mustBeNextTo [purpleTile, redTile] allNeighbours,
+    rules = (<!>) $ nextToAny [purpleTile, redTile] allNeighbours,
     charRep = 'p'
 }
 
 airTile :: Tile
 airTile = Tile {
     materials = undefined,
-    rules = (<!>) $ mustBeNextTo [] allNeighbours,
+    rules = (<!>) $ nextToAny [] allNeighbours,
     charRep = 'a'
 }
 

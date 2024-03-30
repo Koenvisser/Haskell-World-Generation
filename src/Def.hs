@@ -48,7 +48,7 @@ instance Show Tile where
 -- | The Eq instance of a tile is based on its texture location, since no 
 --   two tiles should have the same texture
 instance Eq Tile where
-    (==) tile1 tile2 = materials tile1 == materials tile2
+    (==) tile1 tile2 = charRep tile1 == charRep tile2
 
 -- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
 newtype Rule = Rule (TileMap -> Pos -> RuleResult)
