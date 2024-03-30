@@ -24,7 +24,7 @@ data Material = Material {
     texture :: Maybe FilePath,
     extraFields :: [String],
     extraFiles :: [FilePath]
-} deriving (Show, Eq)
+} deriving (Show, Eq, Ord)
 
 data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded)
 

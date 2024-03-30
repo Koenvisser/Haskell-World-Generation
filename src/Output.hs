@@ -6,6 +6,7 @@ import Def
 
 import qualified Data.Map as M
 import Data.Maybe (maybeToList)
+import Control.Monad (when)
 import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName, takeDirectory)
 
@@ -34,7 +35,7 @@ saveWorldToObjAndMtl :: World
                      -> IO ()
 saveWorldToObjAndMtl world path scale copy = do
   let (objString, mtlString, files) = worldToObjAndMtl world scale
-  putStrLn $ "Checking if all files exist..."
+  putStrLn "Checking if all files exist..."
   mapM_ (\file -> do
     exists <- doesFileExist file
     if exists then return () else error $ "File " ++ file ++ " does not exist") files
@@ -44,12 +45,11 @@ saveWorldToObjAndMtl world path scale copy = do
   writeFile (path ++ "/obj.obj") $ "mtllib mat.mtl\n\nvt 0 0\nvt 1 0\nvt 1 1\nvt 0 1\n" ++ objString
   putStrLn $ "Writing mtl file to " ++ path ++ "/mat.mtl"
   writeFile (path ++ "/mat.mtl") mtlString
-  if copy then do
+  when copy $ do
     putStrLn $ "Copying textures to " ++ path ++ "/textures"
     createDirectoryIfMissing True $ path ++ "/textures"
-    mapM_ (\file -> copyFile file $ path ++ "/textures/" ++ (takeFileName file)) files
-  else return ()
-
+    mapM_ (\file -> copyFile file $ path ++ "/textures/" ++ takeFileName file) files
+  
 -- | Converts a world to an obj file as a string, without any materials
 worldToObj :: World -> Float -> String
 worldToObj (World (_, TileMap tileMap)) scale = fst $ foldl (\(accObjString, fCount) (pos, tile) -> 
@@ -60,10 +60,10 @@ worldToObj (World (_, TileMap tileMap)) scale = fst $ foldl (\(accObjString, fCo
 --   the third is a list of file paths to the textures used in the mtl file
 worldToObjAndMtl :: World -> Float -> (String, String, [FilePath])
 worldToObjAndMtl (World (_, TileMap tileMap)) scale = 
-  let (objString, _, mtlString, filePaths) = foldl (\(accObjString, fCount, accMtlString, accFiles) (pos, tile) -> 
-                                let (newObjString, newfCount, newMtlString, files) = tileToObjAndMtl pos tile scale fCount 
-                                in (accObjString ++ "\n" ++ newObjString, newfCount, accMtlString ++ "\n" ++ newMtlString, accFiles ++ files)
-                             ) ("", 1, "", []) $ M.toList tileMap
+  let (objString, _, mtlString, filePaths, _ ) = foldl (\(accObjString, fCount, accMtlString, accFiles, cache) (pos, tile) -> 
+                                let (newObjString, newfCount, newMtlString, files, newCache) = tileToObjAndMtl pos tile scale fCount cache
+                                in (accObjString ++ "\n" ++ newObjString, newfCount, accMtlString ++ "\n" ++ newMtlString, accFiles ++ files, newCache)
+                             ) ("", 1, "", [], M.empty) $ M.toList tileMap
   in (objString, mtlString, filePaths)
 
 -- | Converts a tile to an obj file as a string, with a given face count and returns the new face count
@@ -78,9 +78,9 @@ tileToObj pos _ scale fCount = let
 
 -- | Converts a tile to a tuple, where the first element is the obj file as a string, the second element is the new face count,
 --   the third element is the mtl file as a string and the fourth element is a list of file paths to the textures used in the mtl file
-tileToObjAndMtl :: Pos -> Tile -> Float -> Int -> (String, Int, String, [FilePath])
-tileToObjAndMtl pos tile scale fCount | M.null $ materials tile = ("", fCount, "", []) 
-                                      | otherwise = let 
+tileToObjAndMtl :: Pos -> Tile -> Float -> Int -> M.Map Material String -> (String, Int, String, [FilePath], M.Map Material String)
+tileToObjAndMtl pos tile scale fCount cache | M.null $ materials tile = ("", fCount, "", [], cache) 
+                                            | otherwise = let 
   -- Get the vertices of the tile, and convert each of them to a string
   verticeLines = scaleAndShowVertices scale $ vertices pos
   -- Filter out the faces that don't have a material
@@ -89,16 +89,22 @@ tileToObjAndMtl pos tile scale fCount | M.null $ materials tile = ("", fCount, "
   name :: Side -> String
   name side = show pos ++ show side
   -- Convert the faces to a string, where each face is a string of 4 vertices. Also add the material to the face
-  faceLines = map (\(v1, v2, v3, v4, side) -> 
-    let (vt1, vt2, vt3, vt4) = textureCoords side in
-    "usemtl " ++ (name side) ++ "\nf " ++ show v1 ++ "/" ++ show vt1 ++ " " ++ show v2 ++ "/" ++ 
-    show vt2 ++ " " ++ show v3 ++ "/" ++ show vt3 ++ " " ++ show v4 ++ "/" ++ show vt4) facesWithMaterial
+  faceLine :: Int -> Int -> Int -> Int -> Side -> String -> String
+  faceLine v1 v2 v3 v4 side mtlName =
+    let (vt1, vt2, vt3, vt4) = textureCoords side 
+    in "usemtl " ++ mtlName ++ "\nf " ++ show v1 ++ "/" ++ show vt1 ++ " " ++ show v2 ++ "/" ++ 
+        show vt2 ++ " " ++ show v3 ++ "/" ++ show vt3 ++ " " ++ show v4 ++ "/" ++ show vt4
   -- Generate the mtl string and the list of files used in the mtl string
-  (mtlString, files) = foldl (\(accMtlString, accFiles) (_, _, _, _, side) -> 
-    let (newMtlString, newFiles) = materialToMtl (materials tile M.! side) (name side)
-    in (accMtlString ++ "\n" ++ newMtlString, accFiles ++ newFiles)
-    ) ("", []) facesWithMaterial
-  in (unlines $ verticeLines ++ faceLines, fCount + 8, mtlString, files) 
+  (faceLines, mtlString, files, newCache) = foldl (\(accFaceLines, accMtlString, accFiles, accCache) (v1, v2, v3, v4, side) ->
+    let material = materials tile M.! side
+    in case M.lookup material accCache of
+      Just mtlName -> (faceLine v1 v2 v3 v4 side mtlName : accFaceLines, accMtlString, accFiles, accCache)
+      Nothing -> let
+          mtlName = name side 
+          (newMtlString, newFiles) = materialToMtl material mtlName
+        in (faceLine v1 v2 v3 v4 side mtlName : accFaceLines, accMtlString ++ "\n" ++ newMtlString, accFiles ++ newFiles, M.insert material mtlName accCache)
+    ) ([], "", [], cache) facesWithMaterial
+  in (unlines $ verticeLines ++ faceLines, fCount + 8, mtlString, files, newCache) 
 
 -- | Converts a material to a mtl file as a string, with a given name for the material 
 --   and returns the mtl string and a list of file paths to the textures used in the mtl file
@@ -111,7 +117,7 @@ materialToMtl
   "Ks " ++ show specR ++ " " ++ show specG ++ " " ++ show specB,
   "d " ++ show transp,
   "Ns " ++ show specExp,
-  "illum " ++ show illum] ++ maybe [] (\texPath -> ["map_Kd textures/" ++ (takeFileName texPath)]) tex ++ extrFields,
+  "illum " ++ show illum] ++ maybe [] (\texPath -> ["map_Kd textures/" ++ takeFileName texPath]) tex ++ extrFields,
   extrFiles ++ maybeToList tex)
 
 
