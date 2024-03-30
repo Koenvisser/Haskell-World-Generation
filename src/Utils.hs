@@ -18,13 +18,25 @@ allNeighbours = listToShape [(x, y, z) | x <- [-1..1], y <- [-1..1], z <- [-1..1
 
 -- | A rule that takes a list of tiles and a shape, and returns True if any of the tiles defined in the list
 --   tile are within the shape at the given position. 
-mustBeNextTo :: [Tile] -> Shape -> Rule
-mustBeNextTo tiles shape = Rule (\(TileMap tileMap) pos -> 
+nextToAny :: [Tile] -> Shape -> Rule
+nextToAny tiles shape = Rule (\(TileMap tileMap) pos -> 
     CanPlace $ any (\nPos -> 
         case M.lookup nPos tileMap of
             Just tile -> tile `elem` tiles
             _ -> False
         ) (shape pos))
+
+-- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles defined in the list
+--   tile are within the shape at the given position. 
+nextToAll :: [Tile] -> Shape -> Rule
+nextToAll tiles shape = Rule (\(TileMap tileMap) pos -> 
+    CanPlace $ all (\nPos -> 
+        case M.lookup nPos tileMap of
+            Just tile -> tile `elem` tiles
+            _ -> False
+        ) (shape pos))
+
+
 
 -- | A rule that takes a float f and returns a rule with chance f of returning True 
 chanceRule :: Float -> Rule
