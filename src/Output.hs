@@ -1,22 +1,28 @@
 -- | This module contains functions to convert a world to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file can be saved, without materials, to a file using the `saveWorldToObj` function, or with materials to a folder using the `saveWorldToObjAndMtl` function.
-module Output (saveWorldToObj, saveWorldToObjAndMtl) where
+module Output (saveWorldToObj, saveWorldToObjAndMtl, worldToObj, worldToObjAndMtl) where
 
 import Def
 
 import qualified Data.Map as M
-import Data.Default (def)
+-- import Data.Default (def)
 import Data.Maybe (maybeToList)
 import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName, takeDirectory)
 
--- TODO: Scale the texture coordinates to the size of the tile
---       Add option to not save the textures in a separate folder, but refer to original location
+-- TODO: Add option to not save the textures in a separate folder, but refer to original location
 --       Improve the code quality
 
-exampleWorld :: World
-exampleWorld = World (((0,0,0), (1,1,1)), TileMap $ M.fromList [
-  ((0,0,0), Tile (M.fromList [(PosX, def), (NegX, def), (PosY, def {texture = Just "C:/Users/KoenV/Downloads/texture.jpg"}), (NegY, def ), (PosZ, def), (NegZ, def )]) (Rule (\_ _ -> CanPlace True)) 'a')])
+-- exampleWorld :: World
+-- exampleWorld = World (((0,0,0), (1,1,1)), TileMap $ M.fromList [
+--   ((0,0,0), Tile (M.fromList [
+--     (PosX, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/posx.jpg"}), 
+--     (NegX, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/negx.jpg"}), 
+--     (PosY, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/posy.jpg"}), 
+--     (NegY, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/negy.jpg"}), 
+--     (PosZ, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/posz.jpg"}), 
+--     (NegZ, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/negz.jpg"})
+--     ]) (Rule (\_ _ -> CanPlace True)) 'a')])
 
 -- | Converts a world to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file is saved to the given path
@@ -136,15 +142,16 @@ faces :: Int -> [(Int, Int, Int, Int, Side)]
 faces fCount = [
   (fCount,     fCount + 1, fCount + 3, fCount + 2, NegX), 
   (fCount + 4, fCount + 5, fCount + 7, fCount + 6, PosX), 
-  (fCount,     fCount + 1, fCount + 5, fCount + 4, NegY), 
+  (fCount,     fCount + 1, fCount + 5, fCount + 4, NegY),
   (fCount + 2, fCount + 3, fCount + 7, fCount + 6, PosY), 
   (fCount,     fCount + 2, fCount + 6, fCount + 4, NegZ), 
   (fCount + 1, fCount + 3, fCount + 7, fCount + 5, PosZ)]
 
+-- | Returns the texture vertices for a side of a tile
 textureCoords :: Side -> (Int, Int, Int, Int)
+textureCoords PosX = (2, 1, 4, 3)
 textureCoords NegX = (1, 2, 3, 4)
-textureCoords PosX = (2, 3, 4, 1)
-textureCoords NegY = (1, 2, 3, 4)
 textureCoords PosY = (4, 1, 2, 3)
-textureCoords NegZ = (1, 2, 3, 4)
-textureCoords PosZ = (1, 2, 3, 4)
+textureCoords NegY = (1, 4, 3, 2)
+textureCoords PosZ = (1, 4, 3, 2)
+textureCoords NegZ = (2, 3, 4, 1)
