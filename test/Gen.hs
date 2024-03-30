@@ -27,7 +27,7 @@ instance Arbitrary Side where
     arbitrary = arbitraryBoundedEnum
 
 instance Arbitrary Material where
-    arbitrary = Material <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+    arbitrary = Material <$> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
 
 -- | Test if all positions are placed in the tilemap if the wave function collapse algorithm is run with a list of tiles 
 --   and a size for the world, where the rule for each tile is that it can be placed at any position.
