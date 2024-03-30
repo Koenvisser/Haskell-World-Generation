@@ -5,24 +5,12 @@ module Output (saveWorldToObj, saveWorldToObjAndMtl, worldToObj, worldToObjAndMt
 import Def
 
 import qualified Data.Map as M
--- import Data.Default (def)
 import Data.Maybe (maybeToList)
 import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName, takeDirectory)
 
 -- TODO: Add option to not save the textures in a separate folder, but refer to original location
 --       Improve the code quality
-
--- exampleWorld :: World
--- exampleWorld = World (((0,0,0), (1,1,1)), TileMap $ M.fromList [
---   ((0,0,0), Tile (M.fromList [
---     (PosX, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/posx.jpg"}), 
---     (NegX, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/negx.jpg"}), 
---     (PosY, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/posy.jpg"}), 
---     (NegY, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/negy.jpg"}), 
---     (PosZ, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/posz.jpg"}), 
---     (NegZ, def {texture = Just "C:/Users/KoenV/Downloads/Yokohama/negz.jpg"})
---     ]) (Rule (\_ _ -> CanPlace True)) 'a')])
 
 -- | Converts a world to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file is saved to the given path
