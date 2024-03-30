@@ -125,7 +125,8 @@ newtype TileMap = TileMap (M.Map Pos Tile)
 -- | The show instance of a tilemap finds it's x and y boundaries and uses these to 
 --   define and use the show instance of a world.
 instance Show TileMap where
-    show (TileMap tileMap) = show $ World ((minPos, maxPos), TileMap tileMap)
+    show (TileMap tileMap) | M.null tileMap = "Empty tilemap"
+                           | otherwise = show $ World ((minPos, maxPos), TileMap tileMap)
         where
             minPos = fst . M.findMin $ tileMap
             maxPos = fst . M.findMax $ tileMap

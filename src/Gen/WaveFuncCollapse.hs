@@ -8,15 +8,25 @@ import Def
 import qualified Data.Map as M
 import System.Random
 import Debug.Trace (trace)
+import Data.List (delete)
 
 
 -- | Weights is a tuple of a float and a list of floats (Total weight, [Weights])
 type Weights = (Float, [Float])
 type ShannonEntropy = Float
 type Env = M.Map Pos ([Tile], Weights, ShannonEntropy)
+type History = [HistoryUnit]
+data HistoryUnit = HistoryUnit {
+  env :: Env,
+  pos :: Pos,
+  tile :: Tile
+} deriving (Show)
+
+-- Backtracking: 
+
 
 -- | Initialize the wave function collapse algorithm with a list of tiles and a size for the world.
---   The algorithm will then generate a tilemap and an environemnt using the `createEnv` function.
+--   The algorithm will then generate a tilemap and an environment using the `createEnv` function.
 --   If no Environment can be created with the current Tile set, the function throw an error.
 --   Afterwards it will invoke `waveFuncCollapse'` which will iteratiively collapse the wave function. 
 waveFuncCollapse :: [Tile] -> Size -> IO TileMap
@@ -25,7 +35,7 @@ waveFuncCollapse tiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let emptyTileMap = TileMap M.empty
   case createEnv tiles emptyTileMap allPos of
     Nothing -> error "No possible tilemap"
-    Just (tileMap, env) -> waveFuncCollapse' tiles tileMap env
+    Just (tileMap, env) -> waveFuncCollapse' tiles tileMap env []
 
 -- | Create the tileMap and environment for the wave function collapse algorithm
 --   It applies the rule to each position and creates the environment based on the result.
@@ -62,19 +72,30 @@ shannonEntropy (totWeight, weights) = log totWeight - (h / totWeight)
 --   function until there are no more available positions in the environment. This function is called with the 
 --   position where the wave function should collapse. This position is generated using the `shannonPos` 
 --   function. If the algorithm gets stuck, it will call the `resetWaveFuncCollapse` function. 
-waveFuncCollapse' :: [Tile] -> TileMap -> Env -> IO TileMap
-waveFuncCollapse' tiles tileMap env
+waveFuncCollapse' :: [Tile] -> TileMap -> Env -> History -> IO TileMap
+waveFuncCollapse' tiles tileMap env history
   | M.null env = return tileMap
   | otherwise = do
     randomPos <- shannonPos env
-    waveFuncCollapseStep tiles randomPos tileMap env >>= \case
-      Nothing -> resetWaveFuncCollapse
-      Just (newTileMap, newEnv) -> waveFuncCollapse' tiles newTileMap newEnv
+    waveFuncCollapseStep tiles randomPos tileMap env history >>= \case
+      Nothing -> resetWaveFuncCollapse tiles tileMap history
+      Just (newTileMap, newEnv, newHistory) -> waveFuncCollapse' tiles newTileMap newEnv newHistory
 
 -- | Reset the wave function collapse algorithm. This is done when the algorithm gets stuck and can't continue.
 --   Not implemented yet. Optimally the algorithm should be able to backtrack to a previously solvable state.
-resetWaveFuncCollapse :: IO TileMap
-resetWaveFuncCollapse = undefined
+resetWaveFuncCollapse :: [Tile] -> TileMap -> History -> IO TileMap
+resetWaveFuncCollapse _ _ [] = error "No possible tilemaps with the current rules"
+resetWaveFuncCollapse tiles (TileMap tileMap) ((HistoryUnit env pos tile):history) = do
+  let newEnv = M.adjust ((\(tiles, weights, _) -> (tiles, weights, shannonEntropy weights)) . deleteTile tile) pos env
+  let newTileMap = trace ("env: " ++ show env ++ "\nnewEnv: " ++ show newEnv) TileMap $ M.delete pos tileMap
+  let (newTiles, _, _) = trace ("tileMap: " ++ show tileMap ++ "\nnewTileMap: " ++ show newTileMap) env M.! pos
+  if null newTiles then resetWaveFuncCollapse tiles newTileMap history else waveFuncCollapse' tiles newTileMap newEnv history
+  where
+    deleteTile :: Tile -> ([Tile], Weights, ShannonEntropy) -> ([Tile], Weights, ShannonEntropy)
+    deleteTile tile ((x:xs), (totalWeight, (y:ys)), entropy) 
+      | x == tile = (xs, (totalWeight - y, ys), entropy)
+      | otherwise = (\(newTiles', (totalWeight, weights), entropy) -> (x:newTiles', (totalWeight, y:weights), entropy)) $ deleteTile tile (xs, (totalWeight, ys), entropy) 
+
 
 -- | Get the position with the lowest shannon entropy. If there are multiple positions with the same entropy,
 --   the function will return a random position from the list of positions.
@@ -98,16 +119,17 @@ getRandomElement xs = do
 --  adds it to the tileMap. If the environment has no possible tiles, the function will return Nothing.
 --  After the tile has been added to the tileMap, the position will be removed from the environment,
 --  and the environment will be updated with the new possible tiles.
-waveFuncCollapseStep :: [Tile] -> Pos -> TileMap -> Env -> IO (Maybe (TileMap, Env))
-waveFuncCollapseStep tiles pos (TileMap tileMap) env = do
-  let (tiles, weight, _) = env M.! pos
-  tile <- randomTile tiles weight
+waveFuncCollapseStep :: [Tile] -> Pos -> TileMap -> Env -> History -> IO (Maybe (TileMap, Env, History))
+waveFuncCollapseStep tiles pos (TileMap tileMap) env history = do
+  let (newTiles, weight, _) = env M.! pos
+  tile <- randomTile newTiles weight
   case tile of
     Nothing -> return Nothing
     Just tile -> do 
       let newTileMap = M.insert pos tile tileMap
-      let newEnv = M.delete pos env
-      return $ createEnv tiles (TileMap newTileMap) (M.keys newEnv)
+      let newHistory = HistoryUnit env pos tile : history
+      let newEnv = trace ("History: " ++ show newHistory) M.delete pos env
+      return $ createEnv tiles (TileMap newTileMap) (M.keys newEnv) >>= (\(newTileMap, newEnv) -> Just (newTileMap, newEnv, newHistory))
 
 -- | Select a random tile from a list of tiles based on their weights.
 --   If the total weight is 0, the function will return Nothing.
