@@ -10,30 +10,23 @@ defaultMaterial = M.fromList [(PosX, def), (NegX, def), (PosY, def), (NegY, def)
 
 redTile :: Tile
 redTile = Tile {
-    materials = undefined,
-    rules = (<!>) $ nextToAny [blueTile, redTile, purpleTile, airTile] allNeighbours,
+    materials = defaultMaterial,
+    rules = (<!>) $ nextToAny [purpleTile] allNeighbours,
     charRep = 'r'
 }
 
 blueTile :: Tile
 blueTile = Tile {
-    materials = undefined,
-    rules = (<!>) $ nextToAny [purpleTile, blueTile] allNeighbours,
+    materials = defaultMaterial,
+    rules = (<!>) $ nextToAny [purpleTile] allNeighbours,
     charRep = 'b'
 }
 
 purpleTile :: Tile
 purpleTile = Tile {
-    materials = undefined,
-    rules = (<!>) $ nextToAny [purpleTile, redTile] allNeighbours,
+    materials = defaultMaterial,
+    rules = (<!>) $ nextToAny [purpleTile] allNeighbours,
     charRep = 'p'
-}
-
-airTile :: Tile
-airTile = Tile {
-    materials = undefined,
-    rules = (<!>) $ nextToAny [] allNeighbours,
-    charRep = 'a'
 }
 
 allTiles :: [Tile]
