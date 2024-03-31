@@ -17,6 +17,7 @@ type ShannonEntropy = Float
 type Env = M.Map Pos ([Tile], Weights, ShannonEntropy)
 type History = [HistoryUnit]
 data HistoryUnit = HistoryUnit {
+  tileMap :: TileMap,
   env :: Env,
   pos :: Pos,
   tile :: Tile
@@ -77,22 +78,22 @@ waveFuncCollapse' tiles tileMap env history
   | M.null env = return tileMap
   | otherwise = do
     randomPos <- shannonPos env
-    waveFuncCollapseStep tiles randomPos tileMap env history >>= \case
-      Nothing -> resetWaveFuncCollapse tiles tileMap history
-      Just (newTileMap, newEnv, newHistory) -> waveFuncCollapse' tiles newTileMap newEnv newHistory
+    (result, newHistory) <- waveFuncCollapseStep tiles randomPos tileMap env history
+    case result of
+      Nothing -> resetWaveFuncCollapse tiles newHistory
+      Just (newTileMap, newEnv) -> waveFuncCollapse' tiles newTileMap newEnv newHistory
 
 -- | Reset the wave function collapse algorithm. This is done when the algorithm gets stuck and can't continue.
 --   Not implemented yet. Optimally the algorithm should be able to backtrack to a previously solvable state.
-resetWaveFuncCollapse :: [Tile] -> TileMap -> History -> IO TileMap
-resetWaveFuncCollapse _ _ [] = error "No possible tilemaps with the current rules"
-resetWaveFuncCollapse tiles (TileMap tileMap) ((HistoryUnit env pos tile):history) = do
+resetWaveFuncCollapse :: [Tile] -> History -> IO TileMap
+resetWaveFuncCollapse _ [] = error "No possible tilemaps with the current rules"
+resetWaveFuncCollapse tiles ((HistoryUnit tileMap env pos tile):history) = do
   let newEnv = M.adjust ((\(tiles, weights, _) -> (tiles, weights, shannonEntropy weights)) . deleteTile tile) pos env
-  let newTileMap = trace ("env: " ++ show env ++ "\nnewEnv: " ++ show newEnv) TileMap $ M.delete pos tileMap
-  let (newTiles, _, _) = trace ("tileMap: " ++ show tileMap ++ "\nnewTileMap: " ++ show newTileMap) env M.! pos
-  if null newTiles then resetWaveFuncCollapse tiles newTileMap history else waveFuncCollapse' tiles newTileMap newEnv history
+  let (newTiles, _, _) = newEnv M.! pos
+  if null newTiles then resetWaveFuncCollapse tiles history else waveFuncCollapse' tiles tileMap newEnv history
   where
     deleteTile :: Tile -> ([Tile], Weights, ShannonEntropy) -> ([Tile], Weights, ShannonEntropy)
-    deleteTile tile ((x:xs), (totalWeight, (y:ys)), entropy) 
+    deleteTile tile (x:xs, (totalWeight, y:ys), entropy) 
       | x == tile = (xs, (totalWeight - y, ys), entropy)
       | otherwise = (\(newTiles', (totalWeight, weights), entropy) -> (x:newTiles', (totalWeight, y:weights), entropy)) $ deleteTile tile (xs, (totalWeight, ys), entropy) 
 
@@ -119,17 +120,17 @@ getRandomElement xs = do
 --  adds it to the tileMap. If the environment has no possible tiles, the function will return Nothing.
 --  After the tile has been added to the tileMap, the position will be removed from the environment,
 --  and the environment will be updated with the new possible tiles.
-waveFuncCollapseStep :: [Tile] -> Pos -> TileMap -> Env -> History -> IO (Maybe (TileMap, Env, History))
+waveFuncCollapseStep :: [Tile] -> Pos -> TileMap -> Env -> History -> IO (Maybe (TileMap, Env), History)
 waveFuncCollapseStep tiles pos (TileMap tileMap) env history = do
   let (newTiles, weight, _) = env M.! pos
   tile <- randomTile newTiles weight
   case tile of
-    Nothing -> return Nothing
+    Nothing -> return (Nothing, history)
     Just tile -> do 
       let newTileMap = M.insert pos tile tileMap
-      let newHistory = HistoryUnit env pos tile : history
-      let newEnv = trace ("History: " ++ show newHistory) M.delete pos env
-      return $ createEnv tiles (TileMap newTileMap) (M.keys newEnv) >>= (\(newTileMap, newEnv) -> Just (newTileMap, newEnv, newHistory))
+      let newHistory = HistoryUnit (TileMap tileMap) env pos tile : history
+      let newEnv = M.delete pos env
+      return (createEnv tiles (TileMap newTileMap) (M.keys newEnv) >>= (\(newTileMap, newEnv) -> Just (newTileMap, newEnv)), newHistory)
 
 -- | Select a random tile from a list of tiles based on their weights.
 --   If the total weight is 0, the function will return Nothing.
@@ -143,7 +144,7 @@ randomTile tiles (totalWeight, tilesWeight) = if totalWeight == 0.0 then return 
 --  greater than the total weight. The length of the tiles and weights must be the same.
 weightToTile :: [Tile] -> [Float] -> Float -> Maybe Tile
 weightToTile [] [] _ = Nothing
-weightToTile (tile:tiles) (weight:weights) random
-  | random < weight = Just tile
-  | otherwise = weightToTile tiles weights (random - weight)
-weightToTile tiles weights _ = error "WeightToTile: tiles and weights are not the same length"
+weightToTile (tile:tiles) (weight:weights) randomNum
+  | randomNum < weight = Just tile
+  | otherwise = weightToTile tiles weights (randomNum - weight)
+weightToTile _ _ _ = error "WeightToTile: tiles and weights are not the same length"
