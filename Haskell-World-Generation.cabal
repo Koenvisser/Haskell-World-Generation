@@ -68,7 +68,7 @@ library
     default-extensions: LambdaCase
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.18.0.0
+    build-depends:    base >=4.17.2.1
                     , containers
                     , random
                     , data-default
@@ -97,7 +97,7 @@ executable Haskell-World-Generation
 
     -- Other library packages from which modules are imported.
     build-depends:
-        base ^>=4.18.0.0,
+        base >=4.17.2.1,
         containers,
         data-default,
         Haskell-World-Generation
@@ -134,7 +134,7 @@ test-suite Haskell-World-Generation-test
 
     -- Test dependencies.
     build-depends:
-        base ^>=4.18.0.0
+        base >=4.17.2.1
       , tasty
       , tasty-quickcheck
       , containers
