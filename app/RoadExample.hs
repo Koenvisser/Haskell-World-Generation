@@ -2,7 +2,6 @@ module RoadExample where
 
 import Def
 import Utils
-import Data.List (nub, intersect)
 import Data.Default (def)
 import qualified Data.Map as M
 
@@ -13,25 +12,17 @@ import qualified Data.Map as M
 dirtMaterial :: Material
 dirtMaterial = def {texture = Just "textures/side-dirt.png"}
 
-grassDirtMaterialNegX :: Material
-grassDirtMaterialNegX = def {texture = Just "textures/side-dirt-grass-x.png"}
+grassDirtMaterialSide :: Material
+grassDirtMaterialSide = def {texture = Just "textures/side-dirt-grass.png"}
 
-grassDirtMaterialNegY :: Material
-grassDirtMaterialNegY = def {texture = Just "textures/side-dirt-grass-y.png"}
-
-grassDirtMaterialPosX :: Material
-grassDirtMaterialPosX = def {texture = Just "textures/side-dirt-grass+x.png"}
-
-grassDirtMaterialPosY :: Material
-grassDirtMaterialPosY = def {texture = Just "textures/side-dirt-grass+y.png"}
 
 topLevelBlock :: M.Map Side Material
 topLevelBlock = M.fromList [
-    (NegZ, dirtMaterial),
-    (NegX, grassDirtMaterialNegX),
-    (NegY, grassDirtMaterialNegY),
-    (PosX, grassDirtMaterialPosX),
-    (PosY, grassDirtMaterialPosY)
+    (NegY, dirtMaterial),
+    (NegX, grassDirtMaterialSide),
+    (PosX, grassDirtMaterialSide),
+    (NegZ, grassDirtMaterialSide),
+    (PosZ, grassDirtMaterialSide)
     ]
 
 dirtBlock :: M.Map Side Material
@@ -45,10 +36,10 @@ dirtBlock = M.fromList [
     ]
 
 posTopRule :: Rule
-posTopRule = canExistAt (\(_, _, z) -> z == 4)
+posTopRule = canExistAt (\(_, y, _) -> y == 4)
 
 verticalNeighbour :: Shape
-verticalNeighbour = listToShape [(0, -1, 0), (0, 1, 0)]
+verticalNeighbour = listToShape [(0, 0, -1), (0, 0, 1)]
 
 horizontalNeighbour :: Shape
 horizontalNeighbour = listToShape [(-1, 0, 0), (1, 0, 0)]
@@ -97,18 +88,6 @@ downConnection = [
     topLDElbowTile
     ]
 
--- anyHorizontalConnection :: [Tile]
--- anyHorizontalConnection = nub $ rightConnection ++ leftConnection
-
--- anyVerticalConnection :: [Tile]
--- anyVerticalConnection = nub $ upConnection ++ downConnection
-
--- allHorizontalConnection :: [Tile]
--- allHorizontalConnection = intersect rightConnection leftConnection
-
--- allVerticalConnection :: [Tile]
--- allVerticalConnection = intersect upConnection downConnection
-
 upConnectionRule :: Rule
 upConnectionRule = allMustBe downConnection upNeighbour
 
@@ -135,7 +114,7 @@ noLeftConnectionRule = (<!>) $ nextToAny rightConnection leftNeighbour
 
 topCrossTile :: Tile
 topCrossTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-cross.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-cross.png"}) topLevelBlock,
     rules = upConnectionRule <&&> downConnectionRule <&&> rightConnectionRule <&&> leftConnectionRule <&&> posTopRule <&&> chanceRule 0.4,
     charRep = '┼'
 }
@@ -143,70 +122,70 @@ topCrossTile = Tile {
 -- | Top left up top split
 topBLUTSplitTile :: Tile
 topBLUTSplitTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-BLU-tsplit.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-BLU-tsplit.png"}) topLevelBlock,
     rules = upConnectionRule <&&> downConnectionRule <&&> leftConnectionRule <&&> noRightConnectionRule <&&> posTopRule,
     charRep = '┤'
 }
 
 topURBTSplitTile :: Tile
 topURBTSplitTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-URB-tsplit.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-URB-tsplit.png"}) topLevelBlock,
     rules = upConnectionRule <&&> downConnectionRule <&&> rightConnectionRule <&&> noLeftConnectionRule <&&> posTopRule,
     charRep = '├'
 }
 
 topLURTSplitTile :: Tile
 topLURTSplitTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-LUR-tsplit.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-LUR-tsplit.png"}) topLevelBlock,
     rules = leftConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> upConnectionRule <&&> posTopRule,
     charRep = '┴'
 }
 
 topLRBTSplitTile :: Tile
 topLRBTSplitTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-LRB-tsplit.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-LRB-tsplit.png"}) topLevelBlock,
     rules = leftConnectionRule <&&> noUpConnectionRule <&&> rightConnectionRule <&&> downConnectionRule <&&> posTopRule,
     charRep = '┬'
 }
 
 topLDElbowTile :: Tile
 topLDElbowTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-LD-elbow.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-LD-elbow.png"}) topLevelBlock,
     rules = leftConnectionRule <&&> downConnectionRule <&&> noUpConnectionRule <&&> noRightConnectionRule <&&> posTopRule,
     charRep = '┐'
 }
 
 topDRElbowTile :: Tile
 topDRElbowTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-DR-elbow.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-DR-elbow.png"}) topLevelBlock,
     rules = downConnectionRule <&&> rightConnectionRule <&&> noUpConnectionRule <&&> noLeftConnectionRule <&&> posTopRule,
     charRep = '┌'
 }
 
 topULElbowTile :: Tile
 topULElbowTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-UL-elbow.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-UL-elbow.png"}) topLevelBlock,
     rules = upConnectionRule <&&> leftConnectionRule <&&> noDownConnectionRule <&&> noRightConnectionRule <&&> posTopRule,
     charRep = '┘'
 }
 
 topURElbowTile :: Tile
 topURElbowTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-UR-elbow.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-UR-elbow.png"}) topLevelBlock,
     rules = upConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> noLeftConnectionRule <&&> posTopRule,
     charRep = '└'
 }
 
 topHorizontalPipeTile :: Tile
 topHorizontalPipeTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-horizontal-pipe.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-horizontal-pipe.png"}) topLevelBlock,
     rules = leftConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> noUpConnectionRule <&&> posTopRule,
     charRep = '─'
 }
 
 topVerticalPipeTile :: Tile
 topVerticalPipeTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-vertical-pipe.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-vertical-pipe.png"}) topLevelBlock,
     rules = upConnectionRule <&&> downConnectionRule <&&> noLeftConnectionRule <&&> noRightConnectionRule <&&> posTopRule,
     charRep = '│'
 }
@@ -214,16 +193,15 @@ topVerticalPipeTile = Tile {
 
 topGrassTile :: Tile
 topGrassTile = Tile {
-    materials = M.insert PosZ (def {texture = Just "textures/top-grass.png"}) topLevelBlock,
+    materials = M.insert PosY (def {texture = Just "textures/top-grass.png"}) topLevelBlock,
     rules = noLeftConnectionRule <&&> noUpConnectionRule <&&> noDownConnectionRule <&&> noRightConnectionRule <&&> posTopRule,
     charRep = '░'
 }
 
-
 dirtTile :: Tile
 dirtTile = Tile {
     materials = dirtBlock,
-    rules = canExistAt (\(_, _, z) -> z <= 3),
+    rules = canExistAt (\(_, y, _) -> y <= 3),
     charRep = 'd'
 }
 

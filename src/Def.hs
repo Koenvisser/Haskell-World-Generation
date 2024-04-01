@@ -135,7 +135,7 @@ instance Show TileMap where
 --   with the tiles represented as their character representation and an empty tile 
 --   represented as a space.
 instance Show World where
-    show (World (((xMin, yMin, zMin), (xMax, yMax, zMax)), TileMap tileMap)) = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | y <- [yMin..yMax]] | z <- [zMin..zMax]]
+    show (World (((xMin, yMin, zMin), (xMax, yMax, zMax)), TileMap tileMap)) = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | z <- [zMin..zMax]] |  y <- [yMin..yMax]]
         where
             tileAtPos :: Pos -> Char
             tileAtPos pos = case M.lookup pos tileMap of

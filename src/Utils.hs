@@ -23,19 +23,19 @@ rightNeighbour = listToShape [(1, 0, 0)]
 
 -- | A shape that contains the neighbour to the front of a position
 downNeighbour :: Shape
-downNeighbour = listToShape [(0, 1, 0)]
+downNeighbour = listToShape [(0, 0, 1)]
 
 -- | A shape that contains the neighbour to the back of a position
 upNeighbour :: Shape
-upNeighbour = listToShape [(0, -1, 0)]
+upNeighbour = listToShape [(0, 0, -1)]
 
 -- | A shape that contains the neighbour above a position
 aboveNeighbour :: Shape
-aboveNeighbour = listToShape [(0, 0, 1)]
+aboveNeighbour = listToShape [(0, 1, 0)]
 
 -- | A shape that contains the neighbour below a position
 belowNeighbour :: Shape
-belowNeighbour = listToShape [(0, 0, -1)]
+belowNeighbour = listToShape [(0, -1, 0)]
 
 
 -- newtype Rule = Rule (Tile -> TileMap -> Pos -> RuleResult)
