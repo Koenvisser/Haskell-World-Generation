@@ -13,6 +13,31 @@ listToShape relPos (px, py, pz) = map (\(x, y, z) -> (x + px, y + py, z + pz)) r
 allNeighbours :: Shape
 allNeighbours = listToShape [(x, y, z) | x <- [-1..1], y <- [-1..1], z <- [-1..1], (x, y, z) /= (0, 0, 0)]
 
+-- | A shape that contains the neighbour to the left of a position
+leftNeighbour :: Shape
+leftNeighbour = listToShape [(-1, 0, 0)]
+
+-- | A shape that contains the neighbour to the right of a position
+rightNeighbour :: Shape
+rightNeighbour = listToShape [(1, 0, 0)]
+
+-- | A shape that contains the neighbour to the front of a position
+downNeighbour :: Shape
+downNeighbour = listToShape [(0, 1, 0)]
+
+-- | A shape that contains the neighbour to the back of a position
+upNeighbour :: Shape
+upNeighbour = listToShape [(0, -1, 0)]
+
+-- | A shape that contains the neighbour above a position
+aboveNeighbour :: Shape
+aboveNeighbour = listToShape [(0, 0, 1)]
+
+-- | A shape that contains the neighbour below a position
+belowNeighbour :: Shape
+belowNeighbour = listToShape [(0, 0, -1)]
+
+
 -- newtype Rule = Rule (Tile -> TileMap -> Pos -> RuleResult)
 -- data RuleResult = CanPlace Bool | ChancePlace Float
 
@@ -30,12 +55,22 @@ nextToAny tiles shape = Rule (\(TileMap tileMap) pos ->
 --   tile are within the shape at the given position. 
 nextToAll :: [Tile] -> Shape -> Rule
 nextToAll tiles shape = Rule (\(TileMap tileMap) pos -> 
+    CanPlace $ all (\tile -> 
+        any (\nPos ->
+            case M.lookup nPos tileMap of
+                Just tile -> tile `elem` tiles
+                _ -> False
+        ) (shape pos)) tiles)
+
+-- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles in the shape are 
+--   within the list of tiles at the given position.
+allMustBe :: [Tile] -> Shape -> Rule
+allMustBe tiles shape = Rule (\(TileMap tileMap) pos -> 
     CanPlace $ all (\nPos -> 
         case M.lookup nPos tileMap of
             Just tile -> tile `elem` tiles
-            _ -> False
+            _ -> True
         ) (shape pos))
-
 
 
 -- | A rule that takes a float f and returns a rule with chance f of returning True 
