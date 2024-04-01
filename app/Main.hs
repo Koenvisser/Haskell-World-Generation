@@ -1,9 +1,9 @@
 module Main where
 
-import ExamplesChance (allTiles)
+import Examples (allTiles)
 import Gen.WaveFuncCollapse (waveFuncCollapse)
 
 main :: IO ()
 main = do
-  tileMap <- waveFuncCollapse allTiles ((0, 0, 0), (3, 3, 3))
+  tileMap <- waveFuncCollapse allTiles ((0, 0, 0), (5, 5, 5))
   putStr $ show tileMap
