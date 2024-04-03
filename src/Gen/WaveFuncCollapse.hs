@@ -23,9 +23,6 @@ data HistoryUnit = HistoryUnit {
   tile :: Tile
 } deriving (Show)
 
--- Backtracking: 
-
-
 -- | Initialize the wave function collapse algorithm with a list of tiles and a size for the world.
 --   The algorithm will then generate a tilemap and an environment using the `createEnv` function.
 --   If no Environment can be created with the current Tile set, the function throw an error.
@@ -61,20 +58,18 @@ updateEnv tileMap env = foldr (\pos result -> case result of
       Just (Right env) -> Just (TileMap newTileMap, M.insert pos env newEnv)
     ) (Just (tileMap, M.empty)) (M.keys env)
 
-checkTileMap :: TileMap -> Bool
-checkTileMap (TileMap tileMap) = all (\pos -> let (Rule rule) = rules $ tileMap M.! pos in case rule (TileMap tileMap) pos of
-  CanPlace b -> b
-  ChancePlace c -> c > 0.0
-  ) (M.keys tileMap)
-
 posToEnv :: Pos -> [Tile] -> TileMap -> Maybe (Either Tile ([Tile], Weights, ShannonEntropy)) 
-posToEnv pos tiles tileMap = 
-  let weights = map (resultToFloat . (\(Rule f) -> f tileMap pos) . rules) tiles
-      (newTiles, newWeights) = unzip $ filter (\(_, weight) -> weight > 0) $ zip tiles weights
+posToEnv pos tiles (TileMap tileMap) = 
+  let weights = map (resultToFloat . (\(Rule f) -> f (TileMap tileMap) pos) . rules) tiles
+      (newTiles, newWeights) = unzip $ filter (\(tile, weight) -> weight > 0 && all (\(pos', tile') ->
+        let (Rule rule) = rules tile' in 
+          case rule (TileMap $ M.insert pos tile tileMap) pos' of
+            CanPlace b -> b
+            ChancePlace c -> c > 0) (M.toList  tileMap)) $ zip tiles weights
   in case newTiles of
     [] -> Nothing
     [tile] -> Just $ Left tile
-    _ -> do      
+    _ -> do
       let totWeight = sum newWeights
       Just $ Right (newTiles, (totWeight, newWeights), shannonEntropy (totWeight, newWeights))
 
@@ -146,7 +141,7 @@ waveFuncCollapseStep pos (TileMap tileMap) env history = do
       let newTileMap = M.insert pos tile tileMap
       let newHistory = HistoryUnit (TileMap tileMap) env pos tile : history
       let newEnv = M.delete pos env
-      return (updateEnv (TileMap newTileMap) newEnv >>= (\(newTileMap, newEnv) -> if checkTileMap newTileMap then Just (newTileMap, newEnv) else Nothing), newHistory)
+      return (updateEnv (TileMap newTileMap) newEnv >>= (\(newTileMap, newEnv) -> Just (newTileMap, newEnv)), newHistory)
 
 -- | Select a random tile from a list of tiles based on their weights.
 --   If the total weight is 0, the function will return Nothing.

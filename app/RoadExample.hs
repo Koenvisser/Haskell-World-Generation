@@ -51,9 +51,6 @@ waterBlock = M.fromList [
 posTopRule :: Rule
 posTopRule = canExistAt (\(_, y, _) -> y == 3)
 
-waterRule :: Rule
-waterRule = (<!>) $ nextToAny [waterTile] belowNeighbour
-
 verticalNeighbour :: Shape
 verticalNeighbour = listToShape [(0, 0, -1), (0, 0, 1)]
 
@@ -131,7 +128,7 @@ noLeftConnectionRule = (<!>) $ nextToAny rightConnection leftNeighbour
 topCrossTile :: Tile
 topCrossTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-cross.png"}) topLevelBlock,
-    rules = upConnectionRule <&&> downConnectionRule <&&> rightConnectionRule <&&> leftConnectionRule <&&> posTopRule <&&> weightedRule 0.05 <&&> waterRule,
+    rules = upConnectionRule <&&> downConnectionRule <&&> rightConnectionRule <&&> leftConnectionRule <&&> posTopRule <&&> weightedRule 0.05 ,
     charRep = '┼'
 }
 
@@ -139,70 +136,70 @@ topCrossTile = Tile {
 topBLUTSplitTile :: Tile
 topBLUTSplitTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-BLU-tsplit.png"}) topLevelBlock,
-    rules = upConnectionRule <&&> downConnectionRule <&&> leftConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.1,
+    rules = upConnectionRule <&&> downConnectionRule <&&> leftConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> weightedRule 0.1,
     charRep = '┤'
 }
 
 topURBTSplitTile :: Tile
 topURBTSplitTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-URB-tsplit.png"}) topLevelBlock,
-    rules = upConnectionRule <&&> downConnectionRule <&&> rightConnectionRule <&&> noLeftConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.1,
+    rules = upConnectionRule <&&> downConnectionRule <&&> rightConnectionRule <&&> noLeftConnectionRule <&&> posTopRule <&&> weightedRule 0.1,
     charRep = '├'
 }
 
 topLURTSplitTile :: Tile
 topLURTSplitTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-LUR-tsplit.png"}) topLevelBlock,
-    rules = leftConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> upConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.1,
+    rules = leftConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> upConnectionRule <&&> posTopRule <&&> weightedRule 0.1,
     charRep = '┴'
 }
 
 topLRBTSplitTile :: Tile
 topLRBTSplitTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-LRB-tsplit.png"}) topLevelBlock,
-    rules = leftConnectionRule <&&> noUpConnectionRule <&&> rightConnectionRule <&&> downConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.1,
+    rules = leftConnectionRule <&&> noUpConnectionRule <&&> rightConnectionRule <&&> downConnectionRule <&&> posTopRule <&&> weightedRule 0.1,
     charRep = '┬'
 }
 
 topLDElbowTile :: Tile
 topLDElbowTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-LD-elbow.png"}) topLevelBlock,
-    rules = leftConnectionRule <&&> downConnectionRule <&&> noUpConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.2,
+    rules = leftConnectionRule <&&> downConnectionRule <&&> noUpConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> weightedRule 0.2,
     charRep = '┐'
 }
 
 topDRElbowTile :: Tile
 topDRElbowTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-DR-elbow.png"}) topLevelBlock,
-    rules = downConnectionRule <&&> rightConnectionRule <&&> noUpConnectionRule <&&> noLeftConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.2,
+    rules = downConnectionRule <&&> rightConnectionRule <&&> noUpConnectionRule <&&> noLeftConnectionRule <&&> posTopRule <&&> weightedRule 0.2,
     charRep = '┌'
 }
 
 topULElbowTile :: Tile
 topULElbowTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-UL-elbow.png"}) topLevelBlock,
-    rules = upConnectionRule <&&> leftConnectionRule <&&> noDownConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.2,
+    rules = upConnectionRule <&&> leftConnectionRule <&&> noDownConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> weightedRule 0.2,
     charRep = '┘'
 }
 
 topURElbowTile :: Tile
 topURElbowTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-UR-elbow.png"}) topLevelBlock,
-    rules = upConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> noLeftConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.2,
+    rules = upConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> noLeftConnectionRule <&&> posTopRule <&&> weightedRule 0.2,
     charRep = '└'
 }
 
 topHorizontalPipeTile :: Tile
 topHorizontalPipeTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-horizontal-pipe.png"}) topLevelBlock,
-    rules = leftConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> noUpConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.6,
+    rules = leftConnectionRule <&&> rightConnectionRule <&&> noDownConnectionRule <&&> noUpConnectionRule <&&> posTopRule <&&> weightedRule 0.6,
     charRep = '─'
 }
 
 topVerticalPipeTile :: Tile
 topVerticalPipeTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-vertical-pipe.png"}) topLevelBlock,
-    rules = upConnectionRule <&&> downConnectionRule <&&> noLeftConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> waterRule <&&> weightedRule 0.6,
+    rules = upConnectionRule <&&> downConnectionRule <&&> noLeftConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> weightedRule 0.6,
     charRep = '│'
 }
 
@@ -210,22 +207,22 @@ topVerticalPipeTile = Tile {
 topGrassTile :: Tile
 topGrassTile = Tile {
     materials = M.insert PosY (def {texture = Just "textures/top-grass.png"}) topLevelBlock,
-    rules = noLeftConnectionRule <&&> noUpConnectionRule <&&> noDownConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> waterRule,
+    rules = posTopRule,
     charRep = '░'
 }
 
 dirtTile :: Tile
 dirtTile = Tile {
     materials = dirtBlock,
-    rules = canExistAt (\(_, y, _) -> y <= 2) <&&> waterRule,
+    rules = canExistAt (\(_, y, _) -> y <= 2),
     charRep = 'd'
 }
 
 waterTile :: Tile
 waterTile = Tile {
     materials = waterBlock,
-    rules = allMustBe [waterTile] aboveNeighbour <&&> noLeftConnectionRule <&&> noUpConnectionRule <&&> noDownConnectionRule <&&> noRightConnectionRule
-        <&&> canExistAt (\(_, y, _) -> y >= 1) <&&> ((weightedRule 0.05 <&&> (<!>) (nextToAny [waterTile] directNeighbours)) <||> (nextToAny [waterTile] directNeighbours)),
+    rules = allMustBe [waterTile] aboveNeighbour <&&> canExistAt (\(_, y, _) -> y >= 1) 
+        <&&> ((weightedRule 0.05 <&&> (<!>) (nextToAny [waterTile] directNeighbours)) <||> nextToAny [waterTile] directNeighbours),
     charRep = 'w'
 }
 
