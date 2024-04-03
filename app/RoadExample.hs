@@ -15,7 +15,6 @@ dirtMaterial = def {texture = Just "textures/side-dirt.png"}
 grassDirtMaterialSide :: Material
 grassDirtMaterialSide = def {texture = Just "textures/side-dirt-grass.png"}
 
-
 topLevelBlock :: M.Map Side Material
 topLevelBlock = M.fromList [
     (NegY, dirtMaterial),
@@ -202,7 +201,6 @@ topVerticalPipeTile = Tile {
     rules = upConnectionRule <&&> downConnectionRule <&&> noLeftConnectionRule <&&> noRightConnectionRule <&&> posTopRule <&&> weightedRule 0.6,
     charRep = '│'
 }
-
 
 topGrassTile :: Tile
 topGrassTile = Tile {

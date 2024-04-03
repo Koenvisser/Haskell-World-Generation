@@ -10,7 +10,7 @@ import System.Random
 import Debug.Trace (trace)
 import Data.List (delete)
 
-
+type WFCMap = M.Map Pos [Pos]
 -- | Weights is a tuple of a float and a list of floats (Total weight, [Weights])
 type Weights = (Float, [Float])
 type ShannonEntropy = Float

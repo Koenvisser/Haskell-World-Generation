@@ -1,6 +1,7 @@
 module Def where
 
 import Data.Default
+import Data.List (union)
 import qualified Data.Map as M
 
 -- | A tile is a 3D object with a texture, a set of rules and a character representation.
@@ -51,7 +52,7 @@ instance Eq Tile where
     (==) tile1 tile2 = charRep tile1 == charRep tile2
 
 -- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
-newtype Rule = Rule (TileMap -> Pos -> RuleResult)
+newtype Rule = Rule (TileMap -> Pos -> (RuleResult, [Pos]))
 
 -- | The result of a rule is defined as a `RuleResult`. It is represented either as a 
 --   `CanPlace Bool` which means the rule guaranteed passes or fails. Or as 
@@ -106,9 +107,17 @@ instance CompareRule RuleResult where
 
 -- | The CompareRule instance for Rule, which composes the rules with the given operator
 instance CompareRule Rule where
-    (Rule rule1) <||> (Rule rule2) = Rule (\tileMap pos -> rule1 tileMap pos <||> rule2 tileMap pos)
-    (Rule rule1) <&&> (Rule rule2) = Rule (\tileMap pos -> rule1 tileMap pos <&&> rule2 tileMap pos)
-    (<!>) (Rule rule) = Rule (\tileMap pos -> (<!>) (rule tileMap pos))
+    (Rule rule1) <||> (Rule rule2) = Rule (\tileMap pos -> 
+        let (result1, pos1) = rule1 tileMap pos 
+            (result2, pos2) = rule2 tileMap pos
+        in (result1 <||> result2, pos1 `union` pos2))
+    (Rule rule1) <&&> (Rule rule2) = Rule (\tileMap pos -> 
+        let (result1, pos1) = rule1 tileMap pos 
+            (result2, pos2) = rule2 tileMap pos
+        in (result1 <&&> result2, pos1 `union` pos2))
+    (<!>) (Rule rule) = Rule (\tileMap pos -> 
+        let (result, pos') = rule tileMap pos
+        in ((<!>) result, pos'))
 
 -- | A position is a 3D coordinate in the world
 type Pos = (Int, Int, Int)
