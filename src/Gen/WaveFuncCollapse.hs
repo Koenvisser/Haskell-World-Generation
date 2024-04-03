@@ -60,12 +60,12 @@ updateEnv tileMap env = foldr (\pos result -> case result of
 
 posToEnv :: Pos -> [Tile] -> TileMap -> Maybe (Either Tile ([Tile], Weights, ShannonEntropy)) 
 posToEnv pos tiles (TileMap tileMap) = 
-  let weights = map (resultToFloat . (\(Rule f) -> f (TileMap tileMap) pos) . rules) tiles
+  let weights = map (resultToFloat . (\(Rule rule) -> rule (TileMap tileMap) pos) . rules) tiles
+      -- Only keep the tiles that have a weight greater than 0 and still satisfy the rules
       (newTiles, newWeights) = unzip $ filter (\(tile, weight) -> weight > 0 && all (\(pos', tile') ->
-        let (Rule rule) = rules tile' in 
-          case rule (TileMap $ M.insert pos tile tileMap) pos' of
-            CanPlace b -> b
-            ChancePlace c -> c > 0) (M.toList  tileMap)) $ zip tiles weights
+        -- Check if the rule still holds for any tile in the tileMap if the new tile is placed at the position
+        ((0<) . resultToFloat . (\(Rule rule) -> rule (TileMap (M.insert pos tile tileMap)) pos') . rules) tile') 
+          (M.toList tileMap)) $ zip tiles weights
   in case newTiles of
     [] -> Nothing
     [tile] -> Just $ Left tile
