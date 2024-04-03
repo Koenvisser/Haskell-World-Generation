@@ -61,6 +61,12 @@ updateEnv tileMap env = foldr (\pos result -> case result of
       Just (Right env) -> Just (TileMap newTileMap, M.insert pos env newEnv)
     ) (Just (tileMap, M.empty)) (M.keys env)
 
+checkTileMap :: TileMap -> Bool
+checkTileMap (TileMap tileMap) = all (\pos -> let (Rule rule) = rules $ tileMap M.! pos in case rule (TileMap tileMap) pos of
+  CanPlace b -> b
+  ChancePlace c -> c > 0.0
+  ) (M.keys tileMap)
+
 posToEnv :: Pos -> [Tile] -> TileMap -> Maybe (Either Tile ([Tile], Weights, ShannonEntropy)) 
 posToEnv pos tiles tileMap = 
   let weights = map (resultToFloat . (\(Rule f) -> f tileMap pos) . rules) tiles
@@ -140,7 +146,7 @@ waveFuncCollapseStep pos (TileMap tileMap) env history = do
       let newTileMap = M.insert pos tile tileMap
       let newHistory = HistoryUnit (TileMap tileMap) env pos tile : history
       let newEnv = M.delete pos env
-      return (updateEnv (TileMap newTileMap) newEnv >>= (\(newTileMap, newEnv) -> Just (newTileMap, newEnv)), newHistory)
+      return (updateEnv (TileMap newTileMap) newEnv >>= (\(newTileMap, newEnv) -> if checkTileMap newTileMap then Just (newTileMap, newEnv) else Nothing), newHistory)
 
 -- | Select a random tile from a list of tiles based on their weights.
 --   If the total weight is 0, the function will return Nothing.
