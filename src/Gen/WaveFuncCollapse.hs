@@ -64,13 +64,13 @@ updateEnv tileMap env = foldr (\pos result -> case result of
 posToEnv :: Pos -> [Tile] -> TileMap -> Maybe (Either Tile ([Tile], Weights, ShannonEntropy)) 
 posToEnv pos tiles tileMap = 
   let weights = map (resultToFloat . (\(Rule f) -> f tileMap pos) . rules) tiles
-      newTiles = map fst $ filter (\(_, weight) -> weight > 0) $ zip tiles weights
+      (newTiles, newWeights) = unzip $ filter (\(_, weight) -> weight > 0) $ zip tiles weights
   in case newTiles of
     [] -> Nothing
     [tile] -> Just $ Left tile
     _ -> do      
-      let totWeight = sum weights
-      Just $ Right (newTiles, (totWeight, weights), shannonEntropy (totWeight, weights))
+      let totWeight = sum newWeights
+      Just $ Right (newTiles, (totWeight, newWeights), shannonEntropy (totWeight, newWeights))
 
 -- | Calculate the shannon entropy of a set of tiles. We use type `Weights` instead of a list of tiles
 --   to avoid reevaluating the rules of the tiles and recalculating the total weight of these tiles.
@@ -98,14 +98,14 @@ waveFuncCollapse' tileMap env history
 resetWaveFuncCollapse :: History -> IO TileMap
 resetWaveFuncCollapse [] = error "No possible tilemaps with the current rules"
 resetWaveFuncCollapse ((HistoryUnit tileMap env pos tile):history) = do
-  let newEnv = M.adjust ((\(tiles, weights, _) -> (tiles, weights, shannonEntropy weights)) . deleteTile tile) pos env
+  let newEnv = M.adjust (\(tiles, weights, _) -> let (newTiles, newWeights) = deleteTile tile (tiles, weights) in (newTiles, newWeights, shannonEntropy newWeights)) pos env
   let (newTiles, _, _) = newEnv M.! pos
   if null newTiles then resetWaveFuncCollapse history else waveFuncCollapse' tileMap newEnv history
   where
-    deleteTile :: Tile -> ([Tile], Weights, ShannonEntropy) -> ([Tile], Weights, ShannonEntropy)
-    deleteTile tile (x:xs, (totalWeight, y:ys), entropy) 
-      | x == tile = (xs, (totalWeight - y, ys), entropy)
-      | otherwise = (\(newTiles', (totalWeight, weights), entropy) -> (x:newTiles', (totalWeight, y:weights), entropy)) $ deleteTile tile (xs, (totalWeight, ys), entropy) 
+    deleteTile :: Tile -> ([Tile], Weights) -> ([Tile], Weights)
+    deleteTile tile (x:xs, (totalWeight, y:ys)) 
+      | x == tile = (xs, (totalWeight - y, ys))
+      | otherwise = (\(newTiles', (totalWeight', weights)) -> (x:newTiles', (totalWeight' + y, y:weights))) $ deleteTile tile (xs, (totalWeight - y, ys)) 
 
 
 -- | Get the position with the lowest shannon entropy. If there are multiple positions with the same entropy,
