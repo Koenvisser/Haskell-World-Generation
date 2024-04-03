@@ -8,272 +8,295 @@
 </span><span id="line-8"></span><span class="hs-comment">--   the absolute positions of the shape at that position</span><span>
 </span><span id="line-9"></span><span class="annot"><a href="Utils.html#listToShape"><span class="hs-identifier hs-type">listToShape</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
 </span><span id="line-10"></span><span id="listToShape"><span class="annot"><span class="annottext">listToShape :: [Pos] -&gt; Shape
-</span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var hs-var">listToShape</span></a></span></span><span> </span><span id="local-6989586621679057107"><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679057107"><span class="hs-identifier hs-var">relPos</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679057108"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057108"><span class="hs-identifier hs-var">px</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057109"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057109"><span class="hs-identifier hs-var">py</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057110"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057110"><span class="hs-identifier hs-var">pz</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Pos -&gt; Pos) -&gt; [Pos] -&gt; [Pos]
+</span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var hs-var">listToShape</span></a></span></span><span> </span><span id="local-6989586621679057119"><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679057119"><span class="hs-identifier hs-var">relPos</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679057120"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057120"><span class="hs-identifier hs-var">px</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057121"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057121"><span class="hs-identifier hs-var">py</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057122"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057122"><span class="hs-identifier hs-var">pz</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Pos -&gt; Pos) -&gt; [Pos] -&gt; [Pos]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679057111"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057111"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057112"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057112"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057113"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057113"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057111"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679057123"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057123"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057124"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057124"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057125"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057125"><span class="hs-identifier hs-var">z</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057123"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057108"><span class="hs-identifier hs-var">px</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057112"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679057120"><span class="hs-identifier hs-var">px</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057124"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057109"><span class="hs-identifier hs-var">py</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057113"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679057121"><span class="hs-identifier hs-var">py</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057125"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057110"><span class="hs-identifier hs-var">pz</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679057107"><span class="hs-identifier hs-var">relPos</span></a></span><span>
+</span><a href="#local-6989586621679057122"><span class="hs-identifier hs-var">pz</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679057119"><span class="hs-identifier hs-var">relPos</span></a></span><span>
 </span><span id="line-11"></span><span>
 </span><span id="line-12"></span><span class="annot"><span class="hs-comment">-- | A shape that contains all the direct horizontal, vertical and diagonal neighbours of a position</span></span><span>
 </span><span id="line-13"></span><span class="annot"><a href="Utils.html#allNeighbours"><span class="hs-identifier hs-type">allNeighbours</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
 </span><span id="line-14"></span><span id="allNeighbours"><span class="annot"><span class="annottext">allNeighbours :: Shape
 </span><a href="Utils.html#allNeighbours"><span class="hs-identifier hs-var hs-var">allNeighbours</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
 </span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057116"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057117"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057118"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679057116"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057116"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057128"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057129"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057130"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679057128"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057128"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">1</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057117"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057117"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057129"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057129"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">1</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057118"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057118"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span id="local-6989586621679057130"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057130"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057116"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057117"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679057118"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Pos -&gt; Bool
+</span><a href="#local-6989586621679057128"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057129"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679057130"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Pos -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">/=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-15"></span><span>
-</span><span id="line-16"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the left of a position</span></span><span>
-</span><span id="line-17"></span><span class="annot"><a href="Utils.html#leftNeighbour"><span class="hs-identifier hs-type">leftNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
-</span><span id="line-18"></span><span id="leftNeighbour"><span class="annot"><span class="annottext">leftNeighbour :: Shape
+</span><span id="line-16"></span><span class="annot"><a href="Utils.html#directNeighbours"><span class="hs-identifier hs-type">directNeighbours</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-17"></span><span id="directNeighbours"><span class="annot"><span class="annottext">directNeighbours :: Shape
+</span><a href="Utils.html#directNeighbours"><span class="hs-identifier hs-var hs-var">directNeighbours</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
+</span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the left of a position</span></span><span>
+</span><span id="line-20"></span><span class="annot"><a href="Utils.html#leftNeighbour"><span class="hs-identifier hs-type">leftNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-21"></span><span id="leftNeighbour"><span class="annot"><span class="annottext">leftNeighbour :: Shape
 </span><a href="Utils.html#leftNeighbour"><span class="hs-identifier hs-var hs-var">leftNeighbour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
 </span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the right of a position</span></span><span>
-</span><span id="line-21"></span><span class="annot"><a href="Utils.html#rightNeighbour"><span class="hs-identifier hs-type">rightNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
-</span><span id="line-22"></span><span id="rightNeighbour"><span class="annot"><span class="annottext">rightNeighbour :: Shape
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the right of a position</span></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Utils.html#rightNeighbour"><span class="hs-identifier hs-type">rightNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-25"></span><span id="rightNeighbour"><span class="annot"><span class="annottext">rightNeighbour :: Shape
 </span><a href="Utils.html#rightNeighbour"><span class="hs-identifier hs-var hs-var">rightNeighbour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
 </span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-23"></span><span>
-</span><span id="line-24"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the front of a position</span></span><span>
-</span><span id="line-25"></span><span class="annot"><a href="Utils.html#downNeighbour"><span class="hs-identifier hs-type">downNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
-</span><span id="line-26"></span><span id="downNeighbour"><span class="annot"><span class="annottext">downNeighbour :: Shape
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the front of a position</span></span><span>
+</span><span id="line-28"></span><span class="annot"><a href="Utils.html#downNeighbour"><span class="hs-identifier hs-type">downNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-29"></span><span id="downNeighbour"><span class="annot"><span class="annottext">downNeighbour :: Shape
 </span><a href="Utils.html#downNeighbour"><span class="hs-identifier hs-var hs-var">downNeighbour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
 </span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-27"></span><span>
-</span><span id="line-28"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the back of a position</span></span><span>
-</span><span id="line-29"></span><span class="annot"><a href="Utils.html#upNeighbour"><span class="hs-identifier hs-type">upNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
-</span><span id="line-30"></span><span id="upNeighbour"><span class="annot"><span class="annottext">upNeighbour :: Shape
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour to the back of a position</span></span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Utils.html#upNeighbour"><span class="hs-identifier hs-type">upNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-33"></span><span id="upNeighbour"><span class="annot"><span class="annottext">upNeighbour :: Shape
 </span><a href="Utils.html#upNeighbour"><span class="hs-identifier hs-var hs-var">upNeighbour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
 </span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour above a position</span></span><span>
-</span><span id="line-33"></span><span class="annot"><a href="Utils.html#aboveNeighbour"><span class="hs-identifier hs-type">aboveNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
-</span><span id="line-34"></span><span id="aboveNeighbour"><span class="annot"><span class="annottext">aboveNeighbour :: Shape
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour above a position</span></span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Utils.html#aboveNeighbour"><span class="hs-identifier hs-type">aboveNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-37"></span><span id="aboveNeighbour"><span class="annot"><span class="annottext">aboveNeighbour :: Shape
 </span><a href="Utils.html#aboveNeighbour"><span class="hs-identifier hs-var hs-var">aboveNeighbour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
 </span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour below a position</span></span><span>
-</span><span id="line-37"></span><span class="annot"><a href="Utils.html#belowNeighbour"><span class="hs-identifier hs-type">belowNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
-</span><span id="line-38"></span><span id="belowNeighbour"><span class="annot"><span class="annottext">belowNeighbour :: Shape
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="annot"><span class="hs-comment">-- | A shape that contains the neighbour below a position</span></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Utils.html#belowNeighbour"><span class="hs-identifier hs-type">belowNeighbour</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span>
+</span><span id="line-41"></span><span id="belowNeighbour"><span class="annot"><span class="annottext">belowNeighbour :: Shape
 </span><a href="Utils.html#belowNeighbour"><span class="hs-identifier hs-var hs-var">belowNeighbour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; Shape
 </span><a href="Utils.html#listToShape"><span class="hs-identifier hs-var">listToShape</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="hs-comment">-- newtype Rule = Rule (Tile -&gt; TileMap -&gt; Pos -&gt; RuleResult)</span><span>
-</span><span id="line-42"></span><span class="hs-comment">-- data RuleResult = CanPlace Bool | ChancePlace Float</span><span>
+</span><span id="line-42"></span><span>
 </span><span id="line-43"></span><span>
-</span><span id="line-44"></span><span class="hs-comment">-- | A rule that takes a list of tiles and a shape, and returns True if any of the tiles defined in the list</span><span>
-</span><span id="line-45"></span><span class="hs-comment">--   tile are within the shape at the given position. </span><span>
-</span><span id="line-46"></span><span class="annot"><a href="Utils.html#nextToAny"><span class="hs-identifier hs-type">nextToAny</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
-</span><span id="line-47"></span><span id="nextToAny"><span class="annot"><span class="annottext">nextToAny :: [Tile] -&gt; Shape -&gt; Rule
-</span><a href="Utils.html#nextToAny"><span class="hs-identifier hs-var hs-var">nextToAny</span></a></span></span><span> </span><span id="local-6989586621679057127"><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679057127"><span class="hs-identifier hs-var">tiles</span></a></span></span><span> </span><span id="local-6989586621679057128"><span class="annot"><span class="annottext">Shape
-</span><a href="#local-6989586621679057128"><span class="hs-identifier hs-var">shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
-</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679057131"><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679057131"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679057132"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057132"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-48"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
+</span><span id="line-44"></span><span class="hs-comment">-- newtype Rule = Rule (Tile -&gt; TileMap -&gt; Pos -&gt; RuleResult)</span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- data RuleResult = CanPlace Bool | ChancePlace Float</span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- | A rule that takes a list of tiles and a shape, and returns True if any of the tiles defined in the list</span><span>
+</span><span id="line-48"></span><span class="hs-comment">--   tile are within the shape at the given position. </span><span>
+</span><span id="line-49"></span><span class="annot"><a href="Utils.html#nextToAny"><span class="hs-identifier hs-type">nextToAny</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
+</span><span id="line-50"></span><span id="nextToAny"><span class="annot"><span class="annottext">nextToAny :: [Tile] -&gt; Shape -&gt; Rule
+</span><a href="Utils.html#nextToAny"><span class="hs-identifier hs-var hs-var">nextToAny</span></a></span></span><span> </span><span id="local-6989586621679057140"><span class="annot"><span class="annottext">[Tile]
+</span><a href="#local-6989586621679057140"><span class="hs-identifier hs-var">tiles</span></a></span></span><span> </span><span id="local-6989586621679057141"><span class="annot"><span class="annottext">Shape
+</span><a href="#local-6989586621679057141"><span class="hs-identifier hs-var">shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
+</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679057144"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679057144"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679057145"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057145"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-51"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
 </span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; RuleResult) -&gt; Bool -&gt; RuleResult
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Pos -&gt; Bool) -&gt; [Pos] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
-</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057135"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057135"><span class="hs-identifier hs-var">nPos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-49"></span><span>        </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
+</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057148"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057148"><span class="hs-identifier hs-var">nPos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-52"></span><span>        </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">M.lookup</span></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057135"><span class="hs-identifier hs-var">nPos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679057131"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-50"></span><span>            </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679057137"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679057137"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679057137"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Tile] -&gt; Bool
-forall a. Eq a =&gt; a -&gt; [a] -&gt; Bool
-forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
-</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679057127"><span class="hs-identifier hs-var">tiles</span></a></span><span>
-</span><span id="line-51"></span><span>            </span><span class="annot"><span class="annottext">Maybe Tile
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span>
-</span><span id="line-52"></span><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Shape
-</span><a href="#local-6989586621679057128"><span class="hs-identifier hs-var">shape</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057132"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="hs-comment">-- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles defined in the list</span><span>
-</span><span id="line-55"></span><span class="hs-comment">--   tile are within the shape at the given position. </span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Utils.html#nextToAll"><span class="hs-identifier hs-type">nextToAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
-</span><span id="line-57"></span><span id="nextToAll"><span class="annot"><span class="annottext">nextToAll :: [Tile] -&gt; Shape -&gt; Rule
-</span><a href="Utils.html#nextToAll"><span class="hs-identifier hs-var hs-var">nextToAll</span></a></span></span><span> </span><span id="local-6989586621679057140"><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679057140"><span class="hs-identifier hs-var">tiles</span></a></span></span><span> </span><span id="local-6989586621679057141"><span class="annot"><span class="annottext">Shape
-</span><a href="#local-6989586621679057141"><span class="hs-identifier hs-var">shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
-</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679057142"><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679057142"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679057143"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057143"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-58"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; RuleResult) -&gt; Bool -&gt; RuleResult
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Tile -&gt; Bool) -&gt; [Tile] -&gt; Bool
-forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
-</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057145"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679057145"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-59"></span><span>        </span><span class="annot"><span class="annottext">(Pos -&gt; Bool) -&gt; [Pos] -&gt; Bool
-forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
-</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057146"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057146"><span class="hs-identifier hs-var">nPos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><span id="line-60"></span><span>            </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
-forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">M.lookup</span></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057146"><span class="hs-identifier hs-var">nPos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679057142"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-61"></span><span>                </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679057147"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679057147"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679057147"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Tile] -&gt; Bool
+</span><a href="#local-6989586621679057148"><span class="hs-identifier hs-var">nPos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679057144"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-53"></span><span>            </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679057150"><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679057150"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679057150"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Tile] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; [a] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Tile]
 </span><a href="#local-6989586621679057140"><span class="hs-identifier hs-var">tiles</span></a></span><span>
-</span><span id="line-62"></span><span>                </span><span class="annot"><span class="annottext">Maybe Tile
+</span><span id="line-54"></span><span>            </span><span class="annot"><span class="annottext">Maybe Tile
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span>
-</span><span id="line-63"></span><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Shape
+</span><span id="line-55"></span><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Shape
 </span><a href="#local-6989586621679057141"><span class="hs-identifier hs-var">shape</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057143"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679057140"><span class="hs-identifier hs-var">tiles</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-64"></span><span>
-</span><span id="line-65"></span><span class="hs-comment">-- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles in the shape are </span><span>
-</span><span id="line-66"></span><span class="hs-comment">--   within the list of tiles at the given position.</span><span>
-</span><span id="line-67"></span><span class="annot"><a href="Utils.html#allMustBe"><span class="hs-identifier hs-type">allMustBe</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
-</span><span id="line-68"></span><span id="allMustBe"><span class="annot"><span class="annottext">allMustBe :: [Tile] -&gt; Shape -&gt; Rule
-</span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var hs-var">allMustBe</span></a></span></span><span> </span><span id="local-6989586621679057149"><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679057149"><span class="hs-identifier hs-var">tiles</span></a></span></span><span> </span><span id="local-6989586621679057150"><span class="annot"><span class="annottext">Shape
-</span><a href="#local-6989586621679057150"><span class="hs-identifier hs-var">shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
-</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679057151"><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679057151"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679057152"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057152"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-69"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
+</span><a href="#local-6989586621679057145"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span class="hs-comment">-- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles defined in the list</span><span>
+</span><span id="line-58"></span><span class="hs-comment">--   tile are within the shape at the given position. </span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Utils.html#nextToAll"><span class="hs-identifier hs-type">nextToAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
+</span><span id="line-60"></span><span id="nextToAll"><span class="annot"><span class="annottext">nextToAll :: [Tile] -&gt; Shape -&gt; Rule
+</span><a href="Utils.html#nextToAll"><span class="hs-identifier hs-var hs-var">nextToAll</span></a></span></span><span> </span><span id="local-6989586621679057153"><span class="annot"><span class="annottext">[Tile]
+</span><a href="#local-6989586621679057153"><span class="hs-identifier hs-var">tiles</span></a></span></span><span> </span><span id="local-6989586621679057154"><span class="annot"><span class="annottext">Shape
+</span><a href="#local-6989586621679057154"><span class="hs-identifier hs-var">shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
+</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679057155"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679057155"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679057156"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057156"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-61"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
+</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; RuleResult) -&gt; Bool -&gt; RuleResult
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Tile -&gt; Bool) -&gt; [Tile] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057158"><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679057158"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-62"></span><span>        </span><span class="annot"><span class="annottext">(Pos -&gt; Bool) -&gt; [Pos] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057159"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057159"><span class="hs-identifier hs-var">nPos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><span id="line-63"></span><span>            </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">M.lookup</span></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057159"><span class="hs-identifier hs-var">nPos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679057155"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-64"></span><span>                </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679057160"><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679057160"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679057160"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Tile] -&gt; Bool
+forall a. Eq a =&gt; a -&gt; [a] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Tile]
+</span><a href="#local-6989586621679057153"><span class="hs-identifier hs-var">tiles</span></a></span><span>
+</span><span id="line-65"></span><span>                </span><span class="annot"><span class="annottext">Maybe Tile
+</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span>
+</span><span id="line-66"></span><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Shape
+</span><a href="#local-6989586621679057154"><span class="hs-identifier hs-var">shape</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057156"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Tile]
+</span><a href="#local-6989586621679057153"><span class="hs-identifier hs-var">tiles</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="hs-comment">-- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles in the shape are </span><span>
+</span><span id="line-69"></span><span class="hs-comment">--   within the list of tiles at the given position.</span><span>
+</span><span id="line-70"></span><span class="annot"><a href="Utils.html#allMustBe"><span class="hs-identifier hs-type">allMustBe</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-type">Shape</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
+</span><span id="line-71"></span><span id="allMustBe"><span class="annot"><span class="annottext">allMustBe :: [Tile] -&gt; Shape -&gt; Rule
+</span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var hs-var">allMustBe</span></a></span></span><span> </span><span id="local-6989586621679057162"><span class="annot"><span class="annottext">[Tile]
+</span><a href="#local-6989586621679057162"><span class="hs-identifier hs-var">tiles</span></a></span></span><span> </span><span id="local-6989586621679057163"><span class="annot"><span class="annottext">Shape
+</span><a href="#local-6989586621679057163"><span class="hs-identifier hs-var">shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
+</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679057164"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679057164"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679057165"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057165"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-72"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
 </span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; RuleResult) -&gt; Bool -&gt; RuleResult
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Pos -&gt; Bool) -&gt; [Pos] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
-</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057153"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057153"><span class="hs-identifier hs-var">nPos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-70"></span><span>        </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
+</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679057166"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057166"><span class="hs-identifier hs-var">nPos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-73"></span><span>        </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">M.lookup</span></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057153"><span class="hs-identifier hs-var">nPos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679057151"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-71"></span><span>            </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679057154"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679057154"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679057154"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Tile] -&gt; Bool
+</span><a href="#local-6989586621679057166"><span class="hs-identifier hs-var">nPos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679057164"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-74"></span><span>            </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679057167"><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679057167"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679057167"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Tile] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; [a] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Tile]
-</span><a href="#local-6989586621679057149"><span class="hs-identifier hs-var">tiles</span></a></span><span>
-</span><span id="line-72"></span><span>            </span><span class="annot"><span class="annottext">Maybe Tile
+</span><a href="#local-6989586621679057162"><span class="hs-identifier hs-var">tiles</span></a></span><span>
+</span><span id="line-75"></span><span>            </span><span class="annot"><span class="annottext">Maybe Tile
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-73"></span><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Shape
-</span><a href="#local-6989586621679057150"><span class="hs-identifier hs-var">shape</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057152"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span>
-</span><span id="line-76"></span><span class="annot"><span class="hs-comment">-- | A rule that takes a float f and returns a rule with chance f of returning True </span></span><span>
-</span><span id="line-77"></span><span class="annot"><a href="Utils.html#chanceRule"><span class="hs-identifier hs-type">chanceRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
-</span><span id="line-78"></span><span id="chanceRule"><span class="annot"><span class="annottext">chanceRule :: Float -&gt; Rule
-</span><a href="Utils.html#chanceRule"><span class="hs-identifier hs-var hs-var">chanceRule</span></a></span></span><span> </span><span id="local-6989586621679057156"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679057156"><span class="hs-identifier hs-var">chance</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
+</span><span id="line-76"></span><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Shape
+</span><a href="#local-6989586621679057163"><span class="hs-identifier hs-var">shape</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057165"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-77"></span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><span class="hs-comment">-- | A rule that takes a float f and returns a rule with chance f of returning True </span></span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Utils.html#weightedRule"><span class="hs-identifier hs-type">weightedRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
+</span><span id="line-81"></span><span id="weightedRule"><span class="annot"><span class="annottext">weightedRule :: Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var hs-var">weightedRule</span></a></span></span><span> </span><span id="local-6989586621679057169"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679057169"><span class="hs-identifier hs-var">chance</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
 </span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="annot"><span class="annottext">TileMap
 </span><span class="hs-identifier">_</span></span><span> </span><span class="annot"><span class="annottext">Pos
 </span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
 </span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679057156"><span class="hs-identifier hs-var">chance</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span class="annot"><span class="hs-comment">-- | A function that takes a list of positions and returns a function that checks if a position is in the list</span></span><span>
-</span><span id="line-81"></span><span class="annot"><a href="Utils.html#isInPos"><span class="hs-identifier hs-type">isInPos</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">)</span><span>
-</span><span id="line-82"></span><span id="isInPos"><span class="annot"><span class="annottext">isInPos :: [Pos] -&gt; Pos -&gt; Bool
-</span><a href="Utils.html#isInPos"><span class="hs-identifier hs-var hs-var">isInPos</span></a></span></span><span> </span><span id="local-6989586621679057159"><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679057159"><span class="hs-identifier hs-var">posList</span></a></span></span><span> </span><span id="local-6989586621679057160"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057160"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057160"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Pos -&gt; [Pos] -&gt; Bool
+</span><a href="#local-6989586621679057169"><span class="hs-identifier hs-var">chance</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="annot"><span class="hs-comment">-- | A function that takes a list of positions and returns a function that checks if a position is in the list</span></span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Utils.html#isInPos"><span class="hs-identifier hs-type">isInPos</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">)</span><span>
+</span><span id="line-85"></span><span id="isInPos"><span class="annot"><span class="annottext">isInPos :: [Pos] -&gt; Pos -&gt; Bool
+</span><a href="Utils.html#isInPos"><span class="hs-identifier hs-var hs-var">isInPos</span></a></span></span><span> </span><span id="local-6989586621679057172"><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679057172"><span class="hs-identifier hs-var">posList</span></a></span></span><span> </span><span id="local-6989586621679057173"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057173"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057173"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Pos -&gt; [Pos] -&gt; Bool
 forall a. Eq a =&gt; a -&gt; [a] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679057159"><span class="hs-identifier hs-var">posList</span></a></span><span>
-</span><span id="line-83"></span><span>
-</span><span id="line-84"></span><span class="annot"><span class="hs-comment">-- | A rule that takes a function that takes a position and returns a boolean, and returns a rule using this function</span></span><span>
-</span><span id="line-85"></span><span class="annot"><a href="Utils.html#canExistAt"><span class="hs-identifier hs-type">canExistAt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
-</span><span id="line-86"></span><span id="canExistAt"><span class="annot"><span class="annottext">canExistAt :: (Pos -&gt; Bool) -&gt; Rule
-</span><a href="Utils.html#canExistAt"><span class="hs-identifier hs-var hs-var">canExistAt</span></a></span></span><span> </span><span id="local-6989586621679057162"><span class="annot"><span class="annottext">Pos -&gt; Bool
-</span><a href="#local-6989586621679057162"><span class="hs-identifier hs-var">posPred</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
+</span><a href="#local-6989586621679057172"><span class="hs-identifier hs-var">posList</span></a></span><span>
+</span><span id="line-86"></span><span>
+</span><span id="line-87"></span><span class="annot"><span class="hs-comment">-- | A rule that takes a function that takes a position and returns a boolean, and returns a rule using this function</span></span><span>
+</span><span id="line-88"></span><span class="annot"><a href="Utils.html#canExistAt"><span class="hs-identifier hs-type">canExistAt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
+</span><span id="line-89"></span><span id="canExistAt"><span class="annot"><span class="annottext">canExistAt :: (Pos -&gt; Bool) -&gt; Rule
+</span><a href="Utils.html#canExistAt"><span class="hs-identifier hs-var hs-var">canExistAt</span></a></span></span><span> </span><span id="local-6989586621679057175"><span class="annot"><span class="annottext">Pos -&gt; Bool
+</span><a href="#local-6989586621679057175"><span class="hs-identifier hs-var">posPred</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleResult) -&gt; Rule
 </span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="annot"><span class="annottext">TileMap
-</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679057163"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057163"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
+</span><span class="hs-identifier">_</span></span><span> </span><span id="local-6989586621679057176"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057176"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
 </span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; RuleResult) -&gt; Bool -&gt; RuleResult
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Bool
-</span><a href="#local-6989586621679057162"><span class="hs-identifier hs-var">posPred</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679057163"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span>
-</span><span id="line-89"></span><span>
-</span><span id="line-90"></span><span class="hs-comment">-- | Must be next to</span><span>
-</span><span id="line-91"></span><span class="hs-comment">-- | Can not be next to</span><span>
-</span><span id="line-92"></span><span class="hs-comment">-- | (Overload with chance)</span><span>
-</span><span id="line-93"></span><span>
-</span><span id="line-94"></span><span class="hs-comment">-- | Can not exist at coordinates</span><span>
-</span><span id="line-95"></span><span class="hs-comment">-- | Can only exist at coordinates</span><span>
-</span><span id="line-96"></span><span class="hs-comment">-- | (Overload with chance)</span><span>
-</span><span id="line-97"></span></pre></body></html>
+</span><a href="#local-6989586621679057175"><span class="hs-identifier hs-var">posPred</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679057176"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span>
+</span><span id="line-93"></span><span class="hs-comment">-- | Must be next to</span><span>
+</span><span id="line-94"></span><span class="hs-comment">-- | Can not be next to</span><span>
+</span><span id="line-95"></span><span class="hs-comment">-- | (Overload with chance)</span><span>
+</span><span id="line-96"></span><span>
+</span><span id="line-97"></span><span class="hs-comment">-- | Can not exist at coordinates</span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- | Can only exist at coordinates</span><span>
+</span><span id="line-99"></span><span class="hs-comment">-- | (Overload with chance)</span><span>
+</span><span id="line-100"></span></pre></body></html>
