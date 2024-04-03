@@ -7,7 +7,7 @@ import Output (saveWorldToObjAndMtl)
 
 main :: IO ()
 main = do
-  tileMap <- waveFuncCollapse allTiles ((0, 0, 0), (9, 4, 9))
-  let world = World (((0, 0, 0), (9, 4, 9)), tileMap)
+  tileMap <- waveFuncCollapse allTiles ((0, 0, 0), (14, 3, 14))
+  let world = World (((0, 0, 0), (14, 3, 14)), tileMap)
   saveWorldToObjAndMtl world "output" 1 True
   putStr $ show tileMap

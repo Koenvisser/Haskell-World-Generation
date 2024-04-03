@@ -13,6 +13,9 @@ listToShape relPos (px, py, pz) = map (\(x, y, z) -> (x + px, y + py, z + pz)) r
 allNeighbours :: Shape
 allNeighbours = listToShape [(x, y, z) | x <- [-1..1], y <- [-1..1], z <- [-1..1], (x, y, z) /= (0, 0, 0)]
 
+directNeighbours :: Shape
+directNeighbours = listToShape [(-1, 0, 0), (1, 0, 0), (0, 0, 1), (0, 0, -1), (0, 1, 0), (0, -1, 0)]
+
 -- | A shape that contains the neighbour to the left of a position
 leftNeighbour :: Shape
 leftNeighbour = listToShape [(-1, 0, 0)]
@@ -74,8 +77,8 @@ allMustBe tiles shape = Rule (\(TileMap tileMap) pos ->
 
 
 -- | A rule that takes a float f and returns a rule with chance f of returning True 
-chanceRule :: Float -> Rule
-chanceRule chance = Rule (\_ _ -> ChancePlace chance)
+weightedRule :: Float -> Rule
+weightedRule chance = Rule (\_ _ -> ChancePlace chance)
 
 -- | A function that takes a list of positions and returns a function that checks if a position is in the list
 isInPos :: [Pos] -> (Pos -> Bool)

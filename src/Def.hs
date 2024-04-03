@@ -94,7 +94,7 @@ instance CompareRule RuleResult where
     (CanPlace False) <||> (ChancePlace f) = ChancePlace f
     (ChancePlace _) <||> (CanPlace True) = CanPlace True
     (ChancePlace f) <||> (CanPlace False) = ChancePlace f
-    (ChancePlace f1) <||> (ChancePlace f2) = ChancePlace ((1.0 + f1) * (1.0 + f2) - 1.0)
+    (ChancePlace f1) <||> (ChancePlace f2) = ChancePlace $ max f1 f2
     (CanPlace b1) <&&> (CanPlace b2) = CanPlace (b1 && b2)
     (CanPlace True) <&&> (ChancePlace f) = ChancePlace f
     (CanPlace False) <&&> (ChancePlace _) = CanPlace False
