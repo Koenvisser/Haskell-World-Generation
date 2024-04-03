@@ -94,7 +94,7 @@ instance CompareRule RuleResult where
     (CanPlace False) <||> (ChancePlace f) = ChancePlace f
     (ChancePlace _) <||> (CanPlace True) = CanPlace True
     (ChancePlace f) <||> (CanPlace False) = ChancePlace f
-    (ChancePlace f1) <||> (ChancePlace f2) = ChancePlace ((1.0 + f1) * (1.0 + f2) - 1.0)
+    (ChancePlace f1) <||> (ChancePlace f2) = ChancePlace $ max f1 f2
     (CanPlace b1) <&&> (CanPlace b2) = CanPlace (b1 && b2)
     (CanPlace True) <&&> (ChancePlace f) = ChancePlace f
     (CanPlace False) <&&> (ChancePlace _) = CanPlace False
@@ -125,7 +125,8 @@ newtype TileMap = TileMap (M.Map Pos Tile)
 -- | The show instance of a tilemap finds it's x and y boundaries and uses these to 
 --   define and use the show instance of a world.
 instance Show TileMap where
-    show (TileMap tileMap) = show $ World ((minPos, maxPos), TileMap tileMap)
+    show (TileMap tileMap) | M.null tileMap = "Empty tilemap"
+                           | otherwise = show $ World ((minPos, maxPos), TileMap tileMap)
         where
             minPos = fst . M.findMin $ tileMap
             maxPos = fst . M.findMax $ tileMap
@@ -134,7 +135,7 @@ instance Show TileMap where
 --   with the tiles represented as their character representation and an empty tile 
 --   represented as a space.
 instance Show World where
-    show (World (((xMin, yMin, zMin), (xMax, yMax, zMax)), TileMap tileMap)) = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | y <- [yMin..yMax]] | z <- [zMin..zMax]]
+    show (World (((xMin, yMin, zMin), (xMax, yMax, zMax)), TileMap tileMap)) = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | z <- [zMin..zMax]] |  y <- [yMin..yMax]]
         where
             tileAtPos :: Pos -> Char
             tileAtPos pos = case M.lookup pos tileMap of
