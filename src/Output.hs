@@ -56,7 +56,7 @@ worldToObjAndMtl :: TileMap -> Float -> (String, String, [FilePath])
 worldToObjAndMtl (TileMap tileMap) scale = 
   let (objString, _, mtlString, filePaths, _ ) = foldl (\(accObjString, fCount, accMtlString, accFiles, cache) (pos, tile) -> 
                                 let (newObjString, newfCount, newMtlString, files, newCache) = tileToObjAndMtl pos tile scale fCount cache
-                                in (accObjString ++ "\n" ++ newObjString, newfCount, accMtlString ++ "\n" ++ newMtlString, accFiles ++ files, newCache)
+                                in (accObjString ++ "\n" ++ newObjString, newfCount, accMtlString ++ newMtlString, accFiles ++ files, newCache)
                              ) ("", 1, "", [], M.empty) $ M.toList tileMap
   in (objString, mtlString, filePaths)
 
