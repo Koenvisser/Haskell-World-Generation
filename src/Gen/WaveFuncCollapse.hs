@@ -68,7 +68,7 @@ posToEnv pos tiles (TileMap tileMap) dependencies =
           Just deps -> all (\pos' -> 
             case M.lookup pos' tileMap of
               Just tile' -> 
-                ((0<) . resultToFloat . fst . (\(Rule rule) -> rule (TileMap (M.insert pos tile tileMap)) pos) . rules) tile'
+                ((0<) . resultToFloat . fst . (\(Rule rule) -> rule (TileMap (M.insert pos tile tileMap)) pos') . rules) tile'
               Nothing -> True) deps
           Nothing -> True) $ zip tiles weights
   in case newTiles of
