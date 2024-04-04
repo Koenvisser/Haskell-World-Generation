@@ -54,7 +54,7 @@ allPosArePlaced = do
             return $ Tile materials rules charRep
         -- | Generate a rule, which can be placed at any position
         genRule :: Gen Rule
-        genRule = genRuleResult >>= \result -> return $ Rule (\_ _ -> result)
+        genRule = genRuleResult >>= \result -> return $ Rule (\_ _ -> (result, []))
         -- | Generate a rule result, which is always true or has a chance greater than 0 of being placed
         genRuleResult :: Gen RuleResult
         genRuleResult = oneof [return $ CanPlace True, ChancePlace <$> (arbitrary `suchThat` (\f -> f > 0 && f <= 1))]
