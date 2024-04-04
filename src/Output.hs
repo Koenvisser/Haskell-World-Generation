@@ -6,12 +6,8 @@ import Def
 
 import qualified Data.Map as M
 import Data.Maybe (maybeToList)
-import Control.Monad (when)
 import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName, takeDirectory)
-
--- TODO: Add option to not save the textures in a separate folder, but refer to original location
---       Improve the code quality
 
 -- | Converts a `TileMap` to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file is saved to the given path
@@ -31,9 +27,8 @@ saveWorldToObj tileMap path scale = do
 saveWorldToObjAndMtl :: TileMap 
                      -> FilePath  -- ^ The 'FilePath' that refers to the folder where the obj and mtl files are saved, as well as the textures folder
                      -> Float     -- ^ The scale of the faces of the tiles, which is important for the texture scaling
-                     -> Bool      -- ^ Whether to copy the textures to the textures folder, or refer to the original location
                      -> IO ()
-saveWorldToObjAndMtl tileMap path scale copy = do
+saveWorldToObjAndMtl tileMap path scale = do
   let (objString, mtlString, files) = worldToObjAndMtl tileMap scale
   putStrLn "Checking if all files exist..."
   mapM_ (\file -> do
@@ -45,10 +40,9 @@ saveWorldToObjAndMtl tileMap path scale copy = do
   writeFile (path ++ "/obj.obj") $ "mtllib mat.mtl\n\nvt 0 0\nvt 1 0\nvt 1 1\nvt 0 1\n" ++ objString
   putStrLn $ "Writing mtl file to " ++ path ++ "/mat.mtl"
   writeFile (path ++ "/mat.mtl") mtlString
-  when copy $ do
-    putStrLn $ "Copying textures to " ++ path ++ "/textures"
-    createDirectoryIfMissing True $ path ++ "/textures"
-    mapM_ (\file -> copyFile file $ path ++ "/textures/" ++ takeFileName file) files
+  putStrLn $ "Copying textures to " ++ path ++ "/textures"
+  createDirectoryIfMissing True $ path ++ "/textures"
+  mapM_ (\file -> copyFile file $ path ++ "/textures/" ++ takeFileName file) files
   
 -- | Converts a world to an obj file as a string, without any materials
 worldToObj :: TileMap -> Float -> String
