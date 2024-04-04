@@ -122,30 +122,20 @@ instance CompareRule Rule where
 -- | A position is a 3D coordinate in the world
 type Pos = (Int, Int, Int)
 -- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
-type Size = ((Int, Int, Int), (Int, Int, Int))
-
--- | A world is a 3D grid of tiles, represented as a size of the world 
---   and a tilemap containing the tiles at each position in the world
-newtype World = World (Size, TileMap)
+type Size = (Pos, Pos)
 
 -- | A tilemap is a map of positions to tiles in the world
 newtype TileMap = TileMap (M.Map Pos Tile)
 
--- | The show instance of a tilemap finds it's x and y boundaries and uses these to 
---   define and use the show instance of a world.
-instance Show TileMap where
-    show (TileMap tileMap) | M.null tileMap = "Empty tilemap"
-                           | otherwise = show $ World ((minPos, maxPos), TileMap tileMap)
-        where
-            minPos = fst . M.findMin $ tileMap
-            maxPos = fst . M.findMax $ tileMap
-
--- | The show instance of a world prints the the world as y slices of an x*z grid
+-- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid
 --   with the tiles represented as their character representation and an empty tile 
 --   represented as a space.
-instance Show World where
-    show (World (((xMin, yMin, zMin), (xMax, yMax, zMax)), TileMap tileMap)) = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | z <- [zMin..zMax]] |  y <- [yMin..yMax]]
+instance Show TileMap where
+    show (TileMap tileMap) | M.null tileMap = "Empty tilemap"
+                           | otherwise = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | z <- [zMin..zMax]] |  y <- [yMin..yMax]]
         where
+            (xMin, yMin, zMin) = fst . M.findMin $ tileMap
+            (xMax, yMax, zMax) = fst . M.findMax $ tileMap
             tileAtPos :: Pos -> Char
             tileAtPos pos = case M.lookup pos tileMap of
                 Just tile -> charRep tile

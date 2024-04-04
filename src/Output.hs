@@ -13,28 +13,28 @@ import System.FilePath.Posix (takeFileName, takeDirectory)
 -- TODO: Add option to not save the textures in a separate folder, but refer to original location
 --       Improve the code quality
 
--- | Converts a world to an obj file, which can be used to render the world in a 3D renderer.
+-- | Converts a `TileMap` to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file is saved to the given path
-saveWorldToObj :: World
+saveWorldToObj :: TileMap
                -> FilePath  -- ^ The 'FilePath' to save the obj file to
                -> Float     -- ^ The scale of the faces of the tiles
                -> IO ()
-saveWorldToObj world path scale = do 
+saveWorldToObj tileMap path scale = do 
   let directory = takeDirectory path
   putStrLn $ "Creating directory " ++ directory ++ " if it does not exist"
   createDirectoryIfMissing True directory
   putStrLn $ "Writing obj file to " ++ path
-  writeFile path $ worldToObj world scale
+  writeFile path $ worldToObj tileMap scale
 
--- | Converts a world to an obj file and a mtl file, which can be used to render the world in a 3D renderer.
+-- | Converts a `TileMap` to an obj file and a mtl file, which can be used to render the world in a 3D renderer.
 --   The obj file and mtl file are saved to the given path to a folder, and the textures are copied to a textures folder in the given path
-saveWorldToObjAndMtl :: World 
+saveWorldToObjAndMtl :: TileMap 
                      -> FilePath  -- ^ The 'FilePath' that refers to the folder where the obj and mtl files are saved, as well as the textures folder
                      -> Float     -- ^ The scale of the faces of the tiles, which is important for the texture scaling
                      -> Bool      -- ^ Whether to copy the textures to the textures folder, or refer to the original location
                      -> IO ()
-saveWorldToObjAndMtl world path scale copy = do
-  let (objString, mtlString, files) = worldToObjAndMtl world scale
+saveWorldToObjAndMtl tileMap path scale copy = do
+  let (objString, mtlString, files) = worldToObjAndMtl tileMap scale
   putStrLn "Checking if all files exist..."
   mapM_ (\file -> do
     exists <- doesFileExist file
@@ -51,15 +51,15 @@ saveWorldToObjAndMtl world path scale copy = do
     mapM_ (\file -> copyFile file $ path ++ "/textures/" ++ takeFileName file) files
   
 -- | Converts a world to an obj file as a string, without any materials
-worldToObj :: World -> Float -> String
-worldToObj (World (_, TileMap tileMap)) scale = fst $ foldl (\(accObjString, fCount) (pos, tile) -> 
+worldToObj :: TileMap -> Float -> String
+worldToObj (TileMap tileMap) scale = fst $ foldl (\(accObjString, fCount) (pos, tile) -> 
   let (objString, newfCount) = tileToObj pos tile scale fCount
   in (accObjString ++ "\n" ++ objString, newfCount)) ("", 1) $ M.toList tileMap
 
 -- | Converts a world to a tuple of strings, where the first string is the obj file, the second string is the mtl file and 
 --   the third is a list of file paths to the textures used in the mtl file
-worldToObjAndMtl :: World -> Float -> (String, String, [FilePath])
-worldToObjAndMtl (World (_, TileMap tileMap)) scale = 
+worldToObjAndMtl :: TileMap -> Float -> (String, String, [FilePath])
+worldToObjAndMtl (TileMap tileMap) scale = 
   let (objString, _, mtlString, filePaths, _ ) = foldl (\(accObjString, fCount, accMtlString, accFiles, cache) (pos, tile) -> 
                                 let (newObjString, newfCount, newMtlString, files, newCache) = tileToObjAndMtl pos tile scale fCount cache
                                 in (accObjString ++ "\n" ++ newObjString, newfCount, accMtlString ++ "\n" ++ newMtlString, accFiles ++ files, newCache)
