@@ -10,12 +10,20 @@ import System.Random
 import Debug.Trace (trace)
 import Data.List (delete)
 
+-- | `Dependencies` is a map of positions to a list of positions. It is used to keep track of which positions
+--   are dependent on which other positions. An example of this is a tile which rules are dependent on its neighbours,
+---  the neighbours of this tile are then dependent on the tile itself, so the position of the tile is added to the
+--   list of dependencies of the neighbours.
 type Dependencies = M.Map Pos [Pos]
 -- | Weights is a tuple of a float and a list of floats (Total weight, [Weights])
 type Weights = (Float, [Float])
 type ShannonEntropy = Float
+-- | The `Env` is a map of positions to a tuple of a list of tiles, weights and shannon entropy.
+--   This is used to keep track of the possible tiles for each position and their weights.
 type Env = M.Map Pos ([Tile], Weights, ShannonEntropy)
+-- | The `History` is a list of `HistoryUnit` which is used to keep track of the history of the wave function collapse.
 type History = [HistoryUnit]
+-- | The `HistoryUnit` is a record of the tilemap, environment, dependencies, position and tile of a single step in the wave function collapse.
 data HistoryUnit = HistoryUnit {
   tileMap :: TileMap,
   env :: Env,
@@ -49,6 +57,11 @@ createEnv tiles tileMap = foldr (\pos result -> case result of
     Just (Right env) -> Just (TileMap newTileMap, M.insert pos env newEnv, newDependencies)
     ) (Just (tileMap, M.empty, M.empty))
 
+-- | Update the environment with the new possible tiles and their weights. 
+--   It applies the rule to each possible tile and removes the tile from the environment if it doesn't satisfy the rules.
+--   If the environment has only one possible tile it will be added to the tileMap and removed from the environment. 
+--   If the environment has no possible tiles, the function will return Nothing.
+--   Also updates the dependencies of the positions based on the new tile.
 updateEnv :: TileMap -> Env -> Dependencies -> Maybe (TileMap, Env, Dependencies)
 updateEnv tileMap env dependencies = foldr (\pos result -> case result of 
   Nothing -> Nothing
@@ -59,17 +72,19 @@ updateEnv tileMap env dependencies = foldr (\pos result -> case result of
       Just (Right env) -> Just (TileMap newTileMap, M.insert pos env newEnv, newDependencies)
     ) (Just (tileMap, M.empty, dependencies)) (M.keys env)
 
+-- | Calculates the new environment for a position. It applies the rules to the position and returns the possible tiles
+--   and their weights. If the environment has only one possible tile it will return a `Left Tile`, otherwise it will return
+--   a `Right ([Tile], Weights, ShannonEntropy)`. If the environment has no possible tiles, the function will return Nothing.
 posToEnv :: Pos -> [Tile] -> TileMap -> Dependencies -> Maybe (Either Tile ([Tile], Weights, ShannonEntropy)) 
 posToEnv pos tiles (TileMap tileMap) dependencies = 
   let weights = map (resultToFloat . fst. (\(Rule rule) -> rule (TileMap tileMap) pos) . rules) tiles
       -- Only keep the tiles that have a weight greater than 0 and still satisfy the rules
       (newTiles, newWeights) = unzip $ filter (\(tile, weight) -> weight > 0 && 
+        -- Check if the depencies of the tile still satisfy the rules if the tile is placed at the position
         case M.lookup pos dependencies of 
           Just deps -> all (\pos' -> 
-            case M.lookup pos' tileMap of
-              Just tile' -> 
-                ((0<) . resultToFloat . fst . (\(Rule rule) -> rule (TileMap (M.insert pos tile tileMap)) pos') . rules) tile'
-              Nothing -> True) deps
+            maybe True ((0<) . resultToFloat . fst . (\(Rule rule) -> rule (TileMap (M.insert pos tile tileMap)) pos') . rules) (M.lookup pos' tileMap) 
+              ) deps
           Nothing -> True) $ zip tiles weights
   in case newTiles of
     [] -> Nothing
@@ -132,6 +147,8 @@ getRandomElement xs = do
     i <- randomRIO (0, length xs - 1)
     return (xs !! i)
 
+-- | Update the dependencies of a position, where a `Tile` has been placed. The function will remove the position
+--   from the dependencies and insert the position of the tile at the position of the dependencies.
 updateDependencies :: Pos -> Tile -> TileMap -> Dependencies -> Dependencies
 updateDependencies pos tile tileMap dependencies = let 
   (Rule rule) = rules tile
