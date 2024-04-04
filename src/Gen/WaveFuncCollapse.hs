@@ -7,8 +7,6 @@ import Def
 
 import qualified Data.Map as M
 import System.Random
-import Debug.Trace (trace)
-import Data.List (delete)
 
 -- | `Dependencies` is a map of positions to a list of positions. It is used to keep track of which positions
 --   are dependent on which other positions. An example of this is a tile which rules are dependent on its neighbours,
@@ -25,19 +23,18 @@ type Env = M.Map Pos ([Tile], Weights, ShannonEntropy)
 type History = [HistoryUnit]
 -- | The `HistoryUnit` is a record of the tilemap, environment, dependencies, position and tile of a single step in the wave function collapse.
 data HistoryUnit = HistoryUnit {
-  tileMap :: TileMap,
-  env :: Env,
-  dependencies :: Dependencies,
-  pos :: Pos,
-  tile :: Tile
+  prevTileMap :: TileMap,
+  prevEnv :: Env,
+  prevDependencies :: Dependencies,
+  placedPos :: Pos,
+  placedTile :: Tile
 } deriving (Show)
 
--- | Initialize the wave function collapse algorithm with a list of tiles and a size for the world.
---   The algorithm will then generate a tilemap and an environment using the `createEnv` function.
---   If no Environment can be created with the current Tile set, the function throw an error.
---   Afterwards it will invoke `waveFuncCollapse'` which will iteratiively collapse the wave function. 
+-- | Run the wave function collapse algorithm on a list of tiles and a size for the world.
+--   The algorithm will return a tilemap that satisfies the rules of the tiles.
+--   If no possible tilemap can be generated, the function will return an error. 
 waveFuncCollapse :: [Tile] -> Size -> IO TileMap
-waveFuncCollapse tiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
+waveFuncCollapse tiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
   let emptyTileMap = TileMap M.empty
   case createEnv tiles emptyTileMap allPos of
@@ -69,7 +66,7 @@ updateEnv tileMap env dependencies = foldr (\pos result -> case result of
     case posToEnv pos tiles (TileMap newTileMap) newDependencies of
       Nothing -> Nothing
       Just (Left tile) -> Just (TileMap $ M.insert pos tile newTileMap, newEnv, updateDependencies pos tile (TileMap newTileMap) newDependencies)
-      Just (Right env) -> Just (TileMap newTileMap, M.insert pos env newEnv, newDependencies)
+      Just (Right newPosEnv) -> Just (TileMap newTileMap, M.insert pos newPosEnv newEnv, newDependencies)
     ) (Just (tileMap, M.empty, dependencies)) (M.keys env)
 
 -- | Calculates the new environment for a position. It applies the rules to the position and returns the possible tiles
@@ -122,12 +119,14 @@ resetWaveFuncCollapse ((HistoryUnit tileMap env dependencies pos tile):history) 
   let newEnv = M.adjust (\(tiles, weights, _) -> let (newTiles, newWeights) = deleteTile tile (tiles, weights) in (newTiles, newWeights, shannonEntropy newWeights)) pos env
   let (newTiles, _, _) = newEnv M.! pos
   if null newTiles then resetWaveFuncCollapse history else waveFuncCollapse' tileMap newEnv dependencies history
-  where
-    deleteTile :: Tile -> ([Tile], Weights) -> ([Tile], Weights)
-    deleteTile tile (x:xs, (totalWeight, y:ys)) 
-      | x == tile = (xs, (totalWeight - y, ys))
-      | otherwise = (\(newTiles', (totalWeight', weights)) -> (x:newTiles', (totalWeight' + y, y:weights))) $ deleteTile tile (xs, (totalWeight - y, ys)) 
 
+-- | Delete a tile from a list of tiles and their weights. The function will return a new list of tiles and weights
+--   where the tile has been removed. If the tile is not in the list, the function will throw an error.
+deleteTile :: Tile -> ([Tile], Weights) -> ([Tile], Weights)
+deleteTile tile (x:xs, (totalWeight, y:ys)) 
+  | x == tile = (xs, (totalWeight - y, ys))
+  | otherwise = (\(newTiles', (totalWeight', weights)) -> (x:newTiles', (totalWeight' + y, y:weights))) $ deleteTile tile (xs, (totalWeight - y, ys)) 
+deleteTile _ _ = error "Tile not in list"
 
 -- | Get the position with the lowest shannon entropy. If there are multiple positions with the same entropy,
 --   the function will return a random position from the list of positions.
@@ -163,8 +162,8 @@ waveFuncCollapseStep :: Pos -> TileMap -> Env -> Dependencies -> History
   -> IO (Maybe (TileMap, Env, Dependencies), History)
 waveFuncCollapseStep pos (TileMap tileMap) env dependencies history  = do
   let (newTiles, weight, _) = env M.! pos
-  tile <- randomTile newTiles weight
-  case tile of
+  rTile <- randomTile newTiles weight
+  case rTile of
     Nothing -> return (Nothing, history)
     Just tile -> do 
       let newTileMap = M.insert pos tile tileMap

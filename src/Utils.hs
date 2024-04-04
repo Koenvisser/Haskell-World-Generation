@@ -61,7 +61,7 @@ nextToAll tiles shape = Rule (\(TileMap tileMap) pos ->
     (CanPlace $ all (\tile -> 
         any (\nPos ->
             case M.lookup nPos tileMap of
-                Just tile -> tile `elem` tiles
+                Just tile' -> tile == tile'
                 _ -> False
         ) (shape pos)) tiles, shape pos))
 
