@@ -1,4 +1,4 @@
-module NoPurple where
+module Examples.NoPurple where
 
 import Def
 import Utils

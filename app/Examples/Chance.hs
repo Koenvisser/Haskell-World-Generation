@@ -1,4 +1,4 @@
-module ExamplesChance where
+module Examples.Chance where
 
 import Def
 import Utils

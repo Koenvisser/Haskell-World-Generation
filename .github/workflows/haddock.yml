@@ -57,7 +57,7 @@ jobs:
       run: cabal build all
 
     - name: Build documentation
-      run: cabal haddock-project --hackage
+      run: cabal haddock-project --hackage --internal
 
     - name: Publish documentation
       uses: JamesIves/github-pages-deploy-action@4.1.5

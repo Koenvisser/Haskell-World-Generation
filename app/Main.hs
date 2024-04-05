@@ -1,6 +1,6 @@
 module Main where
 
-import RoadExample (allTiles)
+import Examples.Roads (allTiles)
 import Gen.WaveFuncCollapse (waveFuncCollapse)
 import Output (saveWorldToObjAndMtl)
 
