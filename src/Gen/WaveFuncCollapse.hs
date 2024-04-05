@@ -74,13 +74,13 @@ updateEnv tileMap env dependencies = foldr (\pos result -> case result of
 --   a `Right ([Tile], Weights, ShannonEntropy)`. If the environment has no possible tiles, the function will return Nothing.
 posToEnv :: Pos -> [Tile] -> TileMap -> Dependencies -> Maybe (Either Tile ([Tile], Weights, ShannonEntropy)) 
 posToEnv pos tiles (TileMap tileMap) dependencies = 
-  let weights = map (resultToFloat . fst. (\(Rule rule) -> rule (TileMap tileMap) pos) . rules) tiles
+  let weights = map (resultToFloat . getVal . (\(Rule rule) -> rule (TileMap tileMap) pos) . rules) tiles
       -- Only keep the tiles that have a weight greater than 0 and still satisfy the rules
       (newTiles, newWeights) = unzip $ filter (\(tile, weight) -> weight > 0 && 
         -- Check if the depencies of the tile still satisfy the rules if the tile is placed at the position
         case M.lookup pos dependencies of 
           Just deps -> all (\pos' -> 
-            maybe True ((0<) . resultToFloat . fst . (\(Rule rule) -> rule (TileMap (M.insert pos tile tileMap)) pos') . rules) (M.lookup pos' tileMap) 
+            maybe True ((0<) . resultToFloat . getVal . (\(Rule rule) -> rule (TileMap (M.insert pos tile tileMap)) pos') . rules) (M.lookup pos' tileMap) 
               ) deps
           Nothing -> True) $ zip tiles weights
   in case newTiles of
@@ -151,7 +151,7 @@ getRandomElement xs = do
 updateDependencies :: Pos -> Tile -> TileMap -> Dependencies -> Dependencies
 updateDependencies pos tile tileMap dependencies = let 
   (Rule rule) = rules tile
-  (_, deps) = rule tileMap pos
+  deps = getPos $ rule tileMap pos
   in foldr (\pos' -> M.insertWith (++) pos' [pos]) (M.delete pos dependencies) deps
 
 -- | Collapse the wave function of a single position. Selects a random tile from the environment and

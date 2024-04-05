@@ -52,7 +52,7 @@ instance Eq Tile where
     (==) tile1 tile2 = charRep tile1 == charRep tile2
 
 -- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
-newtype Rule = Rule (TileMap -> Pos -> (RuleResult, [Pos]))
+newtype Rule = Rule (TileMap -> Pos -> MonadTest RuleResult)
 
 -- | The result of a rule is defined as a `RuleResult`. It is represented either as a 
 --   `CanPlace Bool` which means the rule guaranteed passes or fails. Or as 
@@ -76,6 +76,31 @@ resultToBool (ChancePlace f) = f > 0
 resultToFloat :: RuleResult -> Float
 resultToFloat (CanPlace b) = if b then 1.0 else 0.0
 resultToFloat (ChancePlace f) = f
+
+data MonadTest m = MonadTest m [Pos]
+
+getVal :: MonadTest a -> a
+getVal (MonadTest a _) = a
+
+getPos :: MonadTest a -> [Pos]
+getPos (MonadTest _ pos) = pos
+
+instance Functor MonadTest where
+    fmap f (MonadTest a pos) = MonadTest (f a) pos
+
+instance Applicative MonadTest where
+    pure a = MonadTest a []
+    (MonadTest f pos1) <*> (MonadTest v pos2) = MonadTest (f v) (pos1 `union` pos2) 
+
+instance Monad MonadTest where
+    return = pure
+    MonadTest v1 pos1 >>= f = let MonadTest v2 pos2 = f v1 in MonadTest v2 (pos1 `union` pos2)
+
+instance Foldable MonadTest where
+    foldr f z (MonadTest a _) = f a z
+
+instance Traversable MonadTest where
+    traverse f (MonadTest a pos) = (\a' -> MonadTest a' pos) <$> f a
 
 class CompareRule a where
     -- | The OR operator for rules
@@ -108,16 +133,16 @@ instance CompareRule RuleResult where
 -- | The CompareRule instance for Rule, which composes the rules with the given operator
 instance CompareRule Rule where
     (Rule rule1) <||> (Rule rule2) = Rule (\tileMap pos -> 
-        let (result1, pos1) = rule1 tileMap pos 
-            (result2, pos2) = rule2 tileMap pos
-        in (result1 <||> result2, pos1 `union` pos2))
+        let result1 = rule1 tileMap pos 
+            result2 = rule2 tileMap pos
+        in (<||>) <$> result1 <*> result2)
     (Rule rule1) <&&> (Rule rule2) = Rule (\tileMap pos -> 
-        let (result1, pos1) = rule1 tileMap pos 
-            (result2, pos2) = rule2 tileMap pos
-        in (result1 <&&> result2, pos1 `union` pos2))
+        let result1 = rule1 tileMap pos 
+            result2 = rule2 tileMap pos
+        in (<&&>) <$> result1 <*> result2)
     (<!>) (Rule rule) = Rule (\tileMap pos -> 
-        let (result, pos') = rule tileMap pos
-        in ((<!>) result, pos'))
+        let result = rule tileMap pos
+        in (<!>) <$> result)
 
 -- | A position is a 3D coordinate in the world
 type Pos = (Int, Int, Int)
@@ -126,6 +151,9 @@ type Size = (Pos, Pos)
 
 -- | A tilemap is a map of positions to tiles in the world
 newtype TileMap = TileMap (M.Map Pos Tile)
+
+lookupTile :: Pos -> TileMap -> MonadTest (Maybe Tile)
+lookupTile pos (TileMap tileMap) = MonadTest (M.lookup pos tileMap) [pos]
 
 -- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid
 --   with the tiles represented as their character representation and an empty tile 
