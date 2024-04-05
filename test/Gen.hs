@@ -35,12 +35,12 @@ instance Arbitrary Material where
 allPosArePlaced :: IO Property
 allPosArePlaced = do
     -- Generate a list of tiles that is not empty
-    tiles <- generate genTiles:: IO [Tile]
+    tiles <- generate genTiles :: IO [Tile]
     size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
     -- Execute the wave function collapse algorithm
     result <- waveFuncCollapse tiles size
     case result of
-        Left err -> return $ property Discard
+        Left err -> return $ property False
         Right (TileMap tileMap) -> do
             -- Generate all positions in the world
             let ((minX, minY, minZ), (maxX, maxY, maxZ)) = size
@@ -57,7 +57,7 @@ allRulesAreSatisfied = do
     -- Execute the wave function collapse algorithm
     result <- waveFuncCollapse tiles size
     case result of
-        Left err -> return $ property Discard
+        Left err -> return $ property False
         Right (TileMap tileMap) -> do
             -- Test if all rules are satisfied
             return $ forAll (elements $ M.toList tileMap) $ \(pos, tile) -> 
