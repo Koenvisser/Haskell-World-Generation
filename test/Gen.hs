@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-orphans #-}
 module Gen where
 
 import Test.Tasty
@@ -35,12 +36,12 @@ instance Arbitrary Material where
 allPosArePlaced :: IO Property
 allPosArePlaced = do
     -- Generate a list of tiles that is not empty
-    tiles <- generate genTiles :: IO [Tile]
     size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
+    tiles <- generate $ genTiles size :: IO [Tile]
     -- Execute the wave function collapse algorithm
     result <- waveFuncCollapse tiles size
     case result of
-        Left err -> return $ property False
+        Left _ -> return $ property False
         Right (TileMap tileMap) -> do
             -- Generate all positions in the world
             let ((minX, minY, minZ), (maxX, maxY, maxZ)) = size
@@ -49,32 +50,36 @@ allPosArePlaced = do
             return $ forAll (elements allPos) $ \pos -> 
                 M.member pos tileMap
 
+-- | Test if all rules are satisfied in the tilemap if the wave function collapse algorithm is run with a list of tiles
 allRulesAreSatisfied :: IO Property
 allRulesAreSatisfied = do
     -- Generate a list of tiles that is not empty
-    tiles <- generate genTiles :: IO [Tile]
     size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
+    tiles <- generate $ genTiles size :: IO [Tile]
     -- Execute the wave function collapse algorithm
     result <- waveFuncCollapse tiles size
     case result of
-        Left err -> return $ property False
+        Left _ -> return $ property False
         Right (TileMap tileMap) -> do
             -- Test if all rules are satisfied
             return $ forAll (elements $ M.toList tileMap) $ \(pos, tile) -> 
                 let (Rule rule) = rules tile
-                    (result, _) = rule (TileMap tileMap) pos
-                in resultToBool result
+                    (ruleResult, _) = rule (TileMap tileMap) pos
+                in resultToBool ruleResult
 
-genTiles :: Gen [Tile]
-genTiles = listOf1 genTile `suchThat` any (\(Tile _ (Rule rule) _) -> let (result, _) = rule (TileMap M.empty) (0, 0, 0) in resultToBool result)
+-- | Generate a list of tiles, which uses the rule from `genRule`
+--   For each position in the world, there must be at least one tile that can be placed at that position
+genTiles :: Size -> Gen [Tile]
+genTiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = listOf1 genTile `suchThat` (\tiles -> all (\pos -> any (\(Tile _ (Rule rule) _) -> let (result, _) = rule (TileMap M.empty) pos in resultToBool result) tiles) positions)
+    where positions = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
 
--- | Generate a tile, which can be placed at any position
+-- | Generate a tile, which uses the rule from `genRule`
 genTile :: Gen Tile
 genTile = Tile <$> arbitrary <*> genRule <*> arbitrary
 
--- | Generate a rule, which can be placed at any position
+-- | Generate a rule, which ignores the tileMap for performance reasons
 genRule :: Gen Rule
-genRule = genRuleResult >>= \result -> return $ Rule (\_ _ -> (result, []))
+genRule = arbitrary >>= \f -> return $ Rule $ const f
 
-genRuleResult :: Gen RuleResult
-genRuleResult = oneof [CanPlace <$> arbitrary, ChancePlace <$> (arbitrary `suchThat` (\f -> f >= 0 && f <= 1))]
+instance Arbitrary RuleResult where
+    arbitrary = oneof [CanPlace <$> arbitrary, ChancePlace <$> (arbitrary `suchThat` (\f -> f >= 0 && f <= 1))]
