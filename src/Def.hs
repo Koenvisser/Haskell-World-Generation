@@ -86,21 +86,30 @@ getPos :: MonadTest a -> [Pos]
 getPos (MonadTest _ pos) = pos
 
 instance Functor MonadTest where
+    fmap :: (a -> b) -> MonadTest a -> MonadTest b
     fmap f (MonadTest a pos) = MonadTest (f a) pos
 
 instance Applicative MonadTest where
+    pure :: a -> MonadTest a
     pure a = MonadTest a []
+    (<*>) :: MonadTest (a -> b) -> MonadTest a -> MonadTest b
     (MonadTest f pos1) <*> (MonadTest v pos2) = MonadTest (f v) (pos1 `union` pos2) 
 
 instance Monad MonadTest where
+    return :: a -> MonadTest a
     return = pure
+    (>>=) :: MonadTest a -> (a -> MonadTest b) -> MonadTest b
     MonadTest v1 pos1 >>= f = let MonadTest v2 pos2 = f v1 in MonadTest v2 (pos1 `union` pos2)
 
-instance Foldable MonadTest where
-    foldr f z (MonadTest a _) = f a z
+instance Semigroup a => Semigroup (MonadTest a) where
+    (<>) :: MonadTest a -> MonadTest a -> MonadTest a
+    MonadTest v1 pos1 <> MonadTest v2 pos2 = MonadTest (v1 <> v2) (pos1 `union` pos2)
 
-instance Traversable MonadTest where
-    traverse f (MonadTest a pos) = (`MonadTest` pos) <$> f a
+instance Monoid a => Monoid (MonadTest a) where
+    mempty :: MonadTest a
+    mempty = pure mempty
+    mappend :: MonadTest a -> MonadTest a -> MonadTest a
+    mappend = (<>)
 
 class CompareRule a where
     -- | The OR operator for rules

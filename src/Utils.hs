@@ -77,15 +77,11 @@ allMustBe tiles shape = Rule (\tileMap pos ->
 
 anyMonads :: (a -> MonadTest Bool) -> [a] -> MonadTest Bool
 anyMonads _ [] = return False
-anyMonads f (m:ms) = do
-  b <- f m
-  if b then return True else anyMonads f ms
+anyMonads f (m:ms) = (||) <$> f m <*> anyMonads f ms 
 
 allMonads :: (a -> MonadTest Bool) -> [a] -> MonadTest Bool
 allMonads _ [] = return True
-allMonads f (m:ms) = do
-  b <- f m
-  if b then allMonads f ms else return False
+allMonads f (m:ms) = (&&) <$> f m <*> allMonads f ms
 
 -- | A rule that takes a float f and returns a rule with chance f of returning True 
 weightedRule :: Float -> Rule
