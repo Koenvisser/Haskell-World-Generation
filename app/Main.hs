@@ -6,6 +6,9 @@ import Output (saveWorldToObjAndMtl)
 
 main :: IO ()
 main = do
-  tileMap <- waveFuncCollapse allTiles ((0, 0, 0), (14, 3, 14))
-  saveWorldToObjAndMtl tileMap "output" 1
-  putStr $ show tileMap
+  result <- waveFuncCollapse allTiles ((0, 0, 0), (14, 3, 14))
+  case result of
+    Left err -> putStrLn err
+    Right tileMap -> do 
+      saveWorldToObjAndMtl tileMap "output" 1
+      putStr $ show tileMap

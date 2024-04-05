@@ -9,7 +9,8 @@ import Gen.WaveFuncCollapse
 
 test_WaveFuncCollapse :: [TestTree]
 test_WaveFuncCollapse = [
-    testProperty "All positions are placed" (ioProperty allPosArePlaced)
+    testProperty "All positions are placed" (ioProperty allPosArePlaced),
+    testProperty "All rules are satisfied" (ioProperty allRulesAreSatisfied)
     ]
 
 -- | Generate a size for the world, given a minimum and maximum size for the world
@@ -34,27 +35,46 @@ instance Arbitrary Material where
 allPosArePlaced :: IO Property
 allPosArePlaced = do
     -- Generate a list of tiles that is not empty
-    tiles <- generate (listOf1 genTile) :: IO [Tile]
+    tiles <- generate genTiles:: IO [Tile]
     size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
     -- Execute the wave function collapse algorithm
-    (TileMap tileMap) <- waveFuncCollapse tiles size
-    -- Generate all positions in the world
-    let ((minX, minY, minZ), (maxX, maxY, maxZ)) = size
-    let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
-    -- Test if all positions are placed
-    return $ forAll (elements allPos) $ \pos -> 
-        M.member pos tileMap
-    where
-        -- | Generate a tile, which can be placed at any position
-        genTile :: Gen Tile
-        genTile = do
-            materials <- arbitrary
-            rules <- genRule
-            charRep <- arbitrary
-            return $ Tile materials rules charRep
-        -- | Generate a rule, which can be placed at any position
-        genRule :: Gen Rule
-        genRule = genRuleResult >>= \result -> return $ Rule (\_ _ -> (result, []))
-        -- | Generate a rule result, which is always true or has a chance greater than 0 of being placed
-        genRuleResult :: Gen RuleResult
-        genRuleResult = oneof [return $ CanPlace True, ChancePlace <$> (arbitrary `suchThat` (\f -> f > 0 && f <= 1))]
+    result <- waveFuncCollapse tiles size
+    case result of
+        Left err -> return $ property Discard
+        Right (TileMap tileMap) -> do
+            -- Generate all positions in the world
+            let ((minX, minY, minZ), (maxX, maxY, maxZ)) = size
+            let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
+            -- Test if all positions are placed
+            return $ forAll (elements allPos) $ \pos -> 
+                M.member pos tileMap
+
+allRulesAreSatisfied :: IO Property
+allRulesAreSatisfied = do
+    -- Generate a list of tiles that is not empty
+    tiles <- generate genTiles :: IO [Tile]
+    size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
+    -- Execute the wave function collapse algorithm
+    result <- waveFuncCollapse tiles size
+    case result of
+        Left err -> return $ property Discard
+        Right (TileMap tileMap) -> do
+            -- Test if all rules are satisfied
+            return $ forAll (elements $ M.toList tileMap) $ \(pos, tile) -> 
+                let (Rule rule) = rules tile
+                    (result, _) = rule (TileMap tileMap) pos
+                in resultToBool result
+
+genTiles :: Gen [Tile]
+genTiles = listOf1 genTile `suchThat` any (\(Tile _ (Rule rule) _) -> let (result, _) = rule (TileMap M.empty) (0, 0, 0) in resultToBool result)
+
+-- | Generate a tile, which can be placed at any position
+genTile :: Gen Tile
+genTile = Tile <$> arbitrary <*> genRule <*> arbitrary
+
+-- | Generate a rule, which can be placed at any position
+genRule :: Gen Rule
+genRule = genRuleResult >>= \result -> return $ Rule (\_ _ -> (result, []))
+
+genRuleResult :: Gen RuleResult
+genRuleResult = oneof [CanPlace <$> arbitrary, ChancePlace <$> (arbitrary `suchThat` (\f -> f >= 0 && f <= 1))]
