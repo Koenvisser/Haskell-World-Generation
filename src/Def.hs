@@ -100,7 +100,7 @@ instance Foldable MonadTest where
     foldr f z (MonadTest a _) = f a z
 
 instance Traversable MonadTest where
-    traverse f (MonadTest a pos) = (\a' -> MonadTest a' pos) <$> f a
+    traverse f (MonadTest a pos) = (`MonadTest` pos) <$> f a
 
 class CompareRule a where
     -- | The OR operator for rules

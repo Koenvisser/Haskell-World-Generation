@@ -38,10 +38,6 @@ aboveNeighbour = listToShape [(0, 1, 0)]
 belowNeighbour :: Shape
 belowNeighbour = listToShape [(0, -1, 0)]
 
-
--- newtype Rule = Rule (Tile -> TileMap -> Pos -> RuleResult)
--- data RuleResult = CanPlace Bool | ChancePlace Float
-
 -- | A rule that takes a list of tiles and a shape, and returns True if any of the tiles defined in the list
 --   tile are within the shape at the given position. 
 nextToAny :: [Tile] -> Shape -> Rule
@@ -102,13 +98,3 @@ isInPos posList pos = pos `elem` posList
 -- | A rule that takes a function that takes a position and returns a boolean, and returns a rule using this function
 canExistAt :: (Pos -> Bool) -> Rule
 canExistAt posPred = Rule (\_ pos -> return (CanPlace $ posPred pos))
-
-
-
--- | Must be next to
--- | Can not be next to
--- | (Overload with chance)
-
--- | Can not exist at coordinates
--- | Can only exist at coordinates
--- | (Overload with chance)
