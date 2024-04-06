@@ -81,9 +81,6 @@ resultToFloat (ChancePlace f) = f
 
 data RuleMonad m = RuleMonad m [Pos]
 
-getVal :: RuleMonad a -> a
-getVal (RuleMonad a _) = a
-
 getPos :: RuleMonad a -> [Pos]
 getPos (RuleMonad _ pos) = pos
 

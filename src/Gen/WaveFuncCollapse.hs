@@ -4,6 +4,7 @@
 module Gen.WaveFuncCollapse (waveFuncCollapse) where
 
 import Def
+import Internal.GetVal (getVal)
 
 import qualified Data.Map as M
 import System.Random
