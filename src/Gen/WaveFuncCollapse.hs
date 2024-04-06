@@ -30,10 +30,12 @@ data HistoryUnit = HistoryUnit {
   placedTile :: Tile
 } deriving (Show)
 
+type Error = String
+
 -- | Run the wave function collapse algorithm on a list of tiles and a size for the world.
 --   The algorithm will return a tilemap that satisfies the rules of the tiles.
 --   If no possible tilemap can be generated, the function will return an error. 
-waveFuncCollapse :: [Tile] -> Size -> IO (Either String TileMap)
+waveFuncCollapse :: [Tile] -> Size -> IO (Either Error TileMap)
 waveFuncCollapse tiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
   let emptyTileMap = TileMap M.empty
@@ -101,7 +103,7 @@ shannonEntropy (totWeight, weights) = log totWeight - (h / totWeight)
 --   function until there are no more available positions in the environment. This function is called with the 
 --   position where the wave function should collapse. This position is generated using the `shannonPos` 
 --   function. If the algorithm gets stuck, it will call the `resetWaveFuncCollapse` function. 
-waveFuncCollapse' :: TileMap -> Env -> Dependencies -> History -> IO (Either String TileMap)
+waveFuncCollapse' :: TileMap -> Env -> Dependencies -> History -> IO (Either Error TileMap)
 waveFuncCollapse' tileMap env dependencies history
   | M.null env = return $ Right tileMap
   | otherwise = do
@@ -113,7 +115,7 @@ waveFuncCollapse' tileMap env dependencies history
 
 -- | Reset the wave function collapse algorithm. This is done when the algorithm gets stuck and can't continue.
 --   Not implemented yet. Optimally the algorithm should be able to backtrack to a previously solvable state.
-resetWaveFuncCollapse :: History -> IO (Either String TileMap)
+resetWaveFuncCollapse :: History -> IO (Either Error TileMap)
 resetWaveFuncCollapse [] = return $ Left "No possible tilemap can be generated"
 resetWaveFuncCollapse ((HistoryUnit tileMap env dependencies pos tile):history) = do
   let newEnv = M.adjust (\(tiles, weights, _) -> let (newTiles, newWeights) = deleteTile tile (tiles, weights) in (newTiles, newWeights, shannonEntropy newWeights)) pos env

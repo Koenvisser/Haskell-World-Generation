@@ -3,6 +3,8 @@ module Def where
 import Data.Default
 import Data.List (union)
 import qualified Data.Map as M
+import GHC.Generics (Generic)
+import Control.DeepSeq (NFData)
 
 -- | A tile is a 3D object with a texture, a set of rules and a character representation.
 data Tile = Tile { 
@@ -13,7 +15,7 @@ data Tile = Tile {
     rules :: Rule, 
     -- | The character representation is only used for debugging purposes. 
     charRep :: Char
-}
+} deriving (Generic, NFData)
 
 data Material = Material {
     ambientColor :: (Float, Float, Float),
@@ -25,9 +27,9 @@ data Material = Material {
     texture :: Maybe FilePath,
     extraFields :: [String],
     extraFiles :: [FilePath]
-} deriving (Show, Eq, Ord)
+} deriving (Show, Eq, Ord, Generic, NFData)
 
-data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded)
+data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded, Generic, NFData)
 
 instance Default Material where
     def = Material {
@@ -52,7 +54,7 @@ instance Eq Tile where
     (==) tile1 tile2 = charRep tile1 == charRep tile2
 
 -- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
-newtype Rule = Rule (TileMap -> Pos -> MonadTest RuleResult)
+newtype Rule = Rule (TileMap -> Pos -> MonadTest RuleResult) deriving (Generic, NFData)
 
 -- | The result of a rule is defined as a `RuleResult`. It is represented either as a 
 --   `CanPlace Bool` which means the rule guaranteed passes or fails. Or as 
@@ -159,7 +161,7 @@ type Pos = (Int, Int, Int)
 type Size = (Pos, Pos)
 
 -- | A tilemap is a map of positions to tiles in the world
-newtype TileMap = TileMap (M.Map Pos Tile)
+newtype TileMap = TileMap (M.Map Pos Tile) deriving (Generic, NFData)
 
 lookupTile :: Pos -> TileMap -> MonadTest (Maybe Tile)
 lookupTile pos (TileMap tileMap) = MonadTest (M.lookup pos tileMap) [pos]
