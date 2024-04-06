@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 module Gen where
 
@@ -64,13 +65,13 @@ allRulesAreSatisfied = do
             -- Test if all rules are satisfied
             return $ forAll (elements $ M.toList tileMap) $ \(pos, tile) -> 
                 let (Rule rule) = rules tile
-                    (ruleResult, _) = rule (TileMap tileMap) pos
+                    (RuleMonad ruleResult _) = rule (TileMap tileMap) pos
                 in resultToBool ruleResult
 
 -- | Generate a list of tiles, which uses the rule from `genRule`
 --   For each position in the world, there must be at least one tile that can be placed at that position
 genTiles :: Size -> Gen [Tile]
-genTiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = listOf1 genTile `suchThat` (\tiles -> all (\pos -> any (\(Tile _ (Rule rule) _) -> let (result, _) = rule (TileMap M.empty) pos in resultToBool result) tiles) positions)
+genTiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = listOf1 genTile `suchThat` (\tiles -> all (\pos -> any (\(Tile _ (Rule rule) _) -> let (RuleMonad result _) = rule (TileMap M.empty) pos in resultToBool result) tiles) positions)
     where positions = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
 
 -- | Generate a tile, which uses the rule from `genRule`
@@ -83,3 +84,6 @@ genRule = arbitrary >>= \f -> return $ Rule $ const f
 
 instance Arbitrary RuleResult where
     arbitrary = oneof [CanPlace <$> arbitrary, ChancePlace <$> (arbitrary `suchThat` (\f -> f >= 0 && f <= 1))]
+
+instance Arbitrary (RuleMonad RuleResult) where
+    arbitrary = RuleMonad <$> arbitrary <*> arbitrary
