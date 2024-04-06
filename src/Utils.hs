@@ -42,7 +42,7 @@ belowNeighbour = listToShape [(0, -1, 0)]
 --   tile are within the shape at the given position. 
 nextToAny :: [Tile] -> Shape -> Rule
 nextToAny tiles shape = Rule (\(TileMap tileMap) pos -> 
-    CanPlace <$> anyMonads (\nPos ->
+    CanPlace <$> anyRule (\nPos ->
       do 
         value <- lookupTile nPos (TileMap tileMap)
         case value of
@@ -54,8 +54,8 @@ nextToAny tiles shape = Rule (\(TileMap tileMap) pos ->
 --   tile are within the shape at the given position. 
 nextToAll :: [Tile] -> Shape -> Rule
 nextToAll tiles shape = Rule (\(TileMap tileMap) pos -> 
-    CanPlace <$> allMonads (\tile -> 
-        anyMonads (\nPos ->
+    CanPlace <$> allRule (\tile -> 
+        anyRule (\nPos ->
           do 
             value <- lookupTile nPos (TileMap tileMap)
             case value of
@@ -67,7 +67,7 @@ nextToAll tiles shape = Rule (\(TileMap tileMap) pos ->
 --   within the list of tiles at the given position.
 allMustBe :: [Tile] -> Shape -> Rule
 allMustBe tiles shape = Rule (\tileMap pos -> 
-  CanPlace <$> allMonads (\nPos -> 
+  CanPlace <$> allRule (\nPos -> 
     do 
       value <- lookupTile nPos tileMap
       case value of
@@ -75,13 +75,13 @@ allMustBe tiles shape = Rule (\tileMap pos ->
           _ -> return True
       ) (shape pos))
 
-anyMonads :: (a -> MonadTest Bool) -> [a] -> MonadTest Bool
-anyMonads _ [] = return False
-anyMonads f (m:ms) = (||) <$> f m <*> anyMonads f ms 
+anyRule :: (a -> RuleMonad Bool) -> [a] -> RuleMonad Bool
+anyRule _ [] = return False
+anyRule f (m:ms) = (||) <$> f m <*> anyRule f ms 
 
-allMonads :: (a -> MonadTest Bool) -> [a] -> MonadTest Bool
-allMonads _ [] = return True
-allMonads f (m:ms) = (&&) <$> f m <*> allMonads f ms
+allRule :: (a -> RuleMonad Bool) -> [a] -> RuleMonad Bool
+allRule _ [] = return True
+allRule f (m:ms) = (&&) <$> f m <*> allRule f ms
 
 -- | A rule that takes a float f and returns a rule with chance f of returning True 
 weightedRule :: Float -> Rule

@@ -54,7 +54,7 @@ instance Eq Tile where
     (==) tile1 tile2 = charRep tile1 == charRep tile2
 
 -- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
-newtype Rule = Rule (TileMap -> Pos -> MonadTest RuleResult) deriving (Generic, NFData)
+newtype Rule = Rule (TileMap -> Pos -> RuleMonad RuleResult) deriving (Generic, NFData)
 
 -- | The result of a rule is defined as a `RuleResult`. It is represented either as a 
 --   `CanPlace Bool` which means the rule guaranteed passes or fails. Or as 
@@ -79,38 +79,38 @@ resultToFloat :: RuleResult -> Float
 resultToFloat (CanPlace b) = if b then 1.0 else 0.0
 resultToFloat (ChancePlace f) = f
 
-data MonadTest m = MonadTest m [Pos]
+data RuleMonad m = RuleMonad m [Pos]
 
-getVal :: MonadTest a -> a
-getVal (MonadTest a _) = a
+getVal :: RuleMonad a -> a
+getVal (RuleMonad a _) = a
 
-getPos :: MonadTest a -> [Pos]
-getPos (MonadTest _ pos) = pos
+getPos :: RuleMonad a -> [Pos]
+getPos (RuleMonad _ pos) = pos
 
-instance Functor MonadTest where
-    fmap :: (a -> b) -> MonadTest a -> MonadTest b
-    fmap f (MonadTest a pos) = MonadTest (f a) pos
+instance Functor RuleMonad where
+    fmap :: (a -> b) -> RuleMonad a -> RuleMonad b
+    fmap f (RuleMonad a pos) = RuleMonad (f a) pos
 
-instance Applicative MonadTest where
-    pure :: a -> MonadTest a
-    pure a = MonadTest a []
-    (<*>) :: MonadTest (a -> b) -> MonadTest a -> MonadTest b
-    (MonadTest f pos1) <*> (MonadTest v pos2) = MonadTest (f v) (pos1 `union` pos2) 
+instance Applicative RuleMonad where
+    pure :: a -> RuleMonad a
+    pure a = RuleMonad a []
+    (<*>) :: RuleMonad (a -> b) -> RuleMonad a -> RuleMonad b
+    (RuleMonad f pos1) <*> (RuleMonad v pos2) = RuleMonad (f v) (pos1 `union` pos2) 
 
-instance Monad MonadTest where
-    return :: a -> MonadTest a
+instance Monad RuleMonad where
+    return :: a -> RuleMonad a
     return = pure
-    (>>=) :: MonadTest a -> (a -> MonadTest b) -> MonadTest b
-    MonadTest v1 pos1 >>= f = let MonadTest v2 pos2 = f v1 in MonadTest v2 (pos1 `union` pos2)
+    (>>=) :: RuleMonad a -> (a -> RuleMonad b) -> RuleMonad b
+    RuleMonad v1 pos1 >>= f = let RuleMonad v2 pos2 = f v1 in RuleMonad v2 (pos1 `union` pos2)
 
-instance Semigroup a => Semigroup (MonadTest a) where
-    (<>) :: MonadTest a -> MonadTest a -> MonadTest a
-    MonadTest v1 pos1 <> MonadTest v2 pos2 = MonadTest (v1 <> v2) (pos1 `union` pos2)
+instance Semigroup a => Semigroup (RuleMonad a) where
+    (<>) :: RuleMonad a -> RuleMonad a -> RuleMonad a
+    RuleMonad v1 pos1 <> RuleMonad v2 pos2 = RuleMonad (v1 <> v2) (pos1 `union` pos2)
 
-instance Monoid a => Monoid (MonadTest a) where
-    mempty :: MonadTest a
+instance Monoid a => Monoid (RuleMonad a) where
+    mempty :: RuleMonad a
     mempty = pure mempty
-    mappend :: MonadTest a -> MonadTest a -> MonadTest a
+    mappend :: RuleMonad a -> RuleMonad a -> RuleMonad a
     mappend = (<>)
 
 class CompareRule a where
@@ -163,8 +163,8 @@ type Size = (Pos, Pos)
 -- | A tilemap is a map of positions to tiles in the world
 newtype TileMap = TileMap (M.Map Pos Tile) deriving (Generic, NFData)
 
-lookupTile :: Pos -> TileMap -> MonadTest (Maybe Tile)
-lookupTile pos (TileMap tileMap) = MonadTest (M.lookup pos tileMap) [pos]
+lookupTile :: Pos -> TileMap -> RuleMonad (Maybe Tile)
+lookupTile pos (TileMap tileMap) = RuleMonad (M.lookup pos tileMap) [pos]
 
 -- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid
 --   with the tiles represented as their character representation and an empty tile 

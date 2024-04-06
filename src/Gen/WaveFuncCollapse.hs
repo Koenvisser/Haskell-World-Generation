@@ -135,7 +135,8 @@ deleteTile _ _ = error "Tile not in list"
 shannonPos :: Env -> IO Pos
 shannonPos env = getRandomElement (snd (M.foldrWithKey minList (0, []) env))
   where
-    minList pos (_, _, entropy) list  = case list of
+    minList :: Pos -> ([Tile], Weights, ShannonEntropy) -> (ShannonEntropy, [Pos]) -> (ShannonEntropy, [Pos]) 
+    minList pos (_, _, entropy) list = case list of
       (0, []) -> (entropy, [pos])
       (minEntropy, ys)
         | entropy < minEntropy -> (entropy, [pos])
@@ -145,8 +146,8 @@ shannonPos env = getRandomElement (snd (M.foldrWithKey minList (0, []) env))
 -- | Get a random element from a list
 getRandomElement :: [a] -> IO a
 getRandomElement xs = do
-    i <- randomRIO (0, length xs - 1)
-    return (xs !! i)
+  i <- randomRIO (0, length xs - 1)
+  return (xs !! i)
 
 -- | Update the dependencies of a position, where a `Tile` has been placed. The function will remove the position
 --   from the dependencies and insert the position of the tile at the position of the dependencies.
@@ -177,9 +178,10 @@ waveFuncCollapseStep pos (TileMap tileMap) env dependencies history  = do
 -- | Select a random tile from a list of tiles based on their weights.
 --   If the total weight is 0, the function will return Nothing.
 randomTile :: [Tile] -> Weights -> IO (Maybe Tile)
-randomTile tiles (totalWeight, tilesWeight) = if totalWeight == 0.0 then return Nothing else do
-        randomNum <- randomRIO (0.0, totalWeight)
-        return $ weightToTile tiles tilesWeight randomNum
+randomTile tiles (totalWeight, tilesWeight) = 
+  if totalWeight == 0.0 then return Nothing else do
+    randomNum <- randomRIO (0.0, totalWeight)
+    return $ weightToTile tiles tilesWeight randomNum
 
 -- | Convert a list of tiles and their weights to a single tile based on a random number.
 --  The function will return Nothing if list of tiles and weights are empty or the random number is 
