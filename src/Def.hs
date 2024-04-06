@@ -1,7 +1,7 @@
 module Def where
 
 import Data.Default
-import Data.List (union)
+import qualified Data.HashSet as H
 import qualified Data.Map as M
 
 -- | A tile is a 3D object with a texture, a set of rules and a character representation.
@@ -77,12 +77,12 @@ resultToFloat :: RuleResult -> Float
 resultToFloat (CanPlace b) = if b then 1.0 else 0.0
 resultToFloat (ChancePlace f) = f
 
-data MonadTest m = MonadTest m [Pos]
+data MonadTest m = MonadTest m (H.HashSet Pos) deriving (Show, Eq, Ord)
 
 getVal :: MonadTest a -> a
 getVal (MonadTest a _) = a
 
-getPos :: MonadTest a -> [Pos]
+getPos :: MonadTest a -> H.HashSet Pos
 getPos (MonadTest _ pos) = pos
 
 instance Functor MonadTest where
@@ -91,19 +91,19 @@ instance Functor MonadTest where
 
 instance Applicative MonadTest where
     pure :: a -> MonadTest a
-    pure a = MonadTest a []
+    pure a = MonadTest a H.empty
     (<*>) :: MonadTest (a -> b) -> MonadTest a -> MonadTest b
-    (MonadTest f pos1) <*> (MonadTest v pos2) = MonadTest (f v) (pos1 `union` pos2) 
+    (MonadTest f pos1) <*> (MonadTest v pos2) = MonadTest (f v) (pos1 `H.union` pos2) 
 
 instance Monad MonadTest where
     return :: a -> MonadTest a
     return = pure
     (>>=) :: MonadTest a -> (a -> MonadTest b) -> MonadTest b
-    MonadTest v1 pos1 >>= f = let MonadTest v2 pos2 = f v1 in MonadTest v2 (pos1 `union` pos2)
+    MonadTest v1 pos1 >>= f = let MonadTest v2 pos2 = f v1 in MonadTest v2 (pos1 `H.union` pos2)
 
 instance Semigroup a => Semigroup (MonadTest a) where
     (<>) :: MonadTest a -> MonadTest a -> MonadTest a
-    MonadTest v1 pos1 <> MonadTest v2 pos2 = MonadTest (v1 <> v2) (pos1 `union` pos2)
+    MonadTest v1 pos1 <> MonadTest v2 pos2 = MonadTest (v1 <> v2) (pos1 `H.union` pos2)
 
 instance Monoid a => Monoid (MonadTest a) where
     mempty :: MonadTest a
@@ -162,7 +162,7 @@ type Size = (Pos, Pos)
 newtype TileMap = TileMap (M.Map Pos Tile)
 
 lookupTile :: Pos -> TileMap -> MonadTest (Maybe Tile)
-lookupTile pos (TileMap tileMap) = MonadTest (M.lookup pos tileMap) [pos]
+lookupTile pos (TileMap tileMap) = MonadTest (M.lookup pos tileMap) (H.singleton pos)
 
 -- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid
 --   with the tiles represented as their character representation and an empty tile 

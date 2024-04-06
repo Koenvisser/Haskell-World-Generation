@@ -6,13 +6,14 @@ module Gen.WaveFuncCollapse (waveFuncCollapse) where
 import Def
 
 import qualified Data.Map as M
+import qualified Data.HashSet as H
 import System.Random
 
 -- | `Dependencies` is a map of positions to a list of positions. It is used to keep track of which positions
 --   are dependent on which other positions. An example of this is a tile which rules are dependent on its neighbours,
 ---  the neighbours of this tile are then dependent on the tile itself, so the position of the tile is added to the
 --   list of dependencies of the neighbours.
-type Dependencies = M.Map Pos [Pos]
+type Dependencies = M.Map Pos (H.HashSet Pos)
 -- | Weights is a tuple of a float and a list of floats (Total weight, [Weights])
 type Weights = (Float, [Float])
 type ShannonEntropy = Float
@@ -152,7 +153,12 @@ updateDependencies :: Pos -> Tile -> TileMap -> Dependencies -> Dependencies
 updateDependencies pos tile tileMap dependencies = let 
   (Rule rule) = rules tile
   deps = getPos $ rule tileMap pos
-  in foldr (\pos' -> M.insertWith (++) pos' [pos]) (M.delete pos dependencies) deps
+  in foldr insertDep (M.delete pos dependencies) deps
+  where
+    insertDep :: Pos -> Dependencies -> Dependencies
+    insertDep pos' deps 
+      | M.member pos' deps = M.adjust (H.insert pos) pos' deps
+      | otherwise = M.insert pos' (H.singleton pos) deps
 
 -- | Collapse the wave function of a single position. Selects a random tile from the environment and
 --  adds it to the tileMap. If the environment has no possible tiles, the function will return Nothing.
