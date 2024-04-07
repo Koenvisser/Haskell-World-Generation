@@ -27,11 +27,14 @@ import Control.DeepSeq (NFData)
 -- | A position is a 3D coordinate in the world
 type Pos = (Int, Int, Int)
 
+-- | A rule monad is a monad that is used to compose rules and keep track of the positions that are used in the rule.
 data RuleMonad m = RuleMonad m [Pos]
 
+-- | Get the value of a `RuleMonad`. Only use this function if the result will not be used in the generator.
 getVal :: RuleMonad a -> a
 getVal (RuleMonad a _) = a
 
+-- | Get the positions that are used in the `RuleMonad`. This is used to keep track of the positions that are used in the rule.
 getPos :: RuleMonad a -> [Pos]
 getPos (RuleMonad _ pos) = pos
 
@@ -86,6 +89,7 @@ data Tile = Tile {
     charRep :: Char
 } deriving (Generic, NFData)
 
+-- | A material is a set of properties that are used to render the tile in a 3D renderer.
 data Material = Material {
     ambientColor :: (Float, Float, Float),
     diffuseColor :: (Float, Float, Float),
@@ -98,6 +102,7 @@ data Material = Material {
     extraFiles :: [FilePath]
 } deriving (Show, Eq, Ord, Generic, NFData)
 
+-- | A side is a direction in the world, which is used to determine the material of a tile.
 data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded, Generic, NFData)
 
 instance Default Material where
@@ -125,6 +130,7 @@ instance Eq Tile where
 -- | A tilemap is a map of positions to tiles in the world
 newtype TileMap = TileMap (M.Map Pos Tile) deriving (Generic, NFData)
 
+-- | Return the underlying map of a `TileMap`. Only use this function if the map will not be used in the generator. 
 getMap :: TileMap -> M.Map Pos Tile
 getMap (TileMap tileMap) = tileMap
 

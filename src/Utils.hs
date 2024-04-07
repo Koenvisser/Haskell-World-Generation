@@ -44,7 +44,7 @@ nextToAny :: [Tile] -> Shape -> Rule
 nextToAny tiles shape = Rule (\tileMap pos -> 
     CanPlace <$> anyRule (\nPos ->
       do 
-        value <- lookupTile nPos tileMap
+        value <- lookupTileMap nPos tileMap
         case value of
             Just tile -> return $ tile `elem` tiles
             _ -> return False
@@ -57,7 +57,7 @@ nextToAll tiles shape = Rule (\tileMap pos ->
     CanPlace <$> allRule (\tile -> 
         anyRule (\nPos ->
           do 
-            value <- lookupTile nPos tileMap
+            value <- lookupTileMap nPos tileMap
             case value of
                 Just tile' -> return $ tile == tile'
                 _ -> return False
@@ -69,7 +69,7 @@ allMustBe :: [Tile] -> Shape -> Rule
 allMustBe tiles shape = Rule (\tileMap pos -> 
   CanPlace <$> allRule (\nPos -> 
     do 
-      value <- lookupTile nPos tileMap
+      value <- lookupTileMap nPos tileMap
       case value of
           Just tile -> return $ tile `elem` tiles
           _ -> return True
