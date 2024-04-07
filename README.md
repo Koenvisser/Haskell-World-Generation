@@ -1,3 +1,5 @@
+# Haskell World Generation
+
 [![tests workflow](https://github.com/KoenVisser/Haskell-World-Generation/actions/workflows/tests.yml/badge.svg)]()
 [![tests workflow](https://img.shields.io/static/v1?label=Documentation&message=Available&color=success)](https://koenvisser.github.io/Haskell-World-Generation/)
 
