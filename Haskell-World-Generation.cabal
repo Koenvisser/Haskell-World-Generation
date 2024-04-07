@@ -50,39 +50,18 @@ extra-doc-files:    CHANGELOG.md
 common warnings
     ghc-options: -Wall
 
-library Haskell-World-Generation-internal
-    import:           warnings
-
-    exposed-modules:  Def
-                    , Internal.GetVal
-
-    hs-source-dirs:   internal
-
-    default-extensions: LambdaCase
-                      , InstanceSigs
-                      , DeriveGeneric
-                      , DeriveAnyClass
-
-    build-depends:    base >=4.17.2.1
-                    , containers
-                    , data-default
-                    , deepseq
-
-    default-language: Haskell2010
-
 library
     -- Import common warning flags.
     import:           warnings
 
     -- Modules exported by the library.
-    exposed-modules:  Utils
+    exposed-modules:  Def
+                    , Utils
                     , Gen.WaveFuncCollapse
                     , Output
                     , Examples.Roads
                     , Examples.Chance
                     , Examples.NoPurple
-    
-    reexported-modules: Def
 
     -- Modules included in this library but not exported.
     other-modules:  
@@ -108,6 +87,25 @@ library
     hs-source-dirs:   src
 
     -- Base language which the package is written in.
+    default-language: Haskell2010
+
+library Haskell-World-Generation-internal
+    import:           warnings
+
+    exposed-modules:  Internal.Def
+
+    hs-source-dirs:   internal
+
+    default-extensions: LambdaCase
+                      , InstanceSigs
+                      , DeriveGeneric
+                      , DeriveAnyClass
+
+    build-depends:    base >=4.17.2.1
+                    , containers
+                    , data-default
+                    , deepseq
+
     default-language: Haskell2010
 
 executable Haskell-World-Generation

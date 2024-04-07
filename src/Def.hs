@@ -1,10 +1,26 @@
-module Def where
+module Def (
+    Tile(..),
+    Material(..),
+    Side(..),
+    Rule(..),
+    RuleResult(..),
+    resultToBool,
+    resultToFloat,
+    CompareRule(..),
+    Pos,
+    Size,
+    TileMap(..),
+    lookupTile,
+    Shape,
+    RuleMonad
+) where
 
 import Data.Default
-import Data.List (union)
 import qualified Data.Map as M
 import GHC.Generics (Generic)
 import Control.DeepSeq (NFData)
+
+import Internal.Def (RuleMonad(..), Pos)
 
 -- | A tile is a 3D object with a texture, a set of rules and a character representation.
 data Tile = Tile { 
@@ -79,37 +95,6 @@ resultToFloat :: RuleResult -> Float
 resultToFloat (CanPlace b) = if b then 1.0 else 0.0
 resultToFloat (ChancePlace f) = f
 
-data RuleMonad m = RuleMonad m [Pos]
-
-getPos :: RuleMonad a -> [Pos]
-getPos (RuleMonad _ pos) = pos
-
-instance Functor RuleMonad where
-    fmap :: (a -> b) -> RuleMonad a -> RuleMonad b
-    fmap f (RuleMonad a pos) = RuleMonad (f a) pos
-
-instance Applicative RuleMonad where
-    pure :: a -> RuleMonad a
-    pure a = RuleMonad a []
-    (<*>) :: RuleMonad (a -> b) -> RuleMonad a -> RuleMonad b
-    (RuleMonad f pos1) <*> (RuleMonad v pos2) = RuleMonad (f v) (pos1 `union` pos2) 
-
-instance Monad RuleMonad where
-    return :: a -> RuleMonad a
-    return = pure
-    (>>=) :: RuleMonad a -> (a -> RuleMonad b) -> RuleMonad b
-    RuleMonad v1 pos1 >>= f = let RuleMonad v2 pos2 = f v1 in RuleMonad v2 (pos1 `union` pos2)
-
-instance Semigroup a => Semigroup (RuleMonad a) where
-    (<>) :: RuleMonad a -> RuleMonad a -> RuleMonad a
-    RuleMonad v1 pos1 <> RuleMonad v2 pos2 = RuleMonad (v1 <> v2) (pos1 `union` pos2)
-
-instance Monoid a => Monoid (RuleMonad a) where
-    mempty :: RuleMonad a
-    mempty = pure mempty
-    mappend :: RuleMonad a -> RuleMonad a -> RuleMonad a
-    mappend = (<>)
-
 class CompareRule a where
     -- | The OR operator for rules
     (<||>) :: a -> a -> a
@@ -152,8 +137,6 @@ instance CompareRule Rule where
         let result = rule tileMap pos
         in (<!>) <$> result)
 
--- | A position is a 3D coordinate in the world
-type Pos = (Int, Int, Int)
 -- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
 type Size = (Pos, Pos)
 
