@@ -64,7 +64,7 @@ library
                     , Examples.NoPurple
 
     -- Modules included in this library but not exported.
-    other-modules:  
+    other-modules:  Internal.Def
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -81,31 +81,11 @@ library
                     , directory
                     , filepath
                     , deepseq
-                    , Haskell-World-Generation-internal
 
     -- Directories containing source files.
     hs-source-dirs:   src
 
     -- Base language which the package is written in.
-    default-language: Haskell2010
-
-library Haskell-World-Generation-internal
-    import:           warnings
-
-    exposed-modules:  Internal.Def
-
-    hs-source-dirs:   internal
-
-    default-extensions: LambdaCase
-                      , InstanceSigs
-                      , DeriveGeneric
-                      , DeriveAnyClass
-
-    build-depends:    base >=4.17.2.1
-                    , containers
-                    , data-default
-                    , deepseq
-
     default-language: Haskell2010
 
 executable Haskell-World-Generation
