@@ -41,10 +41,10 @@ belowNeighbour = listToShape [(0, -1, 0)]
 -- | A rule that takes a list of tiles and a shape, and returns True if any of the tiles defined in the list
 --   tile are within the shape at the given position. 
 nextToAny :: [Tile] -> Shape -> Rule
-nextToAny tiles shape = Rule (\(TileMap tileMap) pos -> 
+nextToAny tiles shape = Rule (\tileMap pos -> 
     CanPlace <$> anyRule (\nPos ->
       do 
-        value <- lookupTile nPos (TileMap tileMap)
+        value <- lookupTile nPos tileMap
         case value of
             Just tile -> return $ tile `elem` tiles
             _ -> return False
@@ -53,11 +53,11 @@ nextToAny tiles shape = Rule (\(TileMap tileMap) pos ->
 -- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles defined in the list
 --   tile are within the shape at the given position. 
 nextToAll :: [Tile] -> Shape -> Rule
-nextToAll tiles shape = Rule (\(TileMap tileMap) pos -> 
+nextToAll tiles shape = Rule (\tileMap pos -> 
     CanPlace <$> allRule (\tile -> 
         anyRule (\nPos ->
           do 
-            value <- lookupTile nPos (TileMap tileMap)
+            value <- lookupTile nPos tileMap
             case value of
                 Just tile' -> return $ tile == tile'
                 _ -> return False

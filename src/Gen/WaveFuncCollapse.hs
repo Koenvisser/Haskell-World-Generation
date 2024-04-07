@@ -3,7 +3,7 @@
 --   of each tile based on the rules and the surrounding tiles. This is done until the entire tilemap is filled.
 module Gen.WaveFuncCollapse (waveFuncCollapse, Error) where
 
-import Internal.Def (getVal, getPos)
+import Internal.Def
 import Def
 
 import qualified Data.Map as M

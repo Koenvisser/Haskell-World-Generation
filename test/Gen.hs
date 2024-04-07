@@ -6,6 +6,7 @@ import Test.Tasty
 import Test.Tasty.QuickCheck
 import qualified Data.Map as M
 
+import Internal.Def
 import Def
 import Gen.WaveFuncCollapse
 
