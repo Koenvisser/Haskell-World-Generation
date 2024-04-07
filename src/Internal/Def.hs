@@ -1,8 +1,9 @@
 -- | This module defines the internal types and classes used in the library.
---   Do not import this module directly, instead import "Def" which re-exports
---   the types and classes defined here.
---   Only import this module if you know what you are doing, as it can break the
---   generator if used incorrectly.
+--   It is recommended to Do not import this module directly, instead import "Def" which re-exports
+--   most of the types and classes defined here.
+--   Only import this module if you know what you are doing, as some of the types and classes defined here 
+--   can break the generator if used incorrectly.
+
 module Internal.Def (
     Pos,
     RuleMonad(..),
@@ -13,7 +14,8 @@ module Internal.Def (
     Tile(..),
     Material(..),
     Side(..),
-    TileMap(..)
+    TileMap(..),
+    getMap
 ) where
 
 import Data.Default
@@ -122,6 +124,9 @@ instance Eq Tile where
 
 -- | A tilemap is a map of positions to tiles in the world
 newtype TileMap = TileMap (M.Map Pos Tile) deriving (Generic, NFData)
+
+getMap :: TileMap -> M.Map Pos Tile
+getMap (TileMap tileMap) = tileMap
 
 -- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid
 --   with the tiles represented as their character representation and an empty tile 
