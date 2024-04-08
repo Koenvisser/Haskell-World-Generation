@@ -20,6 +20,7 @@ module Def (
     nullTileMap,
     findWithDefaultTileMap,
     Shape,
+    Error,
     RuleMonad
 ) where
 
@@ -112,3 +113,6 @@ findWithDefaultTileMap def pos (TileMap tileMap) = RuleMonad (M.findWithDefault 
 --   that are relative to the given position, forming a shape. `Utils.allNeighbours` is 
 --   an example of a shape.
 type Shape = Pos -> [Pos]
+
+-- | Represents an error message that can be thrown in the generator
+type Error = String

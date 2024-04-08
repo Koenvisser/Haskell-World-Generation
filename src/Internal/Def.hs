@@ -28,7 +28,7 @@ import Control.DeepSeq (NFData)
 type Pos = (Int, Int, Int)
 
 -- | A rule monad is a monad that is used to compose rules and keep track of the positions that are used in the rule.
-data RuleMonad m = RuleMonad m [Pos]
+data RuleMonad m = RuleMonad m [Pos] deriving (Show, Eq)
 
 -- | Get the value of a `RuleMonad`. Only use this function if the result will not be used in the generator.
 getVal :: RuleMonad a -> a

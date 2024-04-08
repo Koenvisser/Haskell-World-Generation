@@ -31,8 +31,6 @@ data HistoryUnit = HistoryUnit {
   placedTile :: Tile
 } deriving (Show)
 
-type Error = String
-
 -- | Run the wave function collapse algorithm on a list of tiles and a size for the world.
 --   The algorithm will return a tilemap that satisfies the rules of the tiles.
 --   If no possible tilemap can be generated, the function will return an error. 
