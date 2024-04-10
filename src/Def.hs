@@ -12,7 +12,7 @@ module Def (
     resultToFloat,
     CompareRule(..),
     Pos,
-    Size,
+    Size3D,
     TileMap,
     lookupTileMap,
     memberTileMap,
@@ -21,6 +21,7 @@ module Def (
     findWithDefaultTileMap,
     Shape,
     Error,
+    HeightMap,
     RuleMonad
 ) where
 
@@ -91,7 +92,7 @@ instance CompareRule Rule where
         in (<!>) result)
 
 -- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
-type Size = (Pos, Pos)
+type Size3D = (Pos, Pos)
 
 -- | Looks up a tile in the tilemap at the given position, returning the tile if it exists
 lookupTileMap :: Pos -> TileMap -> RuleMonad (Maybe Tile)
@@ -122,3 +123,6 @@ type Shape = Pos -> [Pos]
 
 -- | Represents an error message that can be thrown in the generator
 type Error = String
+
+-- | A heightmap is a map from (x, y) coordinates to a height value.
+type HeightMap = M.Map (Int, Int) Float

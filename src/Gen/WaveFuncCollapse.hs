@@ -34,13 +34,23 @@ data HistoryUnit = HistoryUnit {
 -- | Run the wave function collapse algorithm on a list of tiles and a size for the world.
 --   The algorithm will return a tilemap that satisfies the rules of the tiles.
 --   If no possible tilemap can be generated, the function will return an error. 
-waveFuncCollapse :: [Tile] -> Size -> IO (Either Error TileMap)
+waveFuncCollapse :: [Tile] -> Size3D -> IO (Either Error TileMap)
 waveFuncCollapse tiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
+  waveFunc tiles allPos
+
+waveFunc :: [Tile] -> [Pos] -> IO (Either Error TileMap)
+waveFunc tiles pos = do
   let emptyTileMap = TileMap M.empty
-  case createEnv tiles emptyTileMap allPos of
+  case createEnv tiles emptyTileMap pos of
     Nothing -> return $ Left "No possible tilemap can be generated"
     Just (tileMap, env, dependencies) -> waveFuncCollapse' tileMap env dependencies []
+
+waveFuncCollapeHeightMap :: HeightMap -> [Tile] -> [Tile] -> (Int, Int) -> IO (Either Error TileMap)
+waveFuncCollapeHeightMap heightMap airTiles groundTiles (minHeight, maxHeight) = undefined
+
+-- Roep normale waveFunc Step aan op hoogte, 
+
 
 -- | Create the tileMap and environment for the wave function collapse algorithm
 --   It applies the rule to each position and creates the environment based on the result.

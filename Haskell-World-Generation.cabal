@@ -58,6 +58,7 @@ library
     exposed-modules:  Def
                     , Utils
                     , Gen.WaveFuncCollapse
+                    , Gen.PerlinNoise
                     , Output
                     , Examples.Roads
                     , Examples.Chance
