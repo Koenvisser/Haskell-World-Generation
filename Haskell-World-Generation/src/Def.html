@@ -1,569 +1,358 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span id="local-6989586621679056167"><span id="local-6989586621679056168"></span></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Def</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-2"></span><span>
-</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Default</span></span><span>
-</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">union</span></span><span class="hs-special">)</span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">M</span></span><span>
-</span><span id="line-6"></span><span>
-</span><span id="line-7"></span><span class="annot"><span class="hs-comment">-- | A tile is a 3D object with a texture, a set of rules and a character representation.</span></span><span>
-</span><span id="line-8"></span><span class="hs-keyword">data</span><span> </span><span id="Tile"><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-var">Tile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Tile"><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-var">Tile</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span>
-</span><span id="line-9"></span><span>    </span><span class="annot"><span class="hs-comment">-- | The `FilePath` to a texture location, which is used in the `Output`.</span></span><span>
-</span><span id="line-10"></span><span>    </span><span id="materials"><span class="annot"><span class="annottext">Tile -&gt; Map Side Material
-</span><a href="Def.html#materials"><span class="hs-identifier hs-var hs-var">materials</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">M.Map</span></span><span> </span><span class="annot"><a href="Def.html#Side"><span class="hs-identifier hs-type">Side</span></a></span><span> </span><span class="annot"><a href="Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-11"></span><span>    </span><span class="hs-comment">-- | The `Rule` that determines if a tile can be placed. </span><span>
-</span><span id="line-12"></span><span>    </span><span class="hs-comment">-- Rules can be composed using the functions from the `CompareRule` type class.</span><span>
-</span><span id="line-13"></span><span>    </span><span id="rules"><span class="annot"><span class="annottext">Tile -&gt; Rule
-</span><a href="Def.html#rules"><span class="hs-identifier hs-var hs-var">rules</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-14"></span><span>    </span><span class="annot"><span class="hs-comment">-- | The character representation is only used for debugging purposes. </span></span><span>
-</span><span id="line-15"></span><span>    </span><span id="charRep"><span class="annot"><span class="annottext">Tile -&gt; Char
-</span><a href="Def.html#charRep"><span class="hs-identifier hs-var hs-var">charRep</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span>
-</span><span id="line-16"></span><span class="hs-special">}</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">data</span><span> </span><span id="Material"><span class="annot"><a href="Def.html#Material"><span class="hs-identifier hs-var">Material</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Material"><span class="annot"><a href="Def.html#Material"><span class="hs-identifier hs-var">Material</span></a></span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-19"></span><span>    </span><span id="ambientColor"><span class="annot"><span class="annottext">Material -&gt; (Float, Float, Float)
-</span><a href="Def.html#ambientColor"><span class="hs-identifier hs-var hs-var">ambientColor</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-20"></span><span>    </span><span id="diffuseColor"><span class="annot"><span class="annottext">Material -&gt; (Float, Float, Float)
-</span><a href="Def.html#diffuseColor"><span class="hs-identifier hs-var hs-var">diffuseColor</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-21"></span><span>    </span><span id="specularColor"><span class="annot"><span class="annottext">Material -&gt; (Float, Float, Float)
-</span><a href="Def.html#specularColor"><span class="hs-identifier hs-var hs-var">specularColor</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-22"></span><span>    </span><span id="transparency"><span class="annot"><span class="annottext">Material -&gt; Float
-</span><a href="Def.html#transparency"><span class="hs-identifier hs-var hs-var">transparency</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>    </span><span id="specularExponent"><span class="annot"><span class="annottext">Material -&gt; Float
-</span><a href="Def.html#specularExponent"><span class="hs-identifier hs-var hs-var">specularExponent</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span>
-</span><span id="line-24"></span><span>    </span><span id="illuminationModel"><span class="annot"><span class="annottext">Material -&gt; Int
-</span><a href="Def.html#illuminationModel"><span class="hs-identifier hs-var hs-var">illuminationModel</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>
-</span><span id="line-25"></span><span>    </span><span id="texture"><span class="annot"><span class="annottext">Material -&gt; Maybe FilePath
-</span><a href="Def.html#texture"><span class="hs-identifier hs-var hs-var">texture</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>    </span><span id="extraFields"><span class="annot"><span class="annottext">Material -&gt; [FilePath]
-</span><a href="Def.html#extraFields"><span class="hs-identifier hs-var hs-var">extraFields</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>    </span><span id="extraFiles"><span class="annot"><span class="annottext">Material -&gt; [FilePath]
-</span><a href="Def.html#extraFiles"><span class="hs-identifier hs-var hs-var">extraFiles</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span class="hs-special">]</span><span>
-</span><span id="line-28"></span><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679056190"><span id="local-6989586621679056211"><span id="local-6989586621679056215"><span class="annot"><span class="annottext">Int -&gt; Material -&gt; ShowS
-[Material] -&gt; ShowS
-Material -&gt; FilePath
-(Int -&gt; Material -&gt; ShowS)
--&gt; (Material -&gt; FilePath) -&gt; ([Material] -&gt; ShowS) -&gt; Show Material
-forall a.
-(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; FilePath) -&gt; ([a] -&gt; ShowS) -&gt; Show a
-$cshowsPrec :: Int -&gt; Material -&gt; ShowS
-showsPrec :: Int -&gt; Material -&gt; ShowS
-$cshow :: Material -&gt; FilePath
-show :: Material -&gt; FilePath
-$cshowList :: [Material] -&gt; ShowS
-showList :: [Material] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056222"><span id="local-6989586621679056241"><span class="annot"><span class="annottext">Material -&gt; Material -&gt; Bool
-(Material -&gt; Material -&gt; Bool)
--&gt; (Material -&gt; Material -&gt; Bool) -&gt; Eq Material
-forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
-$c== :: Material -&gt; Material -&gt; Bool
-== :: Material -&gt; Material -&gt; Bool
-$c/= :: Material -&gt; Material -&gt; Bool
-/= :: Material -&gt; Material -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056251"><span id="local-6989586621679056266"><span id="local-6989586621679056278"><span id="local-6989586621679056282"><span id="local-6989586621679056285"><span id="local-6989586621679056288"><span id="local-6989586621679056291"><span class="annot"><span class="annottext">Eq Material
-Eq Material =&gt;
-(Material -&gt; Material -&gt; Ordering)
--&gt; (Material -&gt; Material -&gt; Bool)
--&gt; (Material -&gt; Material -&gt; Bool)
--&gt; (Material -&gt; Material -&gt; Bool)
--&gt; (Material -&gt; Material -&gt; Bool)
--&gt; (Material -&gt; Material -&gt; Material)
--&gt; (Material -&gt; Material -&gt; Material)
--&gt; Ord Material
-Material -&gt; Material -&gt; Bool
-Material -&gt; Material -&gt; Ordering
-Material -&gt; Material -&gt; Material
-forall a.
-Eq a =&gt;
-(a -&gt; a -&gt; Ordering)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; a)
--&gt; (a -&gt; a -&gt; a)
--&gt; Ord a
-$ccompare :: Material -&gt; Material -&gt; Ordering
-compare :: Material -&gt; Material -&gt; Ordering
-$c&lt; :: Material -&gt; Material -&gt; Bool
-&lt; :: Material -&gt; Material -&gt; Bool
-$c&lt;= :: Material -&gt; Material -&gt; Bool
-&lt;= :: Material -&gt; Material -&gt; Bool
-$c&gt; :: Material -&gt; Material -&gt; Bool
-&gt; :: Material -&gt; Material -&gt; Bool
-$c&gt;= :: Material -&gt; Material -&gt; Bool
-&gt;= :: Material -&gt; Material -&gt; Bool
-$cmax :: Material -&gt; Material -&gt; Material
-max :: Material -&gt; Material -&gt; Material
-$cmin :: Material -&gt; Material -&gt; Material
-min :: Material -&gt; Material -&gt; Material
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">)</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | This module defines the types and functions that are used in the rules and the</span><span>
+</span><span id="line-2"></span><span class="hs-comment">--   generation of the world. Use this module to define the tiles and the rules that</span><span>
+</span><span id="line-3"></span><span class="hs-comment">--   are used to generate the world, or use the &quot;Utils&quot; module to define your rules</span><span>
+</span><span id="line-4"></span><span class="hs-comment">--   in an easier way, using the provided functions.</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Def</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-6"></span><span>    </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier">Tile</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>    </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier">Material</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>    </span><span class="annot"><a href="Internal.Def.html#Side"><span class="hs-identifier">Side</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>    </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier">Rule</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>    </span><span class="annot"><a href="Internal.Def.html#RuleResult"><span class="hs-identifier">RuleResult</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>    </span><span class="annot"><a href="Def.html#resultToBool"><span class="hs-identifier">resultToBool</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>    </span><span class="annot"><a href="Def.html#resultToFloat"><span class="hs-identifier">resultToFloat</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>    </span><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier">CompareRule</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-14"></span><span>    </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier">Pos</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>    </span><span class="annot"><a href="Def.html#Size"><span class="hs-identifier">Size</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>    </span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier">TileMap</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>    </span><span class="annot"><a href="Def.html#lookupTileMap"><span class="hs-identifier">lookupTileMap</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-18"></span><span>    </span><span class="annot"><a href="Def.html#memberTileMap"><span class="hs-identifier">memberTileMap</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-19"></span><span>    </span><span class="annot"><a href="Def.html#getTileMap"><span class="hs-identifier">getTileMap</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-20"></span><span>    </span><span class="annot"><a href="Def.html#nullTileMap"><span class="hs-identifier">nullTileMap</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>    </span><span class="annot"><a href="Def.html#findWithDefaultTileMap"><span class="hs-identifier">findWithDefaultTileMap</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>    </span><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier">Shape</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>    </span><span class="annot"><a href="Def.html#Error"><span class="hs-identifier">Error</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>    </span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier">RuleMonad</span></a></span><span>
+</span><span id="line-25"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">M</span></span><span>
+</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">union</span></span><span class="hs-special">)</span><span>
 </span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="hs-keyword">data</span><span> </span><span id="Side"><span class="annot"><a href="Def.html#Side"><span class="hs-identifier hs-var">Side</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="PosX"><span class="annot"><a href="Def.html#PosX"><span class="hs-identifier hs-var">PosX</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="NegX"><span class="annot"><a href="Def.html#NegX"><span class="hs-identifier hs-var">NegX</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="PosY"><span class="annot"><a href="Def.html#PosY"><span class="hs-identifier hs-var">PosY</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="NegY"><span class="annot"><a href="Def.html#NegY"><span class="hs-identifier hs-var">NegY</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="PosZ"><span class="annot"><a href="Def.html#PosZ"><span class="hs-identifier hs-var">PosZ</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="NegZ"><span class="annot"><a href="Def.html#NegZ"><span class="hs-identifier hs-var">NegZ</span></a></span></span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679056304"><span id="local-6989586621679056306"><span id="local-6989586621679056310"><span class="annot"><span class="annottext">Int -&gt; Side -&gt; ShowS
-[Side] -&gt; ShowS
-Side -&gt; FilePath
-(Int -&gt; Side -&gt; ShowS)
--&gt; (Side -&gt; FilePath) -&gt; ([Side] -&gt; ShowS) -&gt; Show Side
-forall a.
-(Int -&gt; a -&gt; ShowS) -&gt; (a -&gt; FilePath) -&gt; ([a] -&gt; ShowS) -&gt; Show a
-$cshowsPrec :: Int -&gt; Side -&gt; ShowS
-showsPrec :: Int -&gt; Side -&gt; ShowS
-$cshow :: Side -&gt; FilePath
-show :: Side -&gt; FilePath
-$cshowList :: [Side] -&gt; ShowS
-showList :: [Side] -&gt; ShowS
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Show</span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056313"><span id="local-6989586621679056315"><span class="annot"><span class="annottext">Side -&gt; Side -&gt; Bool
-(Side -&gt; Side -&gt; Bool) -&gt; (Side -&gt; Side -&gt; Bool) -&gt; Eq Side
-forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
-$c== :: Side -&gt; Side -&gt; Bool
-== :: Side -&gt; Side -&gt; Bool
-$c/= :: Side -&gt; Side -&gt; Bool
-/= :: Side -&gt; Side -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056321"><span id="local-6989586621679056323"><span id="local-6989586621679056325"><span id="local-6989586621679056329"><span id="local-6989586621679056332"><span id="local-6989586621679056335"><span id="local-6989586621679056338"><span class="annot"><span class="annottext">Eq Side
-Eq Side =&gt;
-(Side -&gt; Side -&gt; Ordering)
--&gt; (Side -&gt; Side -&gt; Bool)
--&gt; (Side -&gt; Side -&gt; Bool)
--&gt; (Side -&gt; Side -&gt; Bool)
--&gt; (Side -&gt; Side -&gt; Bool)
--&gt; (Side -&gt; Side -&gt; Side)
--&gt; (Side -&gt; Side -&gt; Side)
--&gt; Ord Side
-Side -&gt; Side -&gt; Bool
-Side -&gt; Side -&gt; Ordering
-Side -&gt; Side -&gt; Side
-forall a.
-Eq a =&gt;
-(a -&gt; a -&gt; Ordering)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; Bool)
--&gt; (a -&gt; a -&gt; a)
--&gt; (a -&gt; a -&gt; a)
--&gt; Ord a
-$ccompare :: Side -&gt; Side -&gt; Ordering
-compare :: Side -&gt; Side -&gt; Ordering
-$c&lt; :: Side -&gt; Side -&gt; Bool
-&lt; :: Side -&gt; Side -&gt; Bool
-$c&lt;= :: Side -&gt; Side -&gt; Bool
-&lt;= :: Side -&gt; Side -&gt; Bool
-$c&gt; :: Side -&gt; Side -&gt; Bool
-&gt; :: Side -&gt; Side -&gt; Bool
-$c&gt;= :: Side -&gt; Side -&gt; Bool
-&gt;= :: Side -&gt; Side -&gt; Bool
-$cmax :: Side -&gt; Side -&gt; Side
-max :: Side -&gt; Side -&gt; Side
-$cmin :: Side -&gt; Side -&gt; Side
-min :: Side -&gt; Side -&gt; Side
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Ord</span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056341"><span id="local-6989586621679056348"><span id="local-6989586621679056354"><span id="local-6989586621679056362"><span id="local-6989586621679056364"><span id="local-6989586621679056368"><span id="local-6989586621679056372"><span id="local-6989586621679056376"><span class="annot"><span class="annottext">Int -&gt; Side
-Side -&gt; Int
-Side -&gt; [Side]
-Side -&gt; Side
-Side -&gt; Side -&gt; [Side]
-Side -&gt; Side -&gt; Side -&gt; [Side]
-(Side -&gt; Side)
--&gt; (Side -&gt; Side)
--&gt; (Int -&gt; Side)
--&gt; (Side -&gt; Int)
--&gt; (Side -&gt; [Side])
--&gt; (Side -&gt; Side -&gt; [Side])
--&gt; (Side -&gt; Side -&gt; [Side])
--&gt; (Side -&gt; Side -&gt; Side -&gt; [Side])
--&gt; Enum Side
-forall a.
-(a -&gt; a)
--&gt; (a -&gt; a)
--&gt; (Int -&gt; a)
--&gt; (a -&gt; Int)
--&gt; (a -&gt; [a])
--&gt; (a -&gt; a -&gt; [a])
--&gt; (a -&gt; a -&gt; [a])
--&gt; (a -&gt; a -&gt; a -&gt; [a])
--&gt; Enum a
-$csucc :: Side -&gt; Side
-succ :: Side -&gt; Side
-$cpred :: Side -&gt; Side
-pred :: Side -&gt; Side
-$ctoEnum :: Int -&gt; Side
-toEnum :: Int -&gt; Side
-$cfromEnum :: Side -&gt; Int
-fromEnum :: Side -&gt; Int
-$cenumFrom :: Side -&gt; [Side]
-enumFrom :: Side -&gt; [Side]
-$cenumFromThen :: Side -&gt; Side -&gt; [Side]
-enumFromThen :: Side -&gt; Side -&gt; [Side]
-$cenumFromTo :: Side -&gt; Side -&gt; [Side]
-enumFromTo :: Side -&gt; Side -&gt; [Side]
-$cenumFromThenTo :: Side -&gt; Side -&gt; Side -&gt; [Side]
-enumFromThenTo :: Side -&gt; Side -&gt; Side -&gt; [Side]
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var hs-var">Enum</span></span></span></span></span></span></span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056380"><span id="local-6989586621679056382"><span class="annot"><span class="annottext">Side
-Side -&gt; Side -&gt; Bounded Side
-forall a. a -&gt; a -&gt; Bounded a
-$cminBound :: Side
-minBound :: Side
-$cmaxBound :: Side
-maxBound :: Side
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Bounded</span></span></span></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Internal.Def.html"><span class="hs-identifier">Internal.Def</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier">RuleMonad</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier">Pos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier">Rule</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#RuleResult"><span class="hs-identifier">RuleResult</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier">Tile</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier">Material</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#Side"><span class="hs-identifier">Side</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier">TileMap</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-33"></span><span>    </span><span id="local-6989586621679056388"><span class="annot"><span class="annottext">def :: Material
-</span><a href="#local-6989586621679056388"><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-34"></span><span>        </span><span class="annot"><span class="annottext">ambientColor :: (Float, Float, Float)
-</span><a href="Def.html#ambientColor"><span class="hs-identifier hs-var">ambientColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">1.0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-35"></span><span>        </span><span class="annot"><span class="annottext">diffuseColor :: (Float, Float, Float)
-</span><a href="Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">1.0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-36"></span><span>        </span><span class="annot"><span class="annottext">specularColor :: (Float, Float, Float)
-</span><a href="Def.html#specularColor"><span class="hs-identifier hs-var">specularColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">0.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">0.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">0.0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-37"></span><span>        </span><span class="annot"><span class="annottext">transparency :: Float
-</span><a href="Def.html#transparency"><span class="hs-identifier hs-var">transparency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span>
-</span><span id="line-38"></span><span>        </span><span class="annot"><span class="annottext">specularExponent :: Float
-</span><a href="Def.html#specularExponent"><span class="hs-identifier hs-var">specularExponent</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-number">10.0</span></span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>        </span><span class="annot"><span class="annottext">illuminationModel :: Int
-</span><a href="Def.html#illuminationModel"><span class="hs-identifier hs-var">illuminationModel</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><span class="hs-number">2</span></span><span class="hs-special">,</span><span>
-</span><span id="line-40"></span><span>        </span><span class="annot"><span class="annottext">texture :: Maybe FilePath
-</span><a href="Def.html#texture"><span class="hs-identifier hs-var">texture</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe FilePath
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span class="hs-special">,</span><span>
-</span><span id="line-41"></span><span>        </span><span class="annot"><span class="annottext">extraFields :: [FilePath]
-</span><a href="Def.html#extraFields"><span class="hs-identifier hs-var">extraFields</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-42"></span><span>        </span><span class="annot"><span class="annottext">extraFiles :: [FilePath]
-</span><a href="Def.html#extraFiles"><span class="hs-identifier hs-var">extraFiles</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-43"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span class="annot"><span class="hs-comment">-- | The show instance of a tile is its character representation</span></span><span>
-</span><span id="line-46"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679056391"><span id="local-6989586621679056396"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-47"></span><span>    </span><span id="local-6989586621679056398"><span class="annot"><span class="annottext">show :: Tile -&gt; FilePath
-</span><a href="#local-6989586621679056398"><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></a></span></span><span> </span><span id="local-6989586621679056400"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056400"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile -&gt; Char
-</span><a href="Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056400"><span class="hs-identifier hs-var">tile</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-48"></span><span>
-</span><span id="line-49"></span><span class="hs-comment">-- | The Eq instance of a tile is based on its texture location, since no </span><span>
-</span><span id="line-50"></span><span class="hs-comment">--   two tiles should have the same texture</span><span>
-</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679056403"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-52"></span><span>    </span><span id="local-6989586621679056407"><span class="annot"><span class="annottext">== :: Tile -&gt; Tile -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">(==)</span></span></span><span> </span><span id="local-6989586621679056408"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056408"><span class="hs-identifier hs-var">tile1</span></a></span></span><span> </span><span id="local-6989586621679056409"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056409"><span class="hs-identifier hs-var">tile2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Tile -&gt; Char
-</span><a href="Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056408"><span class="hs-identifier hs-var">tile1</span></a></span><span> </span><span class="annot"><span class="annottext">Char -&gt; Char -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Tile -&gt; Char
-</span><a href="Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056409"><span class="hs-identifier hs-var">tile2</span></a></span><span>
-</span><span id="line-53"></span><span>
-</span><span id="line-54"></span><span class="annot"><span class="hs-comment">-- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.</span></span><span>
-</span><span id="line-55"></span><span class="hs-keyword">newtype</span><span> </span><span id="Rule"><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Rule"><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#RuleResult"><span class="hs-identifier hs-type">RuleResult</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span class="hs-comment">-- | The result of a rule is defined as a `RuleResult`. It is represented either as a </span><span>
-</span><span id="line-58"></span><span class="hs-comment">--   `CanPlace Bool` which means the rule guaranteed passes or fails. Or as </span><span>
-</span><span id="line-59"></span><span class="hs-comment">--   `ChancePlace Float` which gives a chance between 0 and 1 that the rule passes (1 being 100%).</span><span>
-</span><span id="line-60"></span><span class="hs-keyword">data</span><span> </span><span id="RuleResult"><span class="annot"><a href="Def.html#RuleResult"><span class="hs-identifier hs-var">RuleResult</span></a></span></span><span> </span><span>
-</span><span id="line-61"></span><span>    </span><span class="hs-comment">-- | `CanPlace` simply specifies if a tile can be placed at a position or not. When it is true,</span><span>
-</span><span id="line-62"></span><span>    </span><span class="hs-comment">--   it has weight 1, when it is false it has weight 0</span><span>
-</span><span id="line-63"></span><span>    </span><span class="hs-glyph">=</span><span> </span><span id="CanPlace"><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span> </span><span>
-</span><span id="line-64"></span><span>    </span><span class="hs-comment">-- | `ChancePlace` specifies the chance that a tile can be placed at a position. If it is 0, it will</span><span>
-</span><span id="line-65"></span><span>    </span><span class="hs-comment">--   never be placed. Otherwise, it represents the weight that is used in the generator.</span><span>
-</span><span id="line-66"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span id="ChancePlace"><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-67"></span><span>
-</span><span id="line-68"></span><span class="hs-comment">-- | Converts a `RuleResult` to a boolean, which is true if the result is true or </span><span>
-</span><span id="line-69"></span><span class="hs-comment">--   the chance that it is placed is greater than 0. </span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Def.html#resultToBool"><span class="hs-identifier hs-type">resultToBool</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#RuleResult"><span class="hs-identifier hs-type">RuleResult</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
-</span><span id="line-71"></span><span id="resultToBool"><span class="annot"><span class="annottext">resultToBool :: RuleResult -&gt; Bool
-</span><a href="Def.html#resultToBool"><span class="hs-identifier hs-var hs-var">resultToBool</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679056414"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056414"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056414"><span class="hs-identifier hs-var">b</span></a></span><span>
-</span><span id="line-72"></span><span class="annot"><a href="Def.html#resultToBool"><span class="hs-identifier hs-var">resultToBool</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056415"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056415"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056415"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Bool
+</span><span id="line-32"></span><span class="hs-comment">-- | Converts a `RuleResult` to a boolean, which is true if the result is true or </span><span>
+</span><span id="line-33"></span><span class="hs-comment">--   the chance that it is placed is greater than 0. </span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Def.html#resultToBool"><span class="hs-identifier hs-type">resultToBool</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#RuleResult"><span class="hs-identifier hs-type">RuleResult</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-35"></span><span id="resultToBool"><span class="annot"><span class="annottext">resultToBool :: RuleResult -&gt; Bool
+</span><a href="Def.html#resultToBool"><span class="hs-identifier hs-var hs-var">resultToBool</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679065673"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065673"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065673"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Def.html#resultToBool"><span class="hs-identifier hs-var">resultToBool</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065675"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065675"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065675"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0</span></span><span>
-</span><span id="line-73"></span><span>
-</span><span id="line-74"></span><span class="hs-comment">-- | Convrts a `RuleResult` to a float, which returns the chance if it is a chance or</span><span>
-</span><span id="line-75"></span><span class="hs-comment">--   when it is a boolean it returns 1 for true and 0 for false. </span><span>
-</span><span id="line-76"></span><span class="annot"><a href="Def.html#resultToFloat"><span class="hs-identifier hs-type">resultToFloat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#RuleResult"><span class="hs-identifier hs-type">RuleResult</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-77"></span><span id="resultToFloat"><span class="annot"><span class="annottext">resultToFloat :: RuleResult -&gt; Float
-</span><a href="Def.html#resultToFloat"><span class="hs-identifier hs-var hs-var">resultToFloat</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679056418"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056418"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056418"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Float
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- | Convrts a `RuleResult` to a float, which returns the chance if it is a chance or</span><span>
+</span><span id="line-39"></span><span class="hs-comment">--   when it is a boolean it returns 1 for true and 0 for false. </span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Def.html#resultToFloat"><span class="hs-identifier hs-type">resultToFloat</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#RuleResult"><span class="hs-identifier hs-type">RuleResult</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-41"></span><span id="resultToFloat"><span class="annot"><span class="annottext">resultToFloat :: RuleResult -&gt; Float
+</span><a href="Def.html#resultToFloat"><span class="hs-identifier hs-var hs-var">resultToFloat</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679065677"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065677"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065677"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1.0</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.0</span></span><span>
-</span><span id="line-78"></span><span class="annot"><a href="Def.html#resultToFloat"><span class="hs-identifier hs-var">resultToFloat</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056419"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056419"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056419"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-79"></span><span>
-</span><span id="line-80"></span><span class="hs-keyword">class</span><span> </span><span id="CompareRule"><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-var">CompareRule</span></a></span></span><span> </span><span id="local-6989586621679056148"><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-81"></span><span>    </span><span class="hs-comment">-- | The OR operator for rules</span><span>
-</span><span id="line-82"></span><span>    </span><span id="%3C%7C%7C%3E"><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-type">(&lt;||&gt;)</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span>
-</span><span id="line-83"></span><span>    </span><span class="hs-comment">-- | The AND operator for rules</span><span>
-</span><span id="line-84"></span><span>    </span><span id="%3C%26%26%3E"><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-type">(&lt;&amp;&amp;&gt;)</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span>
-</span><span id="line-85"></span><span>    </span><span class="hs-comment">-- | The NOT operator for rules</span><span>
-</span><span id="line-86"></span><span>    </span><span id="%3C%21%3E"><span class="annot"><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-type">(&lt;!&gt;)</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679056148"><span class="hs-identifier hs-type">a</span></a></span><span>
-</span><span id="line-87"></span><span>
-</span><span id="line-88"></span><span class="hs-comment">-- | The CompareRule instance for RuleResult follows regular boolean logic. The only </span><span>
-</span><span id="line-89"></span><span class="hs-comment">--   notable instances are the `ChancePlace` instances. For `&lt;||&gt;` its calculated as the </span><span>
-</span><span id="line-90"></span><span class="hs-comment">--   chance for either rule succeeding, for `&lt;&amp;&amp;&gt;` its the chance of both rules succeeding </span><span>
-</span><span id="line-91"></span><span class="hs-comment">--   and `&lt;!&gt;` reverses the chance c by the calculation 1 - c.</span><span>
-</span><span id="line-92"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-type">CompareRule</span></a></span><span> </span><span class="annot"><a href="Def.html#RuleResult"><span class="hs-identifier hs-type">RuleResult</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-93"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679056429"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056429"><span class="hs-identifier hs-var">b1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679056430"><span class="annot"><span class="annottext">&lt;||&gt; :: RuleResult -&gt; RuleResult -&gt; RuleResult
-</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;||&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679056431"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056431"><span class="hs-identifier hs-var">b2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056429"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><span id="line-42"></span><span class="annot"><a href="Def.html#resultToFloat"><span class="hs-identifier hs-var">resultToFloat</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065678"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065678"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065678"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="hs-comment">-- | The CompareRule typeclass is used to compare rules with each other. It is used to</span><span>
+</span><span id="line-45"></span><span class="hs-comment">--   compose rules with the operators &lt;||&gt;, &lt;&amp;&amp;&gt; and &lt;!&gt;.</span><span>
+</span><span id="line-46"></span><span class="hs-keyword">class</span><span> </span><span id="CompareRule"><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-var">CompareRule</span></a></span></span><span> </span><span id="local-6989586621679065617"><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-47"></span><span>    </span><span class="hs-comment">-- | The OR operator for rules</span><span>
+</span><span id="line-48"></span><span>    </span><span id="%3C%7C%7C%3E"><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-type">(&lt;||&gt;)</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-49"></span><span>    </span><span class="hs-comment">-- | The AND operator for rules</span><span>
+</span><span id="line-50"></span><span>    </span><span id="%3C%26%26%3E"><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-type">(&lt;&amp;&amp;&gt;)</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-51"></span><span>    </span><span class="hs-comment">-- | The NOT operator for rules</span><span>
+</span><span id="line-52"></span><span>    </span><span id="%3C%21%3E"><span class="annot"><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-type">(&lt;!&gt;)</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679065617"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span class="hs-comment">-- | The CompareRule instance for RuleResult follows regular boolean logic. The only </span><span>
+</span><span id="line-55"></span><span class="hs-comment">--   notable instances are the `ChancePlace` instances. For `&lt;||&gt;` its calculated as the </span><span>
+</span><span id="line-56"></span><span class="hs-comment">--   chance for either rule succeeding, for `&lt;&amp;&amp;&gt;` its the chance of both rules succeeding </span><span>
+</span><span id="line-57"></span><span class="hs-comment">--   and `&lt;!&gt;` reverses the chance c by the calculation 1 - c.</span><span>
+</span><span id="line-58"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-type">CompareRule</span></a></span><span> </span><span class="annot"><a href="Internal.Def.html#RuleResult"><span class="hs-identifier hs-type">RuleResult</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-59"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679065688"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065688"><span class="hs-identifier hs-var">b1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679065689"><span class="annot"><span class="annottext">&lt;||&gt; :: RuleResult -&gt; RuleResult -&gt; RuleResult
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;||&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679065690"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065690"><span class="hs-identifier hs-var">b2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
+</span><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065688"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">||</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056431"><span class="hs-identifier hs-var">b2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-94"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">True</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065690"><span class="hs-identifier hs-var">b2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-60"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-95"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056433"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056433"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
-</span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056433"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-96"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-61"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065692"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065692"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
+</span><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065692"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-62"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-97"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056434"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056434"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-63"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065693"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065693"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
-</span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056434"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-98"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056435"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056435"><span class="hs-identifier hs-var">f1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056436"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056436"><span class="hs-identifier hs-var">f2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
-</span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">(Float -&gt; RuleResult) -&gt; Float -&gt; RuleResult
+</span><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065693"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-64"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065694"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065694"><span class="hs-identifier hs-var">f1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065695"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065695"><span class="hs-identifier hs-var">f2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
+</span><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">(Float -&gt; RuleResult) -&gt; Float -&gt; RuleResult
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Ord a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-identifier hs-var">max</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056435"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056436"><span class="hs-identifier hs-var">f2</span></a></span><span>
-</span><span id="line-99"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679056439"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056439"><span class="hs-identifier hs-var">b1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679056440"><span class="annot"><span class="annottext">&lt;&amp;&amp;&gt; :: RuleResult -&gt; RuleResult -&gt; RuleResult
-</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&amp;&amp;&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679056441"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056441"><span class="hs-identifier hs-var">b2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056439"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
+</span><a href="#local-6989586621679065694"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065695"><span class="hs-identifier hs-var">f2</span></a></span><span>
+</span><span id="line-65"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679065698"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065698"><span class="hs-identifier hs-var">b1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679065699"><span class="annot"><span class="annottext">&lt;&amp;&amp;&gt; :: RuleResult -&gt; RuleResult -&gt; RuleResult
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&amp;&amp;&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679065700"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065700"><span class="hs-identifier hs-var">b2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
+</span><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065698"><span class="hs-identifier hs-var">b1</span></a></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool -&gt; Bool
 </span><span class="hs-operator hs-var">&amp;&amp;</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056441"><span class="hs-identifier hs-var">b2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-100"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">True</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056443"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056443"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
-</span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056443"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-101"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065700"><span class="hs-identifier hs-var">b2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-66"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065702"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065702"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
+</span><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065702"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-67"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span>
-</span><span id="line-102"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056444"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056444"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-68"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065703"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065703"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
-</span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056444"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-103"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065703"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-69"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span>
-</span><span id="line-104"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056445"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056445"><span class="hs-identifier hs-var">f1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056446"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056446"><span class="hs-identifier hs-var">f2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
-</span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056445"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><span id="line-70"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065704"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065704"><span class="hs-identifier hs-var">f1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="annot"><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065705"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065705"><span class="hs-identifier hs-var">f2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
+</span><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065704"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056446"><span class="hs-identifier hs-var">f2</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-105"></span><span>    </span><span id="local-6989586621679056450"><span class="annot"><span class="annottext">&lt;!&gt; :: RuleResult -&gt; RuleResult
-</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;!&gt;)</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679056451"><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056451"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
-</span><a href="Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><a href="#local-6989586621679065705"><span class="hs-identifier hs-var">f2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-71"></span><span>    </span><span id="local-6989586621679065709"><span class="annot"><span class="annottext">&lt;!&gt; :: RuleResult -&gt; RuleResult
+</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;!&gt;)</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-type">CanPlace</span></a></span><span> </span><span id="local-6989586621679065710"><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679065710"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; RuleResult
+</span><a href="Internal.Def.html#CanPlace"><span class="hs-identifier hs-var">CanPlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679056451"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-106"></span><span>    </span><span class="annot"><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679056453"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056453"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
-</span><a href="Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065710"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-72"></span><span>    </span><span class="annot"><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-type">ChancePlace</span></a></span><span> </span><span id="local-6989586621679065712"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679065712"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; RuleResult
+</span><a href="Internal.Def.html#ChancePlace"><span class="hs-identifier hs-var">ChancePlace</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679056453"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-107"></span><span>
-</span><span id="line-108"></span><span class="annot"><span class="hs-comment">-- | The CompareRule instance for Rule, which composes the rules with the given operator</span></span><span>
-</span><span id="line-109"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-type">CompareRule</span></a></span><span> </span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-110"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679056463"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056463"><span class="hs-identifier hs-var">rule1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679056464"><span class="annot"><span class="annottext">&lt;||&gt; :: Rule -&gt; Rule -&gt; Rule
-</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;||&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679056465"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056465"><span class="hs-identifier hs-var">rule2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; (RuleResult, [Pos])) -&gt; Rule
-</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679056466"><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056466"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span> </span><span id="local-6989586621679056467"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056467"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-111"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679056468"><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056468"><span class="hs-identifier hs-var">result1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056469"><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056469"><span class="hs-identifier hs-var">pos1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056463"><span class="hs-identifier hs-var">rule1</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056466"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056467"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span>
-</span><span id="line-112"></span><span>            </span><span class="hs-special">(</span><span id="local-6989586621679056470"><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056470"><span class="hs-identifier hs-var">result2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056471"><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056471"><span class="hs-identifier hs-var">pos2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056465"><span class="hs-identifier hs-var">rule2</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056466"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056467"><span class="hs-identifier hs-var">pos</span></a></span><span>
-</span><span id="line-113"></span><span>        </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056468"><span class="hs-identifier hs-var">result1</span></a></span><span> </span><span class="annot"><span class="annottext">RuleResult -&gt; RuleResult -&gt; RuleResult
+</span><a href="#local-6989586621679065712"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679065624"><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-type">CompareRule</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679065624"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-type">CompareRule</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679065624"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">)</span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-75"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span id="local-6989586621679065726"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065726"><span class="hs-identifier hs-var">r1</span></a></span></span><span> </span><span id="local-6989586621679065727"><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065727"><span class="hs-identifier hs-var">pos1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679065728"><span class="annot"><span class="annottext">&lt;||&gt; :: RuleMonad a -&gt; RuleMonad a -&gt; RuleMonad a
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;||&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span id="local-6989586621679065729"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065729"><span class="hs-identifier hs-var">r2</span></a></span></span><span> </span><span id="local-6989586621679065730"><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065730"><span class="hs-identifier hs-var">pos2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; [Pos] -&gt; RuleMonad a
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065726"><span class="hs-identifier hs-var">r1</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. CompareRule a =&gt; a -&gt; a -&gt; a
-</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056470"><span class="hs-identifier hs-var">result2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056469"><span class="hs-identifier hs-var">pos1</span></a></span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; [Pos] -&gt; [Pos]
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065729"><span class="hs-identifier hs-var">r2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065727"><span class="hs-identifier hs-var">pos1</span></a></span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; [Pos] -&gt; [Pos]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">`union`</span></span><span> </span><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056471"><span class="hs-identifier hs-var">pos2</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-114"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679056477"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056477"><span class="hs-identifier hs-var">rule1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679056478"><span class="annot"><span class="annottext">&lt;&amp;&amp;&gt; :: Rule -&gt; Rule -&gt; Rule
-</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&amp;&amp;&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679056479"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056479"><span class="hs-identifier hs-var">rule2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; (RuleResult, [Pos])) -&gt; Rule
-</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679056480"><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056480"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span> </span><span id="local-6989586621679056481"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056481"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-115"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679056482"><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056482"><span class="hs-identifier hs-var">result1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056483"><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056483"><span class="hs-identifier hs-var">pos1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056477"><span class="hs-identifier hs-var">rule1</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056480"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056481"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span>
-</span><span id="line-116"></span><span>            </span><span class="hs-special">(</span><span id="local-6989586621679056484"><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056484"><span class="hs-identifier hs-var">result2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056485"><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056485"><span class="hs-identifier hs-var">pos2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056479"><span class="hs-identifier hs-var">rule2</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056480"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056481"><span class="hs-identifier hs-var">pos</span></a></span><span>
-</span><span id="line-117"></span><span>        </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056482"><span class="hs-identifier hs-var">result1</span></a></span><span> </span><span class="annot"><span class="annottext">RuleResult -&gt; RuleResult -&gt; RuleResult
+</span><a href="#local-6989586621679065730"><span class="hs-identifier hs-var">pos2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-76"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span id="local-6989586621679065736"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065736"><span class="hs-identifier hs-var">r1</span></a></span></span><span> </span><span id="local-6989586621679065737"><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065737"><span class="hs-identifier hs-var">pos1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679065738"><span class="annot"><span class="annottext">&lt;&amp;&amp;&gt; :: RuleMonad a -&gt; RuleMonad a -&gt; RuleMonad a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&amp;&amp;&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span id="local-6989586621679065739"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065739"><span class="hs-identifier hs-var">r2</span></a></span></span><span> </span><span id="local-6989586621679065740"><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065740"><span class="hs-identifier hs-var">pos2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; [Pos] -&gt; RuleMonad a
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065736"><span class="hs-identifier hs-var">r1</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; a -&gt; a
 forall a. CompareRule a =&gt; a -&gt; a -&gt; a
-</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056484"><span class="hs-identifier hs-var">result2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056483"><span class="hs-identifier hs-var">pos1</span></a></span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; [Pos] -&gt; [Pos]
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065739"><span class="hs-identifier hs-var">r2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065737"><span class="hs-identifier hs-var">pos1</span></a></span><span> </span><span class="annot"><span class="annottext">[Pos] -&gt; [Pos] -&gt; [Pos]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">`union`</span></span><span> </span><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056485"><span class="hs-identifier hs-var">pos2</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-118"></span><span>    </span><span id="local-6989586621679056487"><span class="annot"><span class="annottext">&lt;!&gt; :: Rule -&gt; Rule
-</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;!&gt;)</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679056488"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056488"><span class="hs-identifier hs-var">rule</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; (RuleResult, [Pos])) -&gt; Rule
-</span><a href="Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679056489"><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056489"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span> </span><span id="local-6989586621679056490"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056490"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-119"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679056491"><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056491"><span class="hs-identifier hs-var">result</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056492"><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056492"><span class="hs-identifier hs-var">pos'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; (RuleResult, [Pos])
-</span><a href="#local-6989586621679056488"><span class="hs-identifier hs-var">rule</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
-</span><a href="#local-6989586621679056489"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056490"><span class="hs-identifier hs-var">pos</span></a></span><span>
-</span><span id="line-120"></span><span>        </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RuleResult -&gt; RuleResult
+</span><a href="#local-6989586621679065740"><span class="hs-identifier hs-var">pos2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-77"></span><span>    </span><span id="local-6989586621679065742"><span class="annot"><span class="annottext">&lt;!&gt; :: RuleMonad a -&gt; RuleMonad a
+</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;!&gt;)</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span id="local-6989586621679065743"><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065743"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679065744"><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065744"><span class="hs-identifier hs-var">pos</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a -&gt; [Pos] -&gt; RuleMonad a
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; a
 forall a. CompareRule a =&gt; a -&gt; a
-</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="annot"><span class="annottext">RuleResult
-</span><a href="#local-6989586621679056491"><span class="hs-identifier hs-var">result</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Pos]
-</span><a href="#local-6989586621679056492"><span class="hs-identifier hs-var">pos'</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-121"></span><span>
-</span><span id="line-122"></span><span class="annot"><span class="hs-comment">-- | A position is a 3D coordinate in the world</span></span><span>
-</span><span id="line-123"></span><span class="hs-keyword">type</span><span> </span><span id="Pos"><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-var">Pos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">)</span><span>
-</span><span id="line-124"></span><span class="annot"><span class="hs-comment">-- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world</span></span><span>
-</span><span id="line-125"></span><span class="hs-keyword">type</span><span> </span><span id="Size"><span class="annot"><a href="Def.html#Size"><span class="hs-identifier hs-var">Size</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-126"></span><span>
-</span><span id="line-127"></span><span class="annot"><span class="hs-comment">-- | A tilemap is a map of positions to tiles in the world</span></span><span>
-</span><span id="line-128"></span><span class="hs-keyword">newtype</span><span> </span><span id="TileMap"><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-var">TileMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="TileMap"><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-var">TileMap</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">M.Map</span></span><span> </span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="annot"><a href="Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span class="hs-comment">-- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid</span><span>
-</span><span id="line-131"></span><span class="hs-comment">--   with the tiles represented as their character representation and an empty tile </span><span>
-</span><span id="line-132"></span><span class="hs-comment">--   represented as a space.</span><span>
-</span><span id="line-133"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679056495"><span id="local-6989586621679056500"><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-134"></span><span>    </span><span id="local-6989586621679056509"><span class="annot"><span class="annottext">show :: TileMap -&gt; FilePath
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">show</span></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679056510"><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679056510"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Map Pos Tile -&gt; Bool
-forall k a. Map k a -&gt; Bool
-</span><span class="hs-identifier hs-var">M.null</span></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679056510"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><span class="hs-string">&quot;Empty tilemap&quot;</span></span><span>
-</span><span id="line-135"></span><span>                           </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
-</span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[FilePath] -&gt; FilePath
-</span><span class="hs-identifier hs-var">unlines</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[FilePath] -&gt; FilePath
-</span><span class="hs-identifier hs-var">unlines</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Pos -&gt; Char
-</span><a href="#local-6989586621679056513"><span class="hs-identifier hs-var">tileAtPos</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056514"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056515"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056516"><span class="hs-identifier hs-var">z</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679056514"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056514"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056517"><span class="hs-identifier hs-var">xMin</span></a></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056518"><span class="hs-identifier hs-var">xMax</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679056516"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056516"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056519"><span class="hs-identifier hs-var">zMin</span></a></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056520"><span class="hs-identifier hs-var">zMax</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">|</span><span>  </span><span id="local-6989586621679056515"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056515"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056521"><span class="hs-identifier hs-var">yMin</span></a></span><span class="hs-glyph">..</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056522"><span class="hs-identifier hs-var">yMax</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
-</span><span id="line-136"></span><span>        </span><span class="hs-keyword">where</span><span>
-</span><span id="line-137"></span><span>            </span><span class="hs-special">(</span><span id="local-6989586621679056517"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056517"><span class="hs-identifier hs-var">xMin</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056521"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056521"><span class="hs-identifier hs-var">yMin</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056519"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056519"><span class="hs-identifier hs-var">zMin</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Pos, Tile) -&gt; Pos
-forall a b. (a, b) -&gt; a
-</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">((Pos, Tile) -&gt; Pos)
--&gt; (Map Pos Tile -&gt; (Pos, Tile)) -&gt; Map Pos Tile -&gt; Pos
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile -&gt; (Pos, Tile)
-forall k a. Map k a -&gt; (k, a)
-</span><span class="hs-identifier hs-var">M.findMin</span></span><span> </span><span class="annot"><span class="annottext">(Map Pos Tile -&gt; Pos) -&gt; Map Pos Tile -&gt; Pos
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679056510"><span class="hs-identifier hs-var">tileMap</span></a></span><span>
-</span><span id="line-138"></span><span>            </span><span class="hs-special">(</span><span id="local-6989586621679056518"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056518"><span class="hs-identifier hs-var">xMax</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056522"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056522"><span class="hs-identifier hs-var">yMax</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679056520"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679056520"><span class="hs-identifier hs-var">zMax</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Pos, Tile) -&gt; Pos
-forall a b. (a, b) -&gt; a
-</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">((Pos, Tile) -&gt; Pos)
--&gt; (Map Pos Tile -&gt; (Pos, Tile)) -&gt; Map Pos Tile -&gt; Pos
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile -&gt; (Pos, Tile)
-forall k a. Map k a -&gt; (k, a)
-</span><span class="hs-identifier hs-var">M.findMax</span></span><span> </span><span class="annot"><span class="annottext">(Map Pos Tile -&gt; Pos) -&gt; Map Pos Tile -&gt; Pos
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679056510"><span class="hs-identifier hs-var">tileMap</span></a></span><span>
-</span><span id="line-139"></span><span>            </span><span class="annot"><a href="#local-6989586621679056513"><span class="hs-identifier hs-type">tileAtPos</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Char</span></span><span>
-</span><span id="line-140"></span><span>            </span><span id="local-6989586621679056513"><span class="annot"><span class="annottext">tileAtPos :: Pos -&gt; Char
-</span><a href="#local-6989586621679056513"><span class="hs-identifier hs-var hs-var">tileAtPos</span></a></span></span><span> </span><span id="local-6989586621679056527"><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056527"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
+</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679065743"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Pos]
+</span><a href="#local-6989586621679065744"><span class="hs-identifier hs-var">pos</span></a></span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><span class="hs-comment">-- | The CompareRule instance for Rule, which composes the rules with the given operator</span></span><span>
+</span><span id="line-80"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Def.html#CompareRule"><span class="hs-identifier hs-type">CompareRule</span></a></span><span> </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-81"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679065752"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065752"><span class="hs-identifier hs-var">rule1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679065753"><span class="annot"><span class="annottext">&lt;||&gt; :: Rule -&gt; Rule -&gt; Rule
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;||&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679065754"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065754"><span class="hs-identifier hs-var">rule2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleMonad RuleResult) -&gt; Rule
+</span><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679065755"><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065755"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span> </span><span id="local-6989586621679065756"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065756"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-82"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679065757"><span class="annot"><span class="annottext">result1 :: RuleMonad RuleResult
+</span><a href="#local-6989586621679065757"><span class="hs-identifier hs-var hs-var">result1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065752"><span class="hs-identifier hs-var">rule1</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065755"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065756"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span>
+</span><span id="line-83"></span><span>            </span><span id="local-6989586621679065758"><span class="annot"><span class="annottext">result2 :: RuleMonad RuleResult
+</span><a href="#local-6989586621679065758"><span class="hs-identifier hs-var hs-var">result2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065754"><span class="hs-identifier hs-var">rule2</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065755"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065756"><span class="hs-identifier hs-var">pos</span></a></span><span>
+</span><span id="line-84"></span><span>        </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult
+</span><a href="#local-6989586621679065757"><span class="hs-identifier hs-var">result1</span></a></span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult
+-&gt; RuleMonad RuleResult -&gt; RuleMonad RuleResult
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult
+</span><a href="#local-6989586621679065758"><span class="hs-identifier hs-var">result2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-85"></span><span>    </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679065761"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065761"><span class="hs-identifier hs-var">rule1</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679065762"><span class="annot"><span class="annottext">&lt;&amp;&amp;&gt; :: Rule -&gt; Rule -&gt; Rule
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">&lt;&amp;&amp;&gt;</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679065763"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065763"><span class="hs-identifier hs-var">rule2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleMonad RuleResult) -&gt; Rule
+</span><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679065764"><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065764"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span> </span><span id="local-6989586621679065765"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065765"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-86"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679065766"><span class="annot"><span class="annottext">result1 :: RuleMonad RuleResult
+</span><a href="#local-6989586621679065766"><span class="hs-identifier hs-var hs-var">result1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065761"><span class="hs-identifier hs-var">rule1</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065764"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065765"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span>
+</span><span id="line-87"></span><span>            </span><span id="local-6989586621679065767"><span class="annot"><span class="annottext">result2 :: RuleMonad RuleResult
+</span><a href="#local-6989586621679065767"><span class="hs-identifier hs-var hs-var">result2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065763"><span class="hs-identifier hs-var">rule2</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065764"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065765"><span class="hs-identifier hs-var">pos</span></a></span><span>
+</span><span id="line-88"></span><span>        </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult
+</span><a href="#local-6989586621679065766"><span class="hs-identifier hs-var">result1</span></a></span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult
+-&gt; RuleMonad RuleResult -&gt; RuleMonad RuleResult
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult
+</span><a href="#local-6989586621679065767"><span class="hs-identifier hs-var">result2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-89"></span><span>    </span><span id="local-6989586621679065770"><span class="annot"><span class="annottext">&lt;!&gt; :: Rule -&gt; Rule
+</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var hs-var hs-var hs-var">(&lt;!&gt;)</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span> </span><span id="local-6989586621679065771"><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065771"><span class="hs-identifier hs-var">rule</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(TileMap -&gt; Pos -&gt; RuleMonad RuleResult) -&gt; Rule
+</span><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-var">Rule</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679065772"><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065772"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span> </span><span id="local-6989586621679065773"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065773"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-90"></span><span>        </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679065774"><span class="annot"><span class="annottext">result :: RuleMonad RuleResult
+</span><a href="#local-6989586621679065774"><span class="hs-identifier hs-var hs-var">result</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TileMap -&gt; Pos -&gt; RuleMonad RuleResult
+</span><a href="#local-6989586621679065771"><span class="hs-identifier hs-var">rule</span></a></span><span> </span><span class="annot"><span class="annottext">TileMap
+</span><a href="#local-6989586621679065772"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065773"><span class="hs-identifier hs-var">pos</span></a></span><span>
+</span><span id="line-91"></span><span>        </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult -&gt; RuleMonad RuleResult
+forall a. CompareRule a =&gt; a -&gt; a
+</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="annot"><span class="annottext">RuleMonad RuleResult
+</span><a href="#local-6989586621679065774"><span class="hs-identifier hs-var">result</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-92"></span><span>
+</span><span id="line-93"></span><span class="annot"><span class="hs-comment">-- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world</span></span><span>
+</span><span id="line-94"></span><span class="hs-keyword">type</span><span> </span><span id="Size"><span class="annot"><a href="Def.html#Size"><span class="hs-identifier hs-var">Size</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-95"></span><span>
+</span><span id="line-96"></span><span class="annot"><span class="hs-comment">-- | Looks up a tile in the tilemap at the given position, returning the tile if it exists</span></span><span>
+</span><span id="line-97"></span><span class="annot"><a href="Def.html#lookupTileMap"><span class="hs-identifier hs-type">lookupTileMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-98"></span><span id="lookupTileMap"><span class="annot"><span class="annottext">lookupTileMap :: Pos -&gt; TileMap -&gt; RuleMonad (Maybe Tile)
+</span><a href="Def.html#lookupTileMap"><span class="hs-identifier hs-var hs-var">lookupTileMap</span></a></span></span><span> </span><span id="local-6989586621679065775"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065775"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679065777"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065777"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe Tile -&gt; [Pos] -&gt; RuleMonad (Maybe Tile)
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">M.lookup</span></span><span> </span><span class="annot"><span class="annottext">Pos
-</span><a href="#local-6989586621679056527"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
-</span><a href="#local-6989586621679056510"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-141"></span><span>                </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679056529"><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056529"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile -&gt; Char
-</span><a href="Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="annot"><span class="annottext">Tile
-</span><a href="#local-6989586621679056529"><span class="hs-identifier hs-var">tile</span></a></span><span>
-</span><span id="line-142"></span><span>                </span><span class="annot"><span class="annottext">Maybe Tile
-</span><span class="hs-identifier">_</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Char
-</span><span class="hs-char">' '</span></span><span>
-</span><span id="line-143"></span><span>
-</span><span id="line-144"></span><span class="hs-comment">-- | A shape is a function that takes a position and returns a list of absolute positions</span><span>
-</span><span id="line-145"></span><span class="hs-comment">--   that are relative to the given position, forming a shape. `Utils.allNeighbours` is </span><span>
-</span><span id="line-146"></span><span class="hs-comment">--   an example of a shape.</span><span>
-</span><span id="line-147"></span><span class="hs-keyword">type</span><span> </span><span id="Shape"><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-var">Shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-148"></span></pre></body></html>
+</span><a href="#local-6989586621679065775"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065777"><span class="hs-identifier hs-var">tileMap</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065775"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-99"></span><span>
+</span><span id="line-100"></span><span class="annot"><span class="hs-comment">-- | Checks if a tile exists in the tilemap at the given position</span></span><span>
+</span><span id="line-101"></span><span class="annot"><a href="Def.html#memberTileMap"><span class="hs-identifier hs-type">memberTileMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-102"></span><span id="memberTileMap"><span class="annot"><span class="annottext">memberTileMap :: Pos -&gt; TileMap -&gt; RuleMonad Bool
+</span><a href="Def.html#memberTileMap"><span class="hs-identifier hs-var hs-var">memberTileMap</span></a></span></span><span> </span><span id="local-6989586621679065779"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065779"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679065780"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065780"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; [Pos] -&gt; RuleMonad Bool
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Bool
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Bool
+</span><span class="hs-identifier hs-var">M.member</span></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065779"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065780"><span class="hs-identifier hs-var">tileMap</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065779"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span class="annot"><span class="hs-comment">-- | Gets a tile in the tilemap at the given position, returning an error if it does not exist</span></span><span>
+</span><span id="line-105"></span><span class="annot"><a href="Def.html#getTileMap"><span class="hs-identifier hs-type">getTileMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-106"></span><span id="getTileMap"><span class="annot"><span class="annottext">getTileMap :: Pos -&gt; TileMap -&gt; RuleMonad Tile
+</span><a href="Def.html#getTileMap"><span class="hs-identifier hs-var hs-var">getTileMap</span></a></span></span><span> </span><span id="local-6989586621679065782"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065782"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679065783"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065783"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">Pos -&gt; Map Pos Tile -&gt; Maybe Tile
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">M.lookup</span></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065782"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065783"><span class="hs-identifier hs-var">tileMap</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-107"></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679065784"><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679065784"><span class="hs-identifier hs-var">tile</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Pos] -&gt; RuleMonad Tile
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679065784"><span class="hs-identifier hs-var">tile</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065782"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-108"></span><span>    </span><span class="annot"><span class="annottext">Maybe Tile
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Pos] -&gt; RuleMonad Tile
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char] -&gt; Tile
+forall a. HasCallStack =&gt; [Char] -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;Tile not found&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065782"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-109"></span><span>
+</span><span id="line-110"></span><span class="annot"><span class="hs-comment">-- | Checks if the tilemap is empty</span></span><span>
+</span><span id="line-111"></span><span class="annot"><a href="Def.html#nullTileMap"><span class="hs-identifier hs-type">nullTileMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span><span>
+</span><span id="line-112"></span><span id="nullTileMap"><span class="annot"><span class="annottext">nullTileMap :: TileMap -&gt; Bool
+</span><a href="Def.html#nullTileMap"><span class="hs-identifier hs-var hs-var">nullTileMap</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679065786"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065786"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Map Pos Tile -&gt; Bool
+forall k a. Map k a -&gt; Bool
+</span><span class="hs-identifier hs-var">M.null</span></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065786"><span class="hs-identifier hs-var">tileMap</span></a></span><span>
+</span><span id="line-113"></span><span>
+</span><span id="line-114"></span><span class="annot"><span class="hs-comment">-- | Looks up a tile in the tilemap at the given position, returning the default tile if it does not exist</span></span><span>
+</span><span id="line-115"></span><span class="annot"><a href="Def.html#findWithDefaultTileMap"><span class="hs-identifier hs-type">findWithDefaultTileMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-type">RuleMonad</span></a></span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-116"></span><span id="findWithDefaultTileMap"><span class="annot"><span class="annottext">findWithDefaultTileMap :: Tile -&gt; Pos -&gt; TileMap -&gt; RuleMonad Tile
+</span><a href="Def.html#findWithDefaultTileMap"><span class="hs-identifier hs-var hs-var">findWithDefaultTileMap</span></a></span></span><span> </span><span id="local-6989586621679065788"><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679065788"><span class="hs-identifier hs-var">def</span></a></span></span><span> </span><span id="local-6989586621679065789"><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065789"><span class="hs-identifier hs-var">pos</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Internal.Def.html#TileMap"><span class="hs-identifier hs-type">TileMap</span></a></span><span> </span><span id="local-6989586621679065790"><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065790"><span class="hs-identifier hs-var">tileMap</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Tile -&gt; [Pos] -&gt; RuleMonad Tile
+forall m. m -&gt; [Pos] -&gt; RuleMonad m
+</span><a href="Internal.Def.html#RuleMonad"><span class="hs-identifier hs-var">RuleMonad</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Tile -&gt; Pos -&gt; Map Pos Tile -&gt; Tile
+forall k a. Ord k =&gt; a -&gt; k -&gt; Map k a -&gt; a
+</span><span class="hs-identifier hs-var">M.findWithDefault</span></span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="#local-6989586621679065788"><span class="hs-identifier hs-var">def</span></a></span><span> </span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065789"><span class="hs-identifier hs-var">pos</span></a></span><span> </span><span class="annot"><span class="annottext">Map Pos Tile
+</span><a href="#local-6989586621679065790"><span class="hs-identifier hs-var">tileMap</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Pos
+</span><a href="#local-6989586621679065789"><span class="hs-identifier hs-var">pos</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-117"></span><span>
+</span><span id="line-118"></span><span class="hs-comment">-- | A shape is a function that takes a position and returns a list of absolute positions</span><span>
+</span><span id="line-119"></span><span class="hs-comment">--   that are relative to the given position, forming a shape. `Utils.allNeighbours` is </span><span>
+</span><span id="line-120"></span><span class="hs-comment">--   an example of a shape.</span><span>
+</span><span id="line-121"></span><span class="hs-keyword">type</span><span> </span><span id="Shape"><span class="annot"><a href="Def.html#Shape"><span class="hs-identifier hs-var">Shape</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Internal.Def.html#Pos"><span class="hs-identifier hs-type">Pos</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-122"></span><span>
+</span><span id="line-123"></span><span class="annot"><span class="hs-comment">-- | Represents an error message that can be thrown in the generator</span></span><span>
+</span><span id="line-124"></span><span class="hs-keyword">type</span><span> </span><span id="Error"><span class="annot"><a href="Def.html#Error"><span class="hs-identifier hs-var">Error</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-125"></span></pre></body></html>
