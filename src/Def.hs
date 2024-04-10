@@ -81,14 +81,14 @@ instance CompareRule Rule where
     (Rule rule1) <||> (Rule rule2) = Rule (\tileMap pos -> 
         let result1 = rule1 tileMap pos 
             result2 = rule2 tileMap pos
-        in (<||>) <$> result1 <*> result2)
+        in result1 <||> result2)
     (Rule rule1) <&&> (Rule rule2) = Rule (\tileMap pos -> 
         let result1 = rule1 tileMap pos 
             result2 = rule2 tileMap pos
-        in (<&&>) <$> result1 <*> result2)
+        in result1 <&&> result2)
     (<!>) (Rule rule) = Rule (\tileMap pos -> 
         let result = rule tileMap pos
-        in (<!>) <$> result)
+        in (<!>) result)
 
 -- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
 type Size = (Pos, Pos)
