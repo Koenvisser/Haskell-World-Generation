@@ -25,6 +25,7 @@ module Def (
 ) where
 
 import qualified Data.Map as M
+import Data.List (union)
 
 import Internal.Def (RuleMonad(..), Pos, Rule(..), RuleResult(..), Tile(..), Material(..), Side(..), TileMap(..))
 
@@ -69,6 +70,11 @@ instance CompareRule RuleResult where
     (ChancePlace f1) <&&> (ChancePlace f2) = ChancePlace (f1 * f2)
     (<!>) (CanPlace b) = CanPlace (not b)
     (<!>) (ChancePlace f) = ChancePlace (1 - f)
+
+instance CompareRule a => CompareRule (RuleMonad a) where
+    (RuleMonad r1 pos1) <||> (RuleMonad r2 pos2) = RuleMonad (r1 <||> r2) (pos1 `union` pos2)
+    (RuleMonad r1 pos1) <&&> (RuleMonad r2 pos2) = RuleMonad (r1 <&&> r2) (pos1 `union` pos2)
+    (<!>) (RuleMonad r pos) = RuleMonad ((<!>) r) pos
 
 -- | The CompareRule instance for Rule, which composes the rules with the given operator
 instance CompareRule Rule where
