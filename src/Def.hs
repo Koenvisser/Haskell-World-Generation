@@ -1,69 +1,33 @@
-module Def where
+-- | This module defines the types and functions that are used in the rules and the
+--   generation of the world. Use this module to define the tiles and the rules that
+--   are used to generate the world, or use the "Utils" module to define your rules
+--   in an easier way, using the provided functions.
+module Def (
+    Tile(..),
+    Material(..),
+    Side(..),
+    Rule(..),
+    RuleResult(..),
+    resultToBool,
+    resultToFloat,
+    CompareRule(..),
+    Pos,
+    Size,
+    TileMap,
+    lookupTileMap,
+    memberTileMap,
+    getTileMap,
+    nullTileMap,
+    findWithDefaultTileMap,
+    Shape,
+    Error,
+    RuleMonad
+) where
 
-import Data.Default
-import Data.List (union)
 import qualified Data.Map as M
+import Data.List (union)
 
--- | A tile is a 3D object with a texture, a set of rules and a character representation.
-data Tile = Tile { 
-    -- | The `FilePath` to a texture location, which is used in the `Output`.
-    materials :: M.Map Side Material, 
-    -- | The `Rule` that determines if a tile can be placed. 
-    -- Rules can be composed using the functions from the `CompareRule` type class.
-    rules :: Rule, 
-    -- | The character representation is only used for debugging purposes. 
-    charRep :: Char
-}
-
-data Material = Material {
-    ambientColor :: (Float, Float, Float),
-    diffuseColor :: (Float, Float, Float),
-    specularColor :: (Float, Float, Float),
-    transparency :: Float,
-    specularExponent :: Float,
-    illuminationModel :: Int,
-    texture :: Maybe FilePath,
-    extraFields :: [String],
-    extraFiles :: [FilePath]
-} deriving (Show, Eq, Ord)
-
-data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded)
-
-instance Default Material where
-    def = Material {
-        ambientColor = (1.0, 1.0, 1.0),
-        diffuseColor = (1.0, 1.0, 1.0),
-        specularColor = (0.0, 0.0, 0.0),
-        transparency = 1.0,
-        specularExponent = 10.0,
-        illuminationModel = 2,
-        texture = Nothing,
-        extraFields = [],
-        extraFiles = []
-    }
-
--- | The show instance of a tile is its character representation
-instance Show Tile where
-    show tile = [charRep tile]
-
--- | The Eq instance of a tile is based on its texture location, since no 
---   two tiles should have the same texture
-instance Eq Tile where
-    (==) tile1 tile2 = charRep tile1 == charRep tile2
-
--- | A rule is a function that takes a `TileMap` and a position and returns a `RuleResult`.
-newtype Rule = Rule (TileMap -> Pos -> (RuleResult, [Pos]))
-
--- | The result of a rule is defined as a `RuleResult`. It is represented either as a 
---   `CanPlace Bool` which means the rule guaranteed passes or fails. Or as 
---   `ChancePlace Float` which gives a chance between 0 and 1 that the rule passes (1 being 100%).
-data RuleResult 
-    -- | `CanPlace` simply specifies if a tile can be placed at a position or not. When it is true,
-    --   it has weight 1, when it is false it has weight 0
-    = CanPlace Bool 
-    -- | `ChancePlace` specifies the chance that a tile can be placed at a position. If it is 0, it will
-    --   never be placed. Otherwise, it represents the weight that is used in the generator.
-    | ChancePlace Float
+import Internal.Def (RuleMonad(..), Pos, Rule(..), RuleResult(..), Tile(..), Material(..), Side(..), TileMap(..))
 
 -- | Converts a `RuleResult` to a boolean, which is true if the result is true or 
 --   the chance that it is placed is greater than 0. 
@@ -77,6 +41,8 @@ resultToFloat :: RuleResult -> Float
 resultToFloat (CanPlace b) = if b then 1.0 else 0.0
 resultToFloat (ChancePlace f) = f
 
+-- | The CompareRule typeclass is used to compare rules with each other. It is used to
+--   compose rules with the operators <||>, <&&> and <!>.
 class CompareRule a where
     -- | The OR operator for rules
     (<||>) :: a -> a -> a
@@ -105,43 +71,54 @@ instance CompareRule RuleResult where
     (<!>) (CanPlace b) = CanPlace (not b)
     (<!>) (ChancePlace f) = ChancePlace (1 - f)
 
+instance CompareRule a => CompareRule (RuleMonad a) where
+    (RuleMonad r1 pos1) <||> (RuleMonad r2 pos2) = RuleMonad (r1 <||> r2) (pos1 `union` pos2)
+    (RuleMonad r1 pos1) <&&> (RuleMonad r2 pos2) = RuleMonad (r1 <&&> r2) (pos1 `union` pos2)
+    (<!>) (RuleMonad r pos) = RuleMonad ((<!>) r) pos
+
 -- | The CompareRule instance for Rule, which composes the rules with the given operator
 instance CompareRule Rule where
     (Rule rule1) <||> (Rule rule2) = Rule (\tileMap pos -> 
-        let (result1, pos1) = rule1 tileMap pos 
-            (result2, pos2) = rule2 tileMap pos
-        in (result1 <||> result2, pos1 `union` pos2))
+        let result1 = rule1 tileMap pos 
+            result2 = rule2 tileMap pos
+        in result1 <||> result2)
     (Rule rule1) <&&> (Rule rule2) = Rule (\tileMap pos -> 
-        let (result1, pos1) = rule1 tileMap pos 
-            (result2, pos2) = rule2 tileMap pos
-        in (result1 <&&> result2, pos1 `union` pos2))
+        let result1 = rule1 tileMap pos 
+            result2 = rule2 tileMap pos
+        in result1 <&&> result2)
     (<!>) (Rule rule) = Rule (\tileMap pos -> 
-        let (result, pos') = rule tileMap pos
-        in ((<!>) result, pos'))
+        let result = rule tileMap pos
+        in (<!>) result)
 
--- | A position is a 3D coordinate in the world
-type Pos = (Int, Int, Int)
 -- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
 type Size = (Pos, Pos)
 
--- | A tilemap is a map of positions to tiles in the world
-newtype TileMap = TileMap (M.Map Pos Tile)
+-- | Looks up a tile in the tilemap at the given position, returning the tile if it exists
+lookupTileMap :: Pos -> TileMap -> RuleMonad (Maybe Tile)
+lookupTileMap pos (TileMap tileMap) = RuleMonad (M.lookup pos tileMap) [pos]
 
--- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid
---   with the tiles represented as their character representation and an empty tile 
---   represented as a space.
-instance Show TileMap where
-    show (TileMap tileMap) | M.null tileMap = "Empty tilemap"
-                           | otherwise = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | z <- [zMin..zMax]] |  y <- [yMin..yMax]]
-        where
-            (xMin, yMin, zMin) = fst . M.findMin $ tileMap
-            (xMax, yMax, zMax) = fst . M.findMax $ tileMap
-            tileAtPos :: Pos -> Char
-            tileAtPos pos = case M.lookup pos tileMap of
-                Just tile -> charRep tile
-                _ -> ' '
+-- | Checks if a tile exists in the tilemap at the given position
+memberTileMap :: Pos -> TileMap -> RuleMonad Bool
+memberTileMap pos (TileMap tileMap) = RuleMonad (M.member pos tileMap) [pos]
+
+-- | Gets a tile in the tilemap at the given position, returning an error if it does not exist
+getTileMap :: Pos -> TileMap -> RuleMonad Tile
+getTileMap pos (TileMap tileMap) = case M.lookup pos tileMap of
+    Just tile -> RuleMonad tile [pos]
+    Nothing -> RuleMonad (error "Tile not found") [pos]
+
+-- | Checks if the tilemap is empty
+nullTileMap :: TileMap -> Bool
+nullTileMap (TileMap tileMap) = M.null tileMap
+
+-- | Looks up a tile in the tilemap at the given position, returning the default tile if it does not exist
+findWithDefaultTileMap :: Tile -> Pos -> TileMap -> RuleMonad Tile
+findWithDefaultTileMap def pos (TileMap tileMap) = RuleMonad (M.findWithDefault def pos tileMap) [pos]
 
 -- | A shape is a function that takes a position and returns a list of absolute positions
 --   that are relative to the given position, forming a shape. `Utils.allNeighbours` is 
 --   an example of a shape.
 type Shape = Pos -> [Pos]
+
+-- | Represents an error message that can be thrown in the generator
+type Error = String

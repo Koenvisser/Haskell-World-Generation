@@ -2,7 +2,7 @@
 --   The obj file can be saved, without materials, to a file using the `saveWorldToObj` function, or with materials to a folder using the `saveWorldToObjAndMtl` function.
 module Output (saveWorldToObj, saveWorldToObjAndMtl, worldToObj, worldToObjAndMtl) where
 
-import Def
+import Internal.Def
 
 import qualified Data.Map as M
 import Data.Maybe (maybeToList)
