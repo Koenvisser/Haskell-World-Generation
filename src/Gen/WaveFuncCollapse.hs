@@ -8,6 +8,31 @@ import Def
 
 import qualified Data.Map as M
 import System.Random
+import Control.Monad.State (StateT, get, put, runStateT, liftIO)
+import Control.Monad.Except (ExceptT, throwError, catchError, runExceptT)
+
+test :: ExceptT Error (StateT Int IO) Int
+test = do
+  x <- get
+  liftIO $ print x
+  put (x + 1)
+  throwError "Error"
+  return x
+
+test2 :: StateT Int (ExceptT Error IO) Int
+test2 = do
+  x <- get
+  liftIO $ print x
+  put (x + 1)
+  throwError "Error"
+  return x
+
+testRun :: IO ()
+testRun = do
+  result1 <- runStateT (runExceptT test) 0
+  print result1
+  result2 <- runExceptT (runStateT test2 0)
+  print result2
 
 -- | `Dependencies` is a map of positions to a list of positions. It is used to keep track of which positions
 --   are dependent on which other positions. An example of this is a tile which rules are dependent on its neighbours,
@@ -31,6 +56,16 @@ data HistoryUnit = HistoryUnit {
   placedTile :: Tile
 } deriving (Show)
 
+data StateUnit = StateUnit {
+  tileMap :: TileMap,
+  env :: Env,
+  dependencies :: Dependencies,
+  history :: History
+}
+
+type WFCState = Except Error (StateT StateUnit IO)
+
+
 -- | Run the wave function collapse algorithm on a list of tiles and a size for the world.
 --   The algorithm will return a tilemap that satisfies the rules of the tiles.
 --   If no possible tilemap can be generated, the function will return an error. 
@@ -46,7 +81,7 @@ waveFuncCollapse tiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
 --   It applies the rule to each position and creates the environment based on the result.
 --   If an environment only has one possible tile it will be added to the tileMap, 
 --   and removed from the environment. If an environment has no possible tiles, the function will return Nothing.
-createEnv :: [Tile] -> TileMap -> [Pos] -> Maybe (TileMap, Env, Dependencies)
+createEnv :: [Tile] -> TileMap -> [Pos] -> StateUnit
 createEnv tiles tileMap = foldr (\pos result -> case result of 
   Nothing -> Nothing
   Just (TileMap newTileMap, newEnv, newDependencies) -> case posToEnv pos tiles (TileMap newTileMap) newDependencies of
@@ -102,19 +137,17 @@ shannonEntropy (totWeight, weights) = log totWeight - (h / totWeight)
 --   function until there are no more available positions in the environment. This function is called with the 
 --   position where the wave function should collapse. This position is generated using the `shannonPos` 
 --   function. If the algorithm gets stuck, it will call the `resetWaveFuncCollapse` function. 
-waveFuncCollapse' :: TileMap -> Env -> Dependencies -> History -> IO (Either Error TileMap)
-waveFuncCollapse' tileMap env dependencies history
-  | M.null env = return $ Right tileMap
-  | otherwise = do
-    randomPos <- shannonPos env
-    (result, newHistory) <- waveFuncCollapseStep randomPos tileMap env dependencies history
-    case result of
-      Nothing -> resetWaveFuncCollapse newHistory
-      Just (newTileMap, newEnv, newDependencies) -> waveFuncCollapse' newTileMap newEnv newDependencies newHistory
+waveFuncCollapse' :: WFCState TileMap
+waveFuncCollapse' = do 
+  state <- get 
+  if M.null (env state) then return tileMap
+  else do
+    randomPos <- liftIO $ shannonPos (env state)
+    waveFuncCollapseStep randomPos `catchError` const resetWaveFuncCollapse
 
 -- | Reset the wave function collapse algorithm. This is done when the algorithm gets stuck and can't continue.
 --   Not implemented yet. Optimally the algorithm should be able to backtrack to a previously solvable state.
-resetWaveFuncCollapse :: History -> IO (Either Error TileMap)
+resetWaveFuncCollapse :: WFCState TileMap
 resetWaveFuncCollapse [] = return $ Left "No possible tilemap can be generated"
 resetWaveFuncCollapse ((HistoryUnit tileMap env dependencies pos tile):history) = do
   let newEnv = M.adjust (\(tiles, weights, _) -> let (newTiles, newWeights) = deleteTile tile (tiles, weights) in (newTiles, newWeights, shannonEntropy newWeights)) pos env
@@ -160,14 +193,15 @@ updateDependencies pos tile tileMap dependencies = let
 --  adds it to the tileMap. If the environment has no possible tiles, the function will return Nothing.
 --  After the tile has been added to the tileMap, the position will be removed from the environment,
 --  and the environment will be updated with the new possible tiles.
-waveFuncCollapseStep :: Pos -> TileMap -> Env -> Dependencies -> History 
-  -> IO (Maybe (TileMap, Env, Dependencies), History)
-waveFuncCollapseStep pos (TileMap tileMap) env dependencies history  = do
-  let (newTiles, weight, _) = env M.! pos
-  rTile <- randomTile newTiles weight
+waveFuncCollapseStep :: Pos -> WFCState TileMap
+waveFuncCollapseStep pos = do
+  state <- get
+  let (newTiles, weight, _) = env state M.! pos
+  rTile <- liftIO $ randomTile newTiles weight
   case rTile of
-    Nothing -> return (Nothing, history)
+    Nothing -> throwError "No possible tilemap can be generated"
     Just tile -> do 
+      let (TileMap tileMap) = tileMap state
       let newTileMap = M.insert pos tile tileMap
       let newHistory = HistoryUnit (TileMap tileMap) env dependencies pos tile : history
       let newEnv = M.delete pos env
