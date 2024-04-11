@@ -22,7 +22,7 @@ generateRoads = do
 generateMountains :: IO ()
 generateMountains = do
   heightMap <- perlinNoiseRandom def
-  result <- waveFuncCollapeHeightMap heightMap Mountains.airTiles Mountains.groundTiles ((0, 0, 0), (6, 6, 6))
+  result <- waveFuncCollapeHeightMap heightMap Mountains.airTiles Mountains.groundTiles ((0, 0, 0), (20, 10, 20))
   case result of
     Left err -> putStrLn err
     Right tileMap -> do 

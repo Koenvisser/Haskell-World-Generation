@@ -9,7 +9,7 @@ groundMaterial :: Material
 groundMaterial = def {texture = Just "textures/side-dirt.png"}
 
 airMaterial :: Material
-airMaterial = def {diffuseColor = (0.0, 0.0, 1.0), transparency = 0.25}
+airMaterial = def {diffuseColor = (0.0, 0.0, 1.0), transparency = 0.05}
 
 waterMaterial :: Material
 waterMaterial = def {diffuseColor = (0.0, 0.0, 1.0), transparency = 0.5}

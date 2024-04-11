@@ -4,8 +4,8 @@ import qualified Data.Map as M
 import Data.Default
 import System.Random
 import System.Random.Shuffle (shuffle')
+import Data.Bits ((.&.))
 
-type Size2D = ((Int, Int), (Int, Int))
 type Seed = Int
 type Octaves = Int
 type Scale = Float
@@ -15,8 +15,8 @@ data PerlinConfig = PerlinConfig {
     seed :: Seed,
     permSize :: Int,
     octaves :: Octaves,
-    scale :: Scale,
-    persistance :: Persistance,
+    -- scale :: Scale,
+    -- persistance :: Persistance,
     frequency :: Float
 }
 
@@ -25,8 +25,8 @@ instance Default PerlinConfig where
         seed = 0,
         permSize = 256,
         octaves = 8,
-        scale = 1,
-        persistance = 0.5,
+        -- scale = 1,
+        -- persistance = 0.5,
         frequency = 0.01
     }
 
@@ -44,7 +44,7 @@ constantVector permVal
     | perm == 1 = (-1,  1)
     | perm == 2 = (-1, -1)
     | otherwise = ( 1, -1)
-    where perm = permVal `mod` 3
+    where perm = permVal .&. 3
 
 fade :: Float -> Float
 fade t = ((6 * t - 15) * t + 10) * t * t * t
@@ -62,18 +62,28 @@ perlinNoise pcf =
     in noiseGenerator pcf perm
 
 noiseGenerator :: PerlinConfig -> Permutations -> HeightMap
-noiseGenerator config perms (rawX,rawY) = let 
-    (x, y) = (rawX * frequency config, rawY * frequency config)
-    (x', y') = (floor x `mod` (permSize config - 1), floor y `mod` (permSize config - 1))
-    (xf, yf) = (x - fromIntegral (floor x), y - fromIntegral (floor y))
+noiseGenerator config perms (x, y) = (n + 1) / 2
+    where n = noiseGenerator' config perms 1 (x, y)
+
+noiseGenerator' :: PerlinConfig -> Permutations -> Float -> HeightMap
+noiseGenerator' config perms amp (x, y) | octaves config == 0 = 0
+                                        | otherwise = let
+    (x', y') = (x * frequency config, y * frequency config)
+    noise = amp * noise2D config perms (x', y')
+    in noise + noiseGenerator' (config { octaves = octaves config - 1, frequency = frequency config * 2 }) perms (amp * 0.5) (x, y)
+
+noise2D :: PerlinConfig -> Permutations -> HeightMap
+noise2D config perms (x, y) = let 
+    (x', y') = (floor x .&. (permSize config - 1), floor y .&. (permSize config - 1))
+    (xf, yf) = (x - fromInteger (floor x), y - fromInteger (floor y))
     topRight        = (xf - 1, yf - 1)
     topLeft         = (xf,     yf - 1)
     bottomRight     = (xf - 1, yf    )
     bottomLeft      = (xf,     yf    )
-    valueTopRight   = perms M.! (((perms M.! (x' + 1)) + y' + 1) `mod` (permSize config - 1))
-    valueTopLeft    = perms M.! (((perms M.! x') + y' + 1) `mod` (permSize config - 1))
-    valueBottomRight= perms M.! (((perms M.! (x' + 1)) + y') `mod` (permSize config - 1))
-    valueBottomLeft = perms M.! (((perms M.! x') + y') `mod` (permSize config - 1))
+    valueTopRight = perms M.! (((perms M.! (x' + 1)) + y' + 1) .&. (permSize config - 1))
+    valueTopLeft = perms M.! (((perms M.! x') + y' + 1) .&. (permSize config - 1))
+    valueBottomRight = perms M.! (((perms M.! (x' + 1)) + y') .&. (permSize config - 1))
+    valueBottomLeft = perms M.! (((perms M.! x') + y') .&. (permSize config - 1))
     topRightDot     = dotProduct topRight (constantVector valueTopRight)
     topLeftDot      = dotProduct topLeft (constantVector valueTopLeft)
     bottomRightDot  = dotProduct bottomRight (constantVector valueBottomRight)
