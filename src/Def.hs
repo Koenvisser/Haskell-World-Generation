@@ -19,6 +19,7 @@ module Def (
     getTileMap,
     nullTileMap,
     findWithDefaultTileMap,
+    getSize,
     Shape,
     Error,
     RuleMonad
@@ -111,6 +112,9 @@ nullTileMap (TileMap (tileMap, _)) = M.null tileMap
 -- | Looks up a tile in the tilemap at the given position, returning the default tile if it does not exist
 findWithDefaultTileMap :: Tile -> Pos -> TileMap -> RuleMonad Tile
 findWithDefaultTileMap def pos (TileMap (tileMap, _)) = RuleMonad (M.findWithDefault def pos tileMap) [pos]
+
+getSize :: TileMap -> Size
+getSize (TileMap (_, size)) = size
 
 -- | A shape is a function that takes a position and returns a list of absolute positions
 --   that are relative to the given position, forming a shape. `Utils.allNeighbours` is 

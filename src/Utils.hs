@@ -1,6 +1,7 @@
 module Utils where
 
 import Def
+import qualified Data.Map as M
 
 -- | Convert a list of relative positions into a shape that takes a position and returns
 --   the absolute positions of the shape at that position
@@ -94,3 +95,7 @@ isInPos posList pos = pos `elem` posList
 -- | A rule that takes a function that takes a position and returns a boolean, and returns a rule using this function
 canExistAt :: (Pos -> Bool) -> Rule
 canExistAt posPred = Rule (\_ pos -> return (CanPlace $ posPred pos))
+
+-- | A function that takes a material and returns a map from all sides to that material
+createSolidMaterialMap :: Material -> M.Map Side Material
+createSolidMaterialMap material = M.fromList [(NegX, material), (PosX, material), (NegY, material), (PosY, material), (NegZ, material), (PosZ, material)]
