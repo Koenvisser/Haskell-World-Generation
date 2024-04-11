@@ -57,10 +57,10 @@ data HistoryUnit = HistoryUnit {
 } deriving (Show)
 
 data StateUnit = StateUnit {
-  tileMap :: TileMap,
-  env :: Env,
-  dependencies :: Dependencies,
-  history :: History
+  getTileMap :: TileMap,
+  getEnv :: Env,
+  getDependencies :: Dependencies,
+  getHistory :: History
 }
 
 type WFCState = ExceptT Error (StateT StateUnit IO)
@@ -143,19 +143,19 @@ shannonEntropy (totWeight, weights) = log totWeight - (h / totWeight)
 waveFuncCollapseStep :: WFCState TileMap
 waveFuncCollapseStep = do 
   state <- get 
-  if M.null (env state) then return (tileMap state)
+  let (StateUnit (TileMap tileMap) env dependencies history) = state
+  if M.null env then return (TileMap tileMap)
   else do
-    randomPos <- liftIO $ shannonPos (env state)
-    let (newTiles, weight, _) = env state M.! randomPos
+    randomPos <- liftIO $ shannonPos env
+    let (newTiles, weight, _) = env M.! randomPos
     rTile <- liftIO $ randomTile newTiles weight
     case rTile of
       Nothing -> resetWaveFuncCollapse
       Just tile -> do 
-        let (TileMap tileMap') = tileMap state
-        let newTileMap = M.insert randomPos tile tileMap'
-        let newHistory = HistoryUnit (TileMap tileMap') (env state) (dependencies state) randomPos tile : (history state)
-        let newEnv = M.delete randomPos (env state)
-        let newDependencies = updateDependencies randomPos tile (TileMap newTileMap) (dependencies state)
+        let newTileMap = M.insert randomPos tile tileMap
+        let newHistory = HistoryUnit (TileMap tileMap) env dependencies randomPos tile : history
+        let newEnv = M.delete randomPos env
+        let newDependencies = updateDependencies randomPos tile (TileMap newTileMap) dependencies
         case updateEnv (StateUnit (TileMap newTileMap) newEnv newDependencies newHistory) of
           Nothing -> resetWaveFuncCollapse
           Just newState -> put newState >> waveFuncCollapseStep
@@ -165,11 +165,12 @@ waveFuncCollapseStep = do
 resetWaveFuncCollapse :: WFCState TileMap
 resetWaveFuncCollapse = do
   state <- get
-  case history state of
+  case getHistory state of
     [] -> throwError "No possible tilemap can be generated"
-    (HistoryUnit prevTileMap prevEnv prevDependencies pos tile) : xs -> do
+    (HistoryUnit prevTileMap prevEnv prevDependencies pos tile) : history -> do
       let newEnv = M.adjust (\(tiles, weights, _) -> let (newTiles, newWeights) = deleteTile tile (tiles, weights) in (newTiles, newWeights, shannonEntropy newWeights)) pos prevEnv
       let (newTiles, _, _) = newEnv M.! pos
+      put $ StateUnit prevTileMap newEnv prevDependencies history
       if null newTiles then resetWaveFuncCollapse else waveFuncCollapseStep
 
 -- | Delete a tile from a list of tiles and their weights. The function will return a new list of tiles and weights
