@@ -17,7 +17,7 @@ test_WaveFuncCollapse = [
     ]
 
 -- | Generate a size for the world, given a minimum and maximum size for the world
-genSize :: Size3D -> Gen Size3D
+genSize :: Size -> Gen Size
 genSize ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
     minX' <- choose (minX, maxX)
     minY' <- choose (minY, maxY)
@@ -38,7 +38,7 @@ instance Arbitrary Material where
 allPosArePlaced :: IO Property
 allPosArePlaced = do
     -- Generate a list of tiles that is not empty
-    size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size3D
+    size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
     tiles <- generate $ genTiles size :: IO [Tile]
     -- Execute the wave function collapse algorithm
     result <- waveFuncCollapse tiles size
@@ -56,7 +56,7 @@ allPosArePlaced = do
 allRulesAreSatisfied :: IO Property
 allRulesAreSatisfied = do
     -- Generate a list of tiles that is not empty
-    size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size3D
+    size <- generate (genSize ((0, 0, 0), (2, 2, 2))) :: IO Size
     tiles <- generate $ genTiles size :: IO [Tile]
     -- Execute the wave function collapse algorithm
     result <- waveFuncCollapse tiles size

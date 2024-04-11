@@ -12,7 +12,7 @@ module Def (
     resultToFloat,
     CompareRule(..),
     Pos,
-    Size3D,
+    Size,
     TileMap,
     lookupTileMap,
     memberTileMap,
@@ -91,7 +91,7 @@ instance CompareRule Rule where
         in (<!>) result)
 
 -- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
-type Size3D = (Pos, Pos)
+type Size = (Pos, Pos)
 
 -- | Looks up a tile in the tilemap at the given position, returning the tile if it exists
 lookupTileMap :: Pos -> TileMap -> RuleMonad (Maybe Tile)
