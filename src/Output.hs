@@ -46,14 +46,14 @@ saveWorldToObjAndMtl tileMap path scale = do
   
 -- | Converts a world to an obj file as a string, without any materials
 worldToObj :: TileMap -> Float -> String
-worldToObj (TileMap tileMap) scale = fst $ foldl (\(accObjString, fCount) (pos, tile) -> 
+worldToObj (TileMap (tileMap, _)) scale = fst $ foldl (\(accObjString, fCount) (pos, tile) -> 
   let (objString, newfCount) = tileToObj pos tile scale fCount
   in (accObjString ++ "\n" ++ objString, newfCount)) ("", 1) $ M.toList tileMap
 
 -- | Converts a world to a tuple of strings, where the first string is the obj file, the second string is the mtl file and 
 --   the third is a list of file paths to the textures used in the mtl file
 worldToObjAndMtl :: TileMap -> Float -> (String, String, [FilePath])
-worldToObjAndMtl (TileMap tileMap) scale = 
+worldToObjAndMtl (TileMap (tileMap, _)) scale = 
   let (objString, _, mtlString, filePaths, _ ) = foldl (\(accObjString, fCount, accMtlString, accFiles, cache) (pos, tile) -> 
                                 let (newObjString, newfCount, newMtlString, files, newCache) = tileToObjAndMtl pos tile scale fCount cache
                                 in (accObjString ++ "\n" ++ newObjString, newfCount, accMtlString ++ newMtlString, accFiles ++ files, newCache)
