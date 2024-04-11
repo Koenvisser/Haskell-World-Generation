@@ -51,18 +51,13 @@ waveFuncCollapeHeightMap :: HeightMap -> [Tile] -> [Tile] -> Size -> IO (Either 
 waveFuncCollapeHeightMap heightMap airTiles groundTiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let xz = [(x, heightMap (fromIntegral x, fromIntegral z), z) | x <- [minX..maxX], z <- [minZ..maxZ]]
   let groundPos = [(x, y', z) | (x, y, z) <- xz, y' <- [minY..round(fromIntegral maxY - (fromIntegral maxY - fromIntegral minY) * (1 - y))]]
+  let airPos = [(x, y', z) | (x, y, z) <- xz, y' <- [round(fromIntegral minY + y * (fromIntegral maxY - fromIntegral minY))..maxY]]
   groundResult <- waveFunc groundTiles groundPos size
-  case groundResult of
-    Right (TileMap (groundTileMap, _)) -> do
-      let airPos = [(x, y', z) | (x, y, z) <- xz, y' <- [round(fromIntegral minY + y * (fromIntegral maxY - fromIntegral minY))..maxY]]
-      airResult <- waveFunc airTiles airPos size
-      case airResult of
-        Right (TileMap (airTileMap, _)) -> return $ Right $ TileMap (M.union groundTileMap airTileMap, size)
-        Left err -> return $ Left err 
-    Left err -> return $ Left err  
-
--- Roep normale waveFunc Step aan op hoogte, 
-
+  airResult <- waveFunc airTiles airPos size
+  return $ do 
+    (TileMap (groundTileMap, _)) <- groundResult
+    (TileMap (airTileMap, _)) <- airResult
+    return $ TileMap (M.union groundTileMap airTileMap, size)
 
 -- | Create the tileMap and environment for the wave function collapse algorithm
 --   It applies the rule to each position and creates the environment based on the result.
