@@ -1,7 +1,7 @@
 -- | The wave function collapse algorithm is a way to generate a tilemap based on a set of rules.
 --   The algorithm works by starting with a completely empty tilemap and then collapsing the wave function
 --   of each tile based on the rules and the surrounding tiles. This is done until the entire tilemap is filled.
-module Gen.WaveFuncCollapse (waveFuncCollapse, Error) where
+module Gen.WaveFuncCollapse (waveFuncCollapse, waveFuncCollapeHeightMap) where
 
 import Internal.Def
 import Def
@@ -9,6 +9,7 @@ import Gen.PerlinNoise (HeightMap)
 
 import qualified Data.Map as M
 import System.Random
+import Debug.Trace (trace)
 
 -- | `Dependencies` is a map of positions to a list of positions. It is used to keep track of which positions
 --   are dependent on which other positions. An example of this is a tile which rules are dependent on its neighbours,
@@ -47,8 +48,19 @@ waveFunc tiles pos = do
     Nothing -> return $ Left "No possible tilemap can be generated"
     Just (tileMap, env, dependencies) -> waveFuncCollapse' tileMap env dependencies []
 
-waveFuncCollapeHeightMap :: HeightMap -> [Tile] -> [Tile] -> (Int, Int) -> IO (Either Error TileMap)
-waveFuncCollapeHeightMap heightMap airTiles groundTiles (minHeight, maxHeight) = undefined
+waveFuncCollapeHeightMap :: HeightMap -> [Tile] -> [Tile] -> Size3D -> IO (Either Error TileMap)
+waveFuncCollapeHeightMap heightMap airTiles groundTiles ((minX, minY, minZ), (maxX, maxY, maxZ)) = do
+  let xz = [(x, heightMap (fromIntegral x, fromIntegral z), z) | x <- [minX..maxX], z <- [minZ..maxZ]]
+  let groundPos = trace (show xz) [(x, y', z) | (x, y, z) <- xz, y' <- [minY..round(fromIntegral maxY - (fromIntegral maxY - fromIntegral minY) * (1 - y))]]
+  groundResult <- waveFunc groundTiles groundPos
+  case groundResult of
+    Right (TileMap groundTileMap) -> do
+      let airPos = [(x, y', z) | (x, y, z) <- xz, y' <- [round(fromIntegral minY + y * (fromIntegral maxY - fromIntegral minY))..maxY]]
+      airResult <- waveFunc airTiles airPos
+      case airResult of
+        Right (TileMap airTileMap) -> return $ Right $ TileMap $ M.union groundTileMap airTileMap
+        Left err -> return $ Left err 
+    Left err -> return $ Left err  
 
 -- Roep normale waveFunc Step aan op hoogte, 
 

@@ -1,4 +1,4 @@
-module Gen.PerlinNoise where
+module Gen.PerlinNoise (PerlinConfig(..), HeightMap, Permutations, perlinNoise, perlinNoiseRandom) where
 
 import qualified Data.Map as M
 import Data.Default
@@ -84,5 +84,5 @@ noiseGenerator config perms (rawX,rawY) = let
 
 perlinNoiseRandom :: PerlinConfig -> IO HeightMap
 perlinNoiseRandom config = do
-    seed <- randomIO
-    return $ perlinNoise (config { seed = seed })
+    newSeed <- randomIO
+    return $ perlinNoise (config { seed = newSeed })

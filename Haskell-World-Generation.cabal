@@ -63,6 +63,7 @@ library
                     , Examples.Roads
                     , Examples.Chance
                     , Examples.NoPurple
+                    , Examples.Mountains
                     , Internal.Def
 
     -- Modules included in this library but not exported.
