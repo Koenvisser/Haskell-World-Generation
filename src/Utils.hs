@@ -97,5 +97,5 @@ canExistAt :: (Pos -> Bool) -> Rule
 canExistAt posPred = Rule (\_ pos -> return (CanPlace $ posPred pos))
 
 -- | A function that takes a material and returns a map from all sides to that material
-createSolidMaterialMap :: Material -> M.Map Side Material
-createSolidMaterialMap material = M.fromList [(NegX, material), (PosX, material), (NegY, material), (PosY, material), (NegZ, material), (PosZ, material)]
+createMaterialMapForAllSides :: Material -> M.Map Side Material
+createMaterialMapForAllSides material = M.fromList [(NegX, material), (PosX, material), (NegY, material), (PosY, material), (NegZ, material), (PosZ, material)]

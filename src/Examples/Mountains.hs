@@ -1,7 +1,6 @@
 module Examples.Mountains (groundTiles, airTiles) where
 
 import Data.Default (def)
-import qualified Data.Map as M
 import Def
 import Utils
 
@@ -11,7 +10,7 @@ airMaterial = def {diffuseColor = (0.0, 0.0, 1.0), transparency = 0}
 
 airTile :: Tile
 airTile = Tile {
-    materials = createSolidMaterialMap airMaterial,
+    materials = createMaterialMapForAllSides airMaterial,
     rules = weightedRule 0.5,
     charRep = 'a'
 }
@@ -22,7 +21,7 @@ cloudMaterial = def {diffuseColor = (1.0, 1.0, 1.0), transparency = 0.7}
 cloudTile :: Tile
 cloudTile =
   Tile
-    { materials = createSolidMaterialMap cloudMaterial,
+    { materials = createMaterialMapForAllSides cloudMaterial,
       rules = weightedRule 0.05 <||> nextToAny [cloudTile] directNeighbours,
       charRep = 'c'
     }
@@ -35,7 +34,7 @@ groundMaterial = def {texture = Just "textures/side-dirt.png"}
 groundTile :: Tile
 groundTile =
   Tile
-    { materials = createSolidMaterialMap groundMaterial,
+    { materials = createMaterialMapForAllSides groundMaterial,
       rules = weightedRule 0.8,
       charRep = 'g'
     }
@@ -45,10 +44,13 @@ waterMaterial = def {diffuseColor = (0.0, 0.0, 1.0), transparency = 0.5}
 
 waterTile :: Tile
 waterTile = Tile {
-    materials = createSolidMaterialMap waterMaterial,
+    materials = createMaterialMapForAllSides waterMaterial,
     rules = weightedRule 0.8,
     charRep = 'w'
 }
 
+groundTiles :: [Tile]
 groundTiles = [groundTile, waterTile]
-airTiles = [airTile, cloudTile]
+
+airTiles :: [Tile]
+airTiles = [airTile, cloudTile] :: [Tile]
