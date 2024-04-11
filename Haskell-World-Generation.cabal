@@ -83,6 +83,7 @@ library
                     , directory
                     , filepath
                     , deepseq
+                    , random-shuffle
 
     -- Directories containing source files.
     hs-source-dirs:   src

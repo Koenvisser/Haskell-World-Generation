@@ -21,7 +21,6 @@ module Def (
     findWithDefaultTileMap,
     Shape,
     Error,
-    HeightMap,
     RuleMonad
 ) where
 
@@ -123,6 +122,3 @@ type Shape = Pos -> [Pos]
 
 -- | Represents an error message that can be thrown in the generator
 type Error = String
-
--- | A heightmap is a map from (x, y) coordinates to a height value.
-type HeightMap = M.Map (Int, Int) Float
