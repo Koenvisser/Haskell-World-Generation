@@ -5,18 +5,19 @@ import Data.Default
 import System.Random
 import System.Random.Shuffle (shuffle')
 import Data.Bits ((.&.))
+import Debug.Trace (trace)
 
 type Seed = Int
 type Octaves = Int
 type Scale = Float
-type Persistance = Float
+type Persistence = Float
 
 data PerlinConfig = PerlinConfig {
     seed :: Seed,
     permSize :: Int,
     octaves :: Octaves,
-    -- scale :: Scale,
-    -- persistance :: Persistance,
+    scale :: Scale,
+    persistence :: Persistence,
     frequency :: Float
 }
 
@@ -25,8 +26,8 @@ instance Default PerlinConfig where
         seed = 0,
         permSize = 256,
         octaves = 8,
-        -- scale = 1,
-        -- persistance = 0.5,
+        scale = 0.001,
+        persistence = 0.5,
         frequency = 0.01
     }
 
@@ -62,15 +63,20 @@ perlinNoise pcf =
     in noiseGenerator pcf perm
 
 noiseGenerator :: PerlinConfig -> Permutations -> HeightMap
-noiseGenerator config perms (x, y) = (n + 1) / 2
-    where n = noiseGenerator' config perms 1 (x, y)
+noiseGenerator config perms (x, y) | trace (show (x,y)) octaves config == 0 = 0
+                                   | otherwise = n / maxValue
+    where 
+        n :: Float
+        maxValue :: Float
+        (n, maxValue) = noiseGenerator' config perms 1 (x, y)
 
-noiseGenerator' :: PerlinConfig -> Permutations -> Float -> HeightMap
-noiseGenerator' config perms amp (x, y) | octaves config == 0 = 0
+noiseGenerator' :: PerlinConfig -> Permutations -> Float -> (Float, Float) -> (Float, Float)
+noiseGenerator' config perms amp (x, y) | octaves config == 0 = (0, 0)
                                         | otherwise = let
-    (x', y') = (x * frequency config, y * frequency config)
-    noise = amp * noise2D config perms (x', y')
-    in noise + noiseGenerator' (config { octaves = octaves config - 1, frequency = frequency config * 2 }) perms (amp * 0.5) (x, y)
+    (x', y') = (x * frequency config / scale config, y * frequency config / scale config)
+    noise = amp * (noise2D config perms (x', y') + 1) / 2
+    (noise', maxValue) = noiseGenerator' (config { octaves = octaves config - 1, frequency = frequency config * 2 }) perms (amp * persistence config) (x, y)
+    in (noise + noise', maxValue + amp)
 
 noise2D :: PerlinConfig -> Permutations -> HeightMap
 noise2D config perms (x, y) = let 
