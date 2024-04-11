@@ -104,16 +104,16 @@ downConnection = [
     ]
 
 upConnectionRule :: Rule
-upConnectionRule = allMustBe downConnection upNeighbour
+upConnectionRule = allMustBe downConnection upNeighbour True
 
 downConnectionRule :: Rule
-downConnectionRule = allMustBe upConnection downNeighbour
+downConnectionRule = allMustBe upConnection downNeighbour True
 
 rightConnectionRule :: Rule
-rightConnectionRule = allMustBe leftConnection rightNeighbour
+rightConnectionRule = allMustBe leftConnection rightNeighbour True
 
 leftConnectionRule :: Rule
-leftConnectionRule = allMustBe rightConnection leftNeighbour 
+leftConnectionRule = allMustBe rightConnection leftNeighbour True
 
 noUpConnectionRule :: Rule
 noUpConnectionRule = (<!>) $ nextToAny downConnection upNeighbour
@@ -222,7 +222,7 @@ dirtTile = Tile {
 waterTile :: Tile
 waterTile = Tile {
     materials = waterBlock,
-    rules = allMustBe [waterTile] aboveNeighbour <&&> canExistAt (\(_, y, _) -> y >= 1) 
+    rules = allMustBe [waterTile] aboveNeighbour True <&&> canExistAt (\(_, y, _) -> y >= 1) 
         <&&> ((weightedRule 0.05 <&&> (<!>) (nextToAny [waterTile] directNeighbours)) <||> nextToAny [waterTile] directNeighbours),
     charRep = 'w'
 }
