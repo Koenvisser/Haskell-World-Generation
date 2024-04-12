@@ -70,7 +70,10 @@ nextToAll tiles shape = Rule (\tileMap pos ->
 -- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles in the shape are 
 --   within the list of tiles at the given position. The boolean parameter determines if an empty tile 
 --   should be considered a match.
-allMustBe :: [Tile] -> Shape -> Bool -> Rule
+allMustBe :: [Tile] -- ^ List of tiles that must be present 
+          -> Shape -- ^ Shape that must contain the tiles
+          -> Bool -- ^ If an empty tile should be considered a match
+          -> Rule
 allMustBe tiles shape notPlaced = Rule (\tileMap pos -> 
   CanPlace <$> allRule (\nPos -> 
     do 

@@ -19,7 +19,8 @@ data PerlinConfig = PerlinConfig {
                         --   The higher the number of octaves, the more detailed the noise, but the slower the generation.
   scale :: Float,       -- ^ The scale of the noise. The higher the scale, the more zoomed in the noise.
   persistence :: Float, -- ^ The persistence of the noise. The persistence is the factor that determines how much each octave contributes to the overall shape of the noise.
-  frequency :: Float    -- ^ The frequency of the noise. The frequency is the factor that determines how much the noise is repeated.
+  frequency :: Float,    -- ^ The frequency of the noise. The frequency is the factor that determines how much the noise is repeated.
+  lacunarity :: Float    -- ^ The lacunarity of the noise. The lacunarity is the factor that determines how much the frequency is increased for each octave.
 }
 
 instance Default PerlinConfig where
@@ -29,7 +30,8 @@ instance Default PerlinConfig where
     octaves = 8,
     scale = 0.1,
     persistence = 0.5,
-    frequency = 0.01
+    frequency = 0.01,
+    lacunarity = 2.0
   }
 
 -- | The `Permutations` type is a map that maps an integer to another integer.
@@ -86,7 +88,7 @@ noiseGenerator' config perms amp (x, y) | octaves config < 0 = error "Octaves mu
                                         | otherwise = let
   (x', y') = (x * frequency config / scale config, y * frequency config / scale config)
   noise = amp * (noise2D config perms (x', y') + 1) / 2
-  (noise', maxValue) = noiseGenerator' (config { octaves = octaves config - 1, frequency = frequency config * 2 }) perms (amp * persistence config) (x, y)
+  (noise', maxValue) = noiseGenerator' (config { octaves = octaves config - 1, frequency = frequency config * lacunarity config }) perms (amp * persistence config) (x, y)
   in (noise + noise', maxValue + amp)
 
 -- | Generate a 2D Perlin noise Height map given its perlin configuration and a (shuffled) `permutations`.
