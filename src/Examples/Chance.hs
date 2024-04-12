@@ -5,6 +5,7 @@ import Def
 import Utils
 import Data.Default (def)
 
+-- | A solid red material
 redMaterial :: Material
 redMaterial = def {diffuseColor = (1.0, 0, 0)}
 
@@ -16,6 +17,7 @@ redTile = Tile {
   charRep = 'r'
 }
 
+-- | A solid blue material
 blueMaterial :: Material
 blueMaterial = def {diffuseColor = (0, 0, 1.0)}
 
@@ -27,6 +29,7 @@ blueTile = Tile {
   charRep = 'b'
 }
 
+-- | A solid green material
 greenMaterial :: Material
 greenMaterial = def {diffuseColor = (0, 1.0, 0)}
 
@@ -39,8 +42,10 @@ greenTile = Tile {
   charRep = 'g'
 }
 
+-- | A transparent material that represents air
 airMaterial :: Material
 airMaterial = def {transparency = 0.0}
+
 -- | A textureless air tile that has a 30% chance of being placed
 airTile :: Tile
 airTile = Tile {

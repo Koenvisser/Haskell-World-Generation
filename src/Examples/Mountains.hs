@@ -10,9 +10,11 @@ import Utils
 import qualified Data.Map as M
 
 -------------- Air tiles --------------
+-- | A material that represents air
 airMaterial :: Material
 airMaterial = def {diffuseColor = (0.0, 0.0, 1.0), transparency = 0}
 
+-- | A tile that represents air, must be placed above 0.5 height of the world
 airTile :: Tile
 airTile = Tile {
   materials = createMaterialMapForAllSides airMaterial,
@@ -20,9 +22,12 @@ airTile = Tile {
   charRep = 'a'
 }
 
+-- | A material that represents clouds
 cloudMaterial :: Material
 cloudMaterial = def {diffuseColor = (1.0, 1.0, 1.0), transparency = 0.6}
 
+-- | A tile that represents clouds, must be placed above 0.85 height of the world. Has a higher chance of being placed
+--   when next to another cloud tile.
 cloudTile :: Tile
 cloudTile = Tile { 
   materials = createMaterialMapForAllSides cloudMaterial,
@@ -30,9 +35,11 @@ cloudTile = Tile {
   charRep = 'c'
 }
 
+-- | A material that represents shallow water
 shallowWaterMaterial :: Material
 shallowWaterMaterial = def {diffuseColor = (0.1, 0.1, 1.0), transparency = 0.5}
 
+-- | A tile that represents shallow water, must be placed below 0.5 height of the world, but above 0.3
 shallowWaterTile :: Tile
 shallowWaterTile = Tile {
   materials = createMaterialMapForAllSides shallowWaterMaterial,
@@ -40,9 +47,11 @@ shallowWaterTile = Tile {
   charRep = 'B'
 }
 
+-- | A material that represents deep water
 deepWaterMaterial :: Material
 deepWaterMaterial = def {diffuseColor = (0.1, 0.1, 0.6), transparency = 0.8}
 
+-- | A tile that represents deep water, must be placed below 0.3 height of the world, so below the shallow water
 deepWaterTile :: Tile
 deepWaterTile = Tile {
   materials = createMaterialMapForAllSides deepWaterMaterial,
@@ -51,10 +60,11 @@ deepWaterTile = Tile {
 }
     
 -------------- Ground tiles --------------
-
+-- | A solid white material that represents snow
 snowMaterial :: Material
 snowMaterial = def {diffuseColor = (1.0, 1.0, 1.0)}
 
+-- | A tile that represents snow, must be placed above 0.8 and is used as a groundTile
 snowTile :: Tile
 snowTile = Tile { 
   materials = createMaterialMapForAllSides snowMaterial,
@@ -62,9 +72,11 @@ snowTile = Tile {
   charRep = 's'
 }
 
+-- | A solid grey material that represents rocks
 rockMaterial :: Material
 rockMaterial = def {diffuseColor = (0.5, 0.5, 0.5)}
 
+-- | A tile that represents rocks, its weight scales with the relative height of the world up to 0.8.
 rockTile :: Tile
 rockTile = Tile { 
   materials = createMaterialMapForAllSides rockMaterial,
@@ -75,9 +87,11 @@ rockTile = Tile {
   charRep = 'r'
 }
 
+-- | A solid dark-grey material that represents deep rocks
 deepRockMaterial :: Material
 deepRockMaterial = def {diffuseColor = (0.3, 0.3, 0.3)}
 
+-- | A tile that represents rocks in the lower parts of the world, must be placed below 0.3 relative height of the world.
 deepRockTile :: Tile
 deepRockTile = Tile { 
   materials = createMaterialMapForAllSides deepRockMaterial,
@@ -85,9 +99,11 @@ deepRockTile = Tile {
   charRep = 'R'
 }
 
+-- | A material that represents dirt, a simple dirt texture
 dirtMaterial :: Material
 dirtMaterial = def {texture = Just "textures/side-dirt.png"}
 
+-- | A material that represents grass, with a grass texture on top and dirt on the sides
 grassBlock :: M.Map Side Material
 grassBlock = M.fromList [ 
   (PosY, (def {texture = Just "textures/top-grass.png"})),
@@ -98,6 +114,7 @@ grassBlock = M.fromList [
   (PosZ, dirtMaterial)
   ]
 
+-- | A tile that represents grass, must be placed between 0.4 and 0.7 height of the world
 grassTile :: Tile
 grassTile = Tile { 
   materials = grassBlock,
@@ -105,20 +122,20 @@ grassTile = Tile {
   charRep = 'g'
 }
 
-groundMaterial :: Material
-groundMaterial = def {texture = Just "textures/side-dirt.png"}
 
+-- | A tile that represents the ground, must be placed between 0.3 and 0.5 height of the world.
+--   Uses the `dirtMaterial` for all sides.
 groundTile :: Tile
 groundTile = Tile { 
-  materials = createMaterialMapForAllSides groundMaterial,
+  materials = createMaterialMapForAllSides dirtMaterial,
   rules = minRelativeHeight 0.3 <&&> maxRelativeHeight 0.5 <&&> weightedRule 0.05,
   charRep = 'd'
 }
 
--- | The tiles that will be placed __below__ the heightmap
+-- | The tiles that will be placed __below__ the `HeightMap`
 groundTiles :: [Tile]
 groundTiles = [groundTile, grassTile, rockTile, snowTile, deepRockTile]
 
--- | The tiles that will be placed __above__ the heightmap
+-- | The tiles that will be placed __above__ the `HeightMap`
 airTiles :: [Tile]
 airTiles = [airTile, cloudTile, shallowWaterTile, deepWaterTile]
