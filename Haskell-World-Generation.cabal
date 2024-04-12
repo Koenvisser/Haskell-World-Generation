@@ -85,6 +85,7 @@ library
                     , filepath
                     , deepseq
                     , random-shuffle
+                    , JuicyPixels
 
     -- Directories containing source files.
     hs-source-dirs:   src

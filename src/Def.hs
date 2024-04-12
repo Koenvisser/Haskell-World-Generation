@@ -21,6 +21,7 @@ module Def (
     findWithDefaultTileMap,
     getSize,
     Shape,
+    HeightMap,
     Error,
     RuleMonad
 ) where
@@ -120,6 +121,9 @@ getSize (TileMap (_, size)) = size
 --   that are relative to the given position, forming a shape. `Utils.allNeighbours` is 
 --   an example of a shape.
 type Shape = Pos -> [Pos]
+
+-- | A heightmap is a map from (x, y) coordinates to a height value.
+type HeightMap = (Float, Float) -> Float
 
 -- | Represents an error message that can be thrown in the generator
 type Error = String

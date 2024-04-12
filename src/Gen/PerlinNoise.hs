@@ -1,5 +1,7 @@
 module Gen.PerlinNoise (PerlinConfig(..), HeightMap, Permutations, perlinNoise, perlinNoiseRandom) where
 
+import Def
+
 import qualified Data.Map as M
 import Data.Default
 import System.Random
@@ -29,9 +31,6 @@ instance Default PerlinConfig where
         persistence = 0.5,
         frequency = 0.01
     }
-
--- | A heightmap is a map from (x, y) coordinates to a height value.
-type HeightMap = (Float, Float) -> Float
 
 type Permutations = M.Map Int Int
 
