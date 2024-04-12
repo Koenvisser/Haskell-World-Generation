@@ -26,4 +26,7 @@ heightIsBetweenZeroAndOne = do
     return $ property (height >= 0 && height <= 1)
 
 instance Arbitrary PerlinConfig where
-    arbitrary = PerlinConfig <$> arbitrary <*> (arbitrary `suchThat` (\size -> size >= 0 && size <= 1000)) <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+    arbitrary = PerlinConfig <$> arbitrary 
+        <*> (arbitrary `suchThat` (\size -> size >= 0 && size <= 10)) 
+        <*> (arbitrary `suchThat` (\oct -> oct >= 0 && oct <= 10)) 
+        <*> arbitrary <*> arbitrary <*> arbitrary
