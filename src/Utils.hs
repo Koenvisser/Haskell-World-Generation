@@ -1,3 +1,6 @@
+-- | This module contains utility functions and data structures that can be used to define rules
+--   in an easier way. Also contains functions that can be used to create shapes that can be used
+--   in the rules, and a function that can be used to create a simple material map for all sides.
 module Utils where
 
 import Def

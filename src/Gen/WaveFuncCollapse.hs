@@ -34,11 +34,15 @@ data HistoryUnit = HistoryUnit {
 -- | Run the wave function collapse algorithm on a list of tiles and a size for the world.
 --   The algorithm will return a tilemap that satisfies the rules of the tiles.
 --   If no possible tilemap can be generated, the function will return an error. 
-waveFuncCollapse :: [Tile] -> Size -> IO (Either Error TileMap)
+waveFuncCollapse :: [Tile] -- ^ The tiles that will be placed in the tilemap 
+                 -> Size -- ^ The size of the tilemap
+                 -> IO (Either Error TileMap) -- ^ Returns an error if no possible tilemap can be generated, otherwise returns the tilemap
 waveFuncCollapse tiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let allPos = [(x, y, z) | x <- [minX..maxX], y <- [minY..maxY], z <- [minZ..maxZ]]
   waveFunc tiles allPos size
 
+-- | Run the wave function collapse algorithm on a list of tiles and a list of positions.
+--   The algorithm will return a tilemap that satisfies the rules of the tiles.
 waveFunc :: [Tile] -> [Pos] -> Size -> IO (Either Error TileMap)
 waveFunc tiles pos size = do
   let emptyTileMap = TileMap (M.empty, size)
@@ -46,7 +50,13 @@ waveFunc tiles pos size = do
     Nothing -> return $ Left "No possible tilemap can be generated"
     Just (tileMap, env, dependencies) -> waveFuncCollapse' tileMap env dependencies []
 
-waveFuncCollapeHeightMap :: HeightMap -> [Tile] -> [Tile] -> Size -> IO (Either Error TileMap)
+-- | Run the wave function collapse algorithm on a heightmap. The algorithm will generate a tilemap based on the heightmap
+--   and the rules of the tiles. The algorithm will return a tilemap that satisfies the rules of the tiles.
+waveFuncCollapeHeightMap :: HeightMap -- ^ The heightmap that the tilemap should be generated from
+                         -> [Tile] -- ^ The tiles that will be placed in the tilemap above the heightmap
+                         -> [Tile] -- ^ The tiles that will be placed in the tilemap below the heightmap
+                         -> Size  -- ^ The size of the tilemap
+                         -> IO (Either Error TileMap) -- ^ Returns an error if no possible tilemap can be generated, otherwise returns the tilemap
 waveFuncCollapeHeightMap heightMap airTiles groundTiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
   let xz = [(x, heightMap (fromIntegral x, fromIntegral z), z) | x <- [minX..maxX], z <- [minZ..maxZ]]
   let groundPos = [(x, y', z) | (x, y, z) <- xz, y' <- [minY..round(fromIntegral maxY - (fromIntegral maxY - fromIntegral minY) * (1 - y))]]

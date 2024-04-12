@@ -76,6 +76,7 @@ instance CompareRule RuleResult where
     (<!>) (CanPlace b) = CanPlace (not b)
     (<!>) (ChancePlace f) = ChancePlace (1 - f)
 
+-- | The CompareRule instance for RuleMonad composes the rules with the given operator
 instance CompareRule a => CompareRule (RuleMonad a) where
     (RuleMonad r1 pos1) <||> (RuleMonad r2 pos2) = RuleMonad (r1 <||> r2) (pos1 `union` pos2)
     (RuleMonad r1 pos1) <&&> (RuleMonad r2 pos2) = RuleMonad (r1 <&&> r2) (pos1 `union` pos2)
@@ -117,6 +118,7 @@ nullTileMap (TileMap (tileMap, _)) = M.null tileMap
 findWithDefaultTileMap :: Tile -> Pos -> TileMap -> RuleMonad Tile
 findWithDefaultTileMap def pos (TileMap (tileMap, _)) = RuleMonad (M.findWithDefault def pos tileMap) [pos]
 
+-- | Gets the size of the tilemap
 getSize :: TileMap -> Size
 getSize (TileMap (_, size)) = size
 

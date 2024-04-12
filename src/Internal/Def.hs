@@ -39,26 +39,31 @@ getVal (RuleMonad a _) = a
 getPos :: RuleMonad a -> [Pos]
 getPos (RuleMonad _ pos) = pos
 
+-- | The Functor instance of a `RuleMonad`.
 instance Functor RuleMonad where
     fmap :: (a -> b) -> RuleMonad a -> RuleMonad b
     fmap f (RuleMonad a pos) = RuleMonad (f a) pos
 
+-- | The Applicative instance of a `RuleMonad`.
 instance Applicative RuleMonad where
     pure :: a -> RuleMonad a
     pure a = RuleMonad a []
     (<*>) :: RuleMonad (a -> b) -> RuleMonad a -> RuleMonad b
     (RuleMonad f pos1) <*> (RuleMonad v pos2) = RuleMonad (f v) (pos1 `union` pos2) 
 
+-- | The Monad instance of a `RuleMonad`.
 instance Monad RuleMonad where
     return :: a -> RuleMonad a
     return = pure
     (>>=) :: RuleMonad a -> (a -> RuleMonad b) -> RuleMonad b
     RuleMonad v1 pos1 >>= f = let RuleMonad v2 pos2 = f v1 in RuleMonad v2 (pos1 `union` pos2)
 
+-- | The Semigroup instance of a `RuleMonad`.
 instance Semigroup a => Semigroup (RuleMonad a) where
     (<>) :: RuleMonad a -> RuleMonad a -> RuleMonad a
     RuleMonad v1 pos1 <> RuleMonad v2 pos2 = RuleMonad (v1 <> v2) (pos1 `union` pos2)
 
+-- | The Monoid instance of a `RuleMonad`.
 instance Monoid a => Monoid (RuleMonad a) where
     mempty :: RuleMonad a
     mempty = pure mempty
@@ -106,6 +111,7 @@ data Material = Material {
 -- | A side is a direction in the world, which is used to determine the material of a tile.
 data Side = PosX | NegX | PosY | NegY | PosZ | NegZ deriving (Show, Eq, Ord, Enum, Bounded, Generic, NFData)
 
+-- | The default instance of a material is a solid white material with no texture and no extra fields or files.
 instance Default Material where
     def = Material {
         ambientColor = (1.0, 1.0, 1.0),

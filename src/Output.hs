@@ -11,12 +11,21 @@ import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName, takeDirectory)
 import Codec.Picture
 
-saveHeightMapToImage :: HeightMap -> Int -> Int -> FilePath -> IO ()
+-- | Saves a `HeightMap` to an image file, which can be used to visualize the height map
+saveHeightMapToImage :: HeightMap 
+                     -> Int       -- ^ The width of the image in pixels
+                     -> Int       -- ^ The height of the image in pixels
+                     -> FilePath  -- ^ The 'FilePath' to save the png file to
+                     -> IO ()
 saveHeightMapToImage hm w h path = do
-  putStrLn $ "Writing image to " ++ path
+  putStrLn $ "Writing height map image to " ++ path
   writePng path $ heightMapToImage hm w h
 
-heightMapToImage :: HeightMap -> Int -> Int -> Image Pixel16
+-- | Converts a `HeightMap` to an image
+heightMapToImage :: HeightMap 
+                 -> Int -- ^ The width of the image in pixels
+                 -> Int -- ^ The height of the image in pixels
+                 -> Image Pixel16
 heightMapToImage hm = generateImage (\x y -> let 
   in round $ 65535 * hm (fromIntegral x, fromIntegral y))
 

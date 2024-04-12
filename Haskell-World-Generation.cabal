@@ -62,7 +62,7 @@ library
                     , Output
                     , Examples.Roads
                     , Examples.Chance
-                    , Examples.NoPurple
+                    , Examples.NoGreen
                     , Examples.Mountains
                     , Internal.Def
 
