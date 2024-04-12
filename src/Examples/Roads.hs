@@ -223,6 +223,7 @@ waterTile = Tile {
   charRep = 'w'
 }
 
+-- | The tiles that will be used in the wave function collapse algorithm to generate the world
 allTiles :: [Tile]
 allTiles = [
   topCrossTile, 

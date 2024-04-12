@@ -49,5 +49,6 @@ airTile = Tile {
   charRep = 'a'
 }
 
+-- | The tiles that will be used in the wave function collapse algorithm to generate the world
 allTiles :: [Tile]
 allTiles = [redTile, blueTile, greenTile, airTile]

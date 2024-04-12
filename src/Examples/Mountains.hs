@@ -115,8 +115,10 @@ groundTile = Tile {
   charRep = 'd'
 }
 
+-- | The tiles that will be placed __below__ the heightmap
 groundTiles :: [Tile]
 groundTiles = [groundTile, grassTile, rockTile, snowTile, deepRockTile]
 
+-- | The tiles that will be placed __above__ the heightmap
 airTiles :: [Tile]
 airTiles = [airTile, cloudTile, shallowWaterTile, deepWaterTile]
