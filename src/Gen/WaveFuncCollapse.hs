@@ -5,7 +5,6 @@ module Gen.WaveFuncCollapse (waveFuncCollapse, waveFuncCollapeHeightMap) where
 
 import Internal.Def
 import Def
-import Gen.PerlinNoise (HeightMap)
 
 import qualified Data.Map as M
 import System.Random
