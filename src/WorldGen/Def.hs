@@ -76,11 +76,10 @@ instance CompareRule RuleResult where
   (<!>) (CanPlace b) = CanPlace (not b)
   (<!>) (ChancePlace f) = ChancePlace (1 - f)
 
--- | The CompareRule instance for RuleMonad composes the rules with the given operator
-instance CompareRule a => CompareRule (RuleMonad a) where
-  (RuleMonad r1 pos1) <||> (RuleMonad r2 pos2) = RuleMonad (r1 <||> r2) (pos1 `union` pos2)
-  (RuleMonad r1 pos1) <&&> (RuleMonad r2 pos2) = RuleMonad (r1 <&&> r2) (pos1 `union` pos2)
-  (<!>) (RuleMonad r pos) = RuleMonad ((<!>) r) pos
+instance (Applicative m, CompareRule a) => CompareRule (m a) where
+  a <||> b = (<||>) <$> a <*> b
+  a <&&> b = (<&&>) <$> a <*> b
+  (<!>) a = (<!>) <$> a 
 
 -- | The CompareRule instance for Rule, which composes the rules with the given operator
 instance CompareRule Rule where
