@@ -5,7 +5,6 @@ import Data.Default
 import System.Random
 import System.Random.Shuffle (shuffle')
 import Data.Bits ((.&.))
-import Debug.Trace (trace)
 
 type Seed = Int
 type Octaves = Int
@@ -26,7 +25,7 @@ instance Default PerlinConfig where
         seed = 0,
         permSize = 256,
         octaves = 8,
-        scale = 0.001,
+        scale = 0.1,
         persistence = 0.5,
         frequency = 0.01
     }
@@ -63,7 +62,7 @@ perlinNoise pcf =
     in noiseGenerator pcf perm
 
 noiseGenerator :: PerlinConfig -> Permutations -> HeightMap
-noiseGenerator config perms (x, y) | trace (show (x,y)) octaves config == 0 = 0
+noiseGenerator config perms (x, y) | octaves config == 0 = 0
                                    | otherwise = n / maxValue
     where 
         n :: Float
@@ -86,10 +85,10 @@ noise2D config perms (x, y) = let
     topLeft         = (xf,     yf - 1)
     bottomRight     = (xf - 1, yf    )
     bottomLeft      = (xf,     yf    )
-    valueTopRight = perms M.! (((perms M.! (x' + 1)) + y' + 1) .&. (permSize config - 1))
-    valueTopLeft = perms M.! (((perms M.! x') + y' + 1) .&. (permSize config - 1))
-    valueBottomRight = perms M.! (((perms M.! (x' + 1)) + y') .&. (permSize config - 1))
-    valueBottomLeft = perms M.! (((perms M.! x') + y') .&. (permSize config - 1))
+    valueTopRight = perms M.! (((perms M.! ((x' + 1) .&. (permSize config - 1))) + y' + 1) .&. (permSize config - 1))
+    valueTopLeft = perms M.! (((perms M.! (x' .&. (permSize config - 1))) + y' + 1) .&. (permSize config - 1))
+    valueBottomRight = perms M.! (((perms M.! ((x' + 1) .&. (permSize config - 1))) + y') .&. (permSize config - 1))
+    valueBottomLeft = perms M.! (((perms M.! (x' .&. (permSize config - 1))) + y') .&. (permSize config - 1))
     topRightDot     = dotProduct topRight (constantVector valueTopRight)
     topLeftDot      = dotProduct topLeft (constantVector valueTopLeft)
     bottomRightDot  = dotProduct bottomRight (constantVector valueBottomRight)
