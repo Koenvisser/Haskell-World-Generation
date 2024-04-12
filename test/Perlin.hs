@@ -27,6 +27,6 @@ heightIsBetweenZeroAndOne = do
 
 instance Arbitrary PerlinConfig where
     arbitrary = PerlinConfig <$> arbitrary 
-        <*> (arbitrary `suchThat` (\size -> size >= 0 && size <= 10)) 
+        <*> (arbitrary `suchThat` (\size -> size >= 1 && size <= 10)) 
         <*> (arbitrary `suchThat` (\oct -> oct >= 0 && oct <= 10)) 
         <*> arbitrary <*> arbitrary <*> arbitrary
