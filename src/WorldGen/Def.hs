@@ -2,7 +2,7 @@
 --   generation of the world. Use this module to define the tiles and the rules that
 --   are used to generate the world, or use the "Utils" module to define your rules
 --   in an easier way, using the provided functions.
-module Def (
+module WorldGen.Def (
   Tile(..),
   Material(..),
   Side(..),
@@ -29,7 +29,7 @@ module Def (
 import qualified Data.Map as M
 import Data.List (union)
 
-import Internal.Def (RuleMonad(..), Pos, Rule(..), RuleResult(..), Tile(..), Material(..), Side(..), TileMap(..), Size)
+import WorldGen.Internal.Def (RuleMonad(..), Pos, Rule(..), RuleResult(..), Tile(..), Material(..), Side(..), TileMap(..), Size)
 
 -- | Converts a `RuleResult` to a boolean, which is true if the result is true or 
 --   the chance that it is placed is greater than 0. 
@@ -76,11 +76,10 @@ instance CompareRule RuleResult where
   (<!>) (CanPlace b) = CanPlace (not b)
   (<!>) (ChancePlace f) = ChancePlace (1 - f)
 
--- | The CompareRule instance for RuleMonad composes the rules with the given operator
-instance CompareRule a => CompareRule (RuleMonad a) where
-  (RuleMonad r1 pos1) <||> (RuleMonad r2 pos2) = RuleMonad (r1 <||> r2) (pos1 `union` pos2)
-  (RuleMonad r1 pos1) <&&> (RuleMonad r2 pos2) = RuleMonad (r1 <&&> r2) (pos1 `union` pos2)
-  (<!>) (RuleMonad r pos) = RuleMonad ((<!>) r) pos
+instance (Applicative m, CompareRule a) => CompareRule (m a) where
+  a <||> b = (<||>) <$> a <*> b
+  a <&&> b = (<&&>) <$> a <*> b
+  (<!>) a = (<!>) <$> a 
 
 -- | The CompareRule instance for Rule, which composes the rules with the given operator
 instance CompareRule Rule where

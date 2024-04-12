@@ -2,13 +2,13 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 module WFC where
 
+import WorldGen.Internal.Def
+import WorldGen.Def
+import WorldGen.Gen.WaveFuncCollapse
+
 import Test.Tasty
 import Test.Tasty.QuickCheck
 import qualified Data.Map as M
-
-import Internal.Def
-import Def
-import Gen.WaveFuncCollapse
 
 test_WaveFuncCollapse :: [TestTree]
 test_WaveFuncCollapse = [

@@ -1,9 +1,9 @@
 -- | This module contains functions to convert a world to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file can be saved, without materials, to a file using the `saveWorldToObj` function, or with materials to a folder using the `saveWorldToObjAndMtl` function.
-module Output (saveHeightMapToImage, heightMapToImage, saveWorldToObj, saveWorldToObjAndMtl, worldToObj, worldToObjAndMtl) where
+module WorldGen.Output (saveHeightMapToImage, heightMapToImage, saveWorldToObj, saveWorldToObjAndMtl, worldToObj, worldToObjAndMtl) where
 
-import Internal.Def
-import Def
+import WorldGen.Internal.Def
+import WorldGen.Def
 
 import qualified Data.Map as M
 import Data.Maybe (maybeToList)
@@ -18,6 +18,9 @@ saveHeightMapToImage :: HeightMap
                      -> FilePath  -- ^ The 'FilePath' to save the png file to
                      -> IO ()
 saveHeightMapToImage hm w h path = do
+  let directory = takeDirectory path
+  putStrLn $ "Creating directory " ++ directory ++ " if it does not exist"
+  createDirectoryIfMissing True directory
   putStrLn $ "Writing height map image to " ++ path
   writePng path $ heightMapToImage hm w h
 

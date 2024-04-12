@@ -1,10 +1,11 @@
 -- | A module that defines a set of tiles that can be used to generate a road-like structure.
 --   The roads must be connected to each other, and the road can have a turn, a split, a cross, a straight line, or an elbow.
 --   The world can also contain dirt, grass and water.
-module Examples.Roads where
+module WorldGen.Examples.Roads where
 
-import Def
-import Utils
+import WorldGen.Def
+import WorldGen.Utils
+
 import Data.Default (def)
 import qualified Data.Map as M
 

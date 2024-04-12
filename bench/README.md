@@ -1,7 +1,7 @@
 # Benchmark Module
 
 This module contains benchmarks for the Haskell-World-Generation library.
-It benchmarks the Wave Function Collapse function.
+It benchmarks the Wave Function Collapse function and the Perlin noise.
 
 ## Running the Benchmarks
 

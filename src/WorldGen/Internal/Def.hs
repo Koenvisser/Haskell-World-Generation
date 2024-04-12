@@ -4,7 +4,7 @@
 --   Only import this module if you know what you are doing, as some of the types and classes defined here 
 --   can break the generator if used incorrectly.
 
-module Internal.Def (
+module WorldGen.Internal.Def (
   Pos,
   RuleMonad(..),
   getVal,

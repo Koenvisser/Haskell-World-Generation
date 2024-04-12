@@ -1,11 +1,12 @@
 module Main where
 
+import qualified WorldGen.Examples.Roads as Roads (allTiles)
+import qualified WorldGen.Examples.Mountains as Mountains (airTiles, groundTiles)
+import WorldGen.Gen.PerlinNoise (perlinNoiseRandom)
+import WorldGen.Gen.WaveFuncCollapse (waveFuncCollapse, waveFuncCollapeHeightMap)
+import WorldGen.Output (saveWorldToObjAndMtl, saveHeightMapToImage)
+
 import Data.Default (def)
-import qualified Examples.Roads as Roads (allTiles)
-import qualified Examples.Mountains as Mountains (airTiles, groundTiles)
-import Gen.PerlinNoise (perlinNoiseRandom)
-import Gen.WaveFuncCollapse (waveFuncCollapse, waveFuncCollapeHeightMap)
-import Output (saveWorldToObjAndMtl, saveHeightMapToImage)
 
 main :: IO ()
 main = generateMountains

@@ -32,7 +32,7 @@ version:            0.1.0.0
 license:            NONE
 
 -- The package author(s).
-author:             Visser,K.J.A. (Koen)
+author:             Koen Visser, Milo Ligter
 
 -- An email address to which users can send suggestions, bug reports, and patches.
 maintainer:         57984909+Koenvisser@users.noreply.github.com
@@ -43,6 +43,7 @@ build-type:         Simple
 
 -- Extra doc files to be distributed with the package, such as a CHANGELOG or a README.
 extra-doc-files:    CHANGELOG.md
+                  , README.md
 
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
 -- extra-source-files:
@@ -55,16 +56,16 @@ library
     import:           warnings
 
     -- Modules exported by the library.
-    exposed-modules:  Def
-                    , Utils
-                    , Gen.WaveFuncCollapse
-                    , Gen.PerlinNoise
-                    , Output
-                    , Examples.Roads
-                    , Examples.Chance
-                    , Examples.NoGreen
-                    , Examples.Mountains
-                    , Internal.Def
+    exposed-modules:  WorldGen.Def
+                    , WorldGen.Utils
+                    , WorldGen.Gen.WaveFuncCollapse
+                    , WorldGen.Gen.PerlinNoise
+                    , WorldGen.Output
+                    , WorldGen.Examples.Roads
+                    , WorldGen.Examples.Chance
+                    , WorldGen.Examples.NoGreen
+                    , WorldGen.Examples.Mountains
+                    , WorldGen.Internal.Def
 
     -- Modules included in this library but not exported.
     other-modules:  
@@ -75,6 +76,7 @@ library
                       , InstanceSigs
                       , DeriveGeneric
                       , DeriveAnyClass
+                      , FlexibleInstances
 
     -- Other library packages from which modules are imported.
     build-depends:    base >=4.17.2.1
