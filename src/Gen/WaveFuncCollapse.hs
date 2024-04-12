@@ -7,6 +7,7 @@ import Internal.Def
 import Def
 
 import qualified Data.Map as M
+import Data.List (nub)
 import System.Random
 
 -- | `Dependencies` is a map of positions to a list of positions. It is used to keep track of which positions
@@ -46,7 +47,7 @@ waveFuncCollapse tiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
 waveFunc :: [Tile] -> [Pos] -> Size -> IO (Either Error TileMap)
 waveFunc tiles pos size = do
   let emptyTileMap = TileMap (M.empty, size)
-  case createEnv tiles emptyTileMap pos of
+  case createEnv (nub tiles) emptyTileMap pos of
     Nothing -> return $ Left "No possible tilemap can be generated"
     Just (tileMap, env, dependencies) -> waveFuncCollapse' tileMap env dependencies []
 
