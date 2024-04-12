@@ -55,16 +55,16 @@ library
     import:           warnings
 
     -- Modules exported by the library.
-    exposed-modules:  Def
-                    , Utils
-                    , Gen.WaveFuncCollapse
-                    , Gen.PerlinNoise
-                    , Output
-                    , Examples.Roads
-                    , Examples.Chance
-                    , Examples.NoGreen
-                    , Examples.Mountains
-                    , Internal.Def
+    exposed-modules:  WorldGen.Def
+                    , WorldGen.Utils
+                    , WorldGen.Gen.WaveFuncCollapse
+                    , WorldGen.Gen.PerlinNoise
+                    , WorldGen.Output
+                    , WorldGen.Examples.Roads
+                    , WorldGen.Examples.Chance
+                    , WorldGen.Examples.NoGreen
+                    , WorldGen.Examples.Mountains
+                    , WorldGen.Internal.Def
 
     -- Modules included in this library but not exported.
     other-modules:  

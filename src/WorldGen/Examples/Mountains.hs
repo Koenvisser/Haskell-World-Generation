@@ -2,11 +2,12 @@
 --   This example creates a simple world with mountains, snow, rocks, and water.
 --   The world is generated using a heightmap generated using perlin noise that uses 
 --   two different tile sets (airTiles and groundTiles).
-module Examples.Mountains (groundTiles, airTiles) where
+module WorldGen.Examples.Mountains (groundTiles, airTiles) where
+
+import WorldGen.Def
+import WorldGen.Utils
 
 import Data.Default (def)
-import Def
-import Utils
 import qualified Data.Map as M
 
 -------------- Air tiles --------------

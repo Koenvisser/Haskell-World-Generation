@@ -1,9 +1,10 @@
 -- | This world becomes impossible whenever a green tile is placed. This is a useful example 
 --   to benchmark very difficult to create worlds and test backtracking.
-module Examples.NoGreen where
+module WorldGen.Examples.NoGreen where
 
-import Def
-import Utils
+import WorldGen.Def
+import WorldGen.Utils
+
 import Data.Default (def)
 
 -- | A solid red material

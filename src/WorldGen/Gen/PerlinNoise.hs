@@ -1,9 +1,9 @@
 -- | This is a generator that generates a heightmap using Perlin noise.
 --   The `HeightMap` can be used to generate a world using the "Gen.WaveFuncCollapse" module, or
 --   it can be used to generate an image using the "Output" module.
-module Gen.PerlinNoise (PerlinConfig(..), perlinNoise, perlinNoiseRandom) where
+module WorldGen.Gen.PerlinNoise (PerlinConfig(..), perlinNoise, perlinNoiseRandom) where
 
-import Def
+import WorldGen.Def
 
 import qualified Data.Map as M
 import Data.Default

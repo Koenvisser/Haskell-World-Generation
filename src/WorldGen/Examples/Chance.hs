@@ -1,8 +1,9 @@
 -- | This module contains examples of tiles that have a chance of being generated using the weightedRule.
-module Examples.Chance where
+module WorldGen.Examples.Chance where
 
-import Def
-import Utils
+import WorldGen.Def
+import WorldGen.Utils
+
 import Data.Default (def)
 
 -- | A solid red material

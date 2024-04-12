@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -Wno-orphans #-}
 module Perlin where
 
+import WorldGen.Gen.PerlinNoise (PerlinConfig(..), perlinNoiseRandom)
+
 import Test.Tasty
 import Test.Tasty.QuickCheck
-
-import Gen.PerlinNoise (PerlinConfig(..), perlinNoiseRandom)
 
 test_Perlin :: [TestTree]
 test_Perlin = [
