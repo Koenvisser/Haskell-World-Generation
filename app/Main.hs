@@ -23,7 +23,7 @@ generateMountains :: IO ()
 generateMountains = do
   heightMap <- perlinNoiseRandom def
   saveHeightMapToImage heightMap 1000 1000 "output/image.png"
-  result <- waveFuncCollapeHeightMap heightMap Mountains.airTiles Mountains.groundTiles ((0, 0, 0), (30, 15, 30))
+  result <- waveFuncCollapeHeightMap heightMap Mountains.airTiles Mountains.groundTiles ((0, 0, 0), (19, 9, 19))
   case result of
     Left err -> putStrLn err
     Right tileMap -> do 
