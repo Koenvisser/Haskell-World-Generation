@@ -14,6 +14,7 @@ module Internal.Def (
     Tile(..),
     Material(..),
     Side(..),
+    Size,
     TileMap(..),
     getMap
 ) where
@@ -127,22 +128,24 @@ instance Show Tile where
 instance Eq Tile where
     (==) tile1 tile2 = charRep tile1 == charRep tile2
 
+-- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
+type Size = (Pos, Pos)
+
 -- | A tilemap is a map of positions to tiles in the world
-newtype TileMap = TileMap (M.Map Pos Tile) deriving (Generic, NFData)
+newtype TileMap = TileMap (M.Map Pos Tile, Size) deriving (Generic, NFData)
 
 -- | Return the underlying map of a `TileMap`. Only use this function if the map will not be used in the generator. 
 getMap :: TileMap -> M.Map Pos Tile
-getMap (TileMap tileMap) = tileMap
+getMap (TileMap (tileMap, _)) = tileMap
 
 -- | The show instance of a `TileMap` prints the the world as y slices of an x*z grid
 --   with the tiles represented as their character representation and an empty tile 
 --   represented as a space.
 instance Show TileMap where
-    show (TileMap tileMap) | M.null tileMap = "Empty tilemap"
-                           | otherwise = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | z <- [zMin..zMax]] |  y <- [yMin..yMax]]
+    show (TileMap (tileMap, ((xMin, yMin, zMin),(xMax, yMax, zMax))))
+        | M.null tileMap = "Empty tilemap"
+        | otherwise = unlines [unlines [[tileAtPos (x,y,z) | x <- [xMin..xMax]] | z <- [zMin..zMax]] |  y <- [yMin..yMax]]
         where
-            (xMin, yMin, zMin) = fst . M.findMin $ tileMap
-            (xMax, yMax, zMax) = fst . M.findMax $ tileMap
             tileAtPos :: Pos -> Char
             tileAtPos pos = case M.lookup pos tileMap of
                 Just tile -> charRep tile

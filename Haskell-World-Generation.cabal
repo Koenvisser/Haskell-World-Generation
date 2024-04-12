@@ -58,10 +58,12 @@ library
     exposed-modules:  Def
                     , Utils
                     , Gen.WaveFuncCollapse
+                    , Gen.PerlinNoise
                     , Output
                     , Examples.Roads
                     , Examples.Chance
                     , Examples.NoPurple
+                    , Examples.Mountains
                     , Internal.Def
 
     -- Modules included in this library but not exported.
@@ -82,6 +84,8 @@ library
                     , directory
                     , filepath
                     , deepseq
+                    , random-shuffle
+                    , JuicyPixels
 
     -- Directories containing source files.
     hs-source-dirs:   src

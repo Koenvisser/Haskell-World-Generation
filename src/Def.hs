@@ -19,7 +19,9 @@ module Def (
     getTileMap,
     nullTileMap,
     findWithDefaultTileMap,
+    getSize,
     Shape,
+    HeightMap,
     Error,
     RuleMonad
 ) where
@@ -27,7 +29,7 @@ module Def (
 import qualified Data.Map as M
 import Data.List (union)
 
-import Internal.Def (RuleMonad(..), Pos, Rule(..), RuleResult(..), Tile(..), Material(..), Side(..), TileMap(..))
+import Internal.Def (RuleMonad(..), Pos, Rule(..), RuleResult(..), Tile(..), Material(..), Side(..), TileMap(..), Size)
 
 -- | Converts a `RuleResult` to a boolean, which is true if the result is true or 
 --   the chance that it is placed is greater than 0. 
@@ -46,10 +48,13 @@ resultToFloat (ChancePlace f) = f
 class CompareRule a where
     -- | The OR operator for rules
     (<||>) :: a -> a -> a
+    infixr 2 <||>
     -- | The AND operator for rules
     (<&&>) :: a -> a -> a
+    infixr 3 <&&>
     -- | The NOT operator for rules
     (<!>) :: a -> a
+    
 
 -- | The CompareRule instance for RuleResult follows regular boolean logic. The only 
 --   notable instances are the `ChancePlace` instances. For `<||>` its calculated as the 
@@ -90,35 +95,38 @@ instance CompareRule Rule where
         let result = rule tileMap pos
         in (<!>) result)
 
--- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
-type Size = (Pos, Pos)
-
 -- | Looks up a tile in the tilemap at the given position, returning the tile if it exists
 lookupTileMap :: Pos -> TileMap -> RuleMonad (Maybe Tile)
-lookupTileMap pos (TileMap tileMap) = RuleMonad (M.lookup pos tileMap) [pos]
+lookupTileMap pos (TileMap (tileMap, _)) = RuleMonad (M.lookup pos tileMap) [pos]
 
 -- | Checks if a tile exists in the tilemap at the given position
 memberTileMap :: Pos -> TileMap -> RuleMonad Bool
-memberTileMap pos (TileMap tileMap) = RuleMonad (M.member pos tileMap) [pos]
+memberTileMap pos (TileMap (tileMap, _)) = RuleMonad (M.member pos tileMap) [pos]
 
 -- | Gets a tile in the tilemap at the given position, returning an error if it does not exist
 getTileMap :: Pos -> TileMap -> RuleMonad Tile
-getTileMap pos (TileMap tileMap) = case M.lookup pos tileMap of
+getTileMap pos (TileMap (tileMap, _)) = case M.lookup pos tileMap of
     Just tile -> RuleMonad tile [pos]
     Nothing -> RuleMonad (error "Tile not found") [pos]
 
 -- | Checks if the tilemap is empty
 nullTileMap :: TileMap -> Bool
-nullTileMap (TileMap tileMap) = M.null tileMap
+nullTileMap (TileMap (tileMap, _)) = M.null tileMap
 
 -- | Looks up a tile in the tilemap at the given position, returning the default tile if it does not exist
 findWithDefaultTileMap :: Tile -> Pos -> TileMap -> RuleMonad Tile
-findWithDefaultTileMap def pos (TileMap tileMap) = RuleMonad (M.findWithDefault def pos tileMap) [pos]
+findWithDefaultTileMap def pos (TileMap (tileMap, _)) = RuleMonad (M.findWithDefault def pos tileMap) [pos]
+
+getSize :: TileMap -> Size
+getSize (TileMap (_, size)) = size
 
 -- | A shape is a function that takes a position and returns a list of absolute positions
 --   that are relative to the given position, forming a shape. `Utils.allNeighbours` is 
 --   an example of a shape.
 type Shape = Pos -> [Pos]
+
+-- | A heightmap is a map from (x, y) coordinates to a height value.
+type HeightMap = (Float, Float) -> Float
 
 -- | Represents an error message that can be thrown in the generator
 type Error = String

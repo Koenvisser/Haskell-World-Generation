@@ -1,6 +1,7 @@
 module Utils where
 
 import Def
+import qualified Data.Map as M
 
 -- | Convert a list of relative positions into a shape that takes a position and returns
 --   the absolute positions of the shape at that position
@@ -64,15 +65,16 @@ nextToAll tiles shape = Rule (\tileMap pos ->
         ) (shape pos)) tiles)
 
 -- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles in the shape are 
---   within the list of tiles at the given position.
-allMustBe :: [Tile] -> Shape -> Rule
-allMustBe tiles shape = Rule (\tileMap pos -> 
+--   within the list of tiles at the given position. The boolean parameter determines if an empty tile 
+--   should be considered a match.
+allMustBe :: [Tile] -> Shape -> Bool -> Rule
+allMustBe tiles shape notPlaced = Rule (\tileMap pos -> 
   CanPlace <$> allRule (\nPos -> 
     do 
       value <- lookupTileMap nPos tileMap
       case value of
           Just tile -> return $ tile `elem` tiles
-          _ -> return True
+          _ -> return notPlaced
       ) (shape pos))
 
 anyRule :: (a -> RuleMonad Bool) -> [a] -> RuleMonad Bool
@@ -87,6 +89,20 @@ allRule f (m:ms) = (&&) <$> f m <*> allRule f ms
 weightedRule :: Float -> Rule
 weightedRule chance = Rule (\_ _ -> return (ChancePlace chance))
 
+-- | A rule that checks if the position has a height of at most p times the height of the tileMap
+maxRelativeHeight :: Float -> Rule
+maxRelativeHeight p = Rule (\tileMap (_, y, _) -> let 
+  ((_, minY, _),(_, maxY, _)) = getSize tileMap
+  yLimit = fromIntegral minY + p * (fromIntegral maxY - fromIntegral minY)
+  in return (CanPlace $ yLimit >= fromIntegral y))
+
+-- | A rule that checks if the position has a height of at least p times the height of the tileMap
+minRelativeHeight :: Float -> Rule
+minRelativeHeight p = Rule (\tileMap (_, y, _) -> let 
+  ((_, minY, _),(_, maxY, _)) = getSize tileMap
+  yLimit = fromIntegral minY + p * (fromIntegral maxY - fromIntegral minY)
+  in return (CanPlace $ yLimit <= fromIntegral y))
+
 -- | A function that takes a list of positions and returns a function that checks if a position is in the list
 isInPos :: [Pos] -> (Pos -> Bool)
 isInPos posList pos = pos `elem` posList
@@ -94,3 +110,7 @@ isInPos posList pos = pos `elem` posList
 -- | A rule that takes a function that takes a position and returns a boolean, and returns a rule using this function
 canExistAt :: (Pos -> Bool) -> Rule
 canExistAt posPred = Rule (\_ pos -> return (CanPlace $ posPred pos))
+
+-- | A function that takes a material and returns a map from all sides to that material
+createMaterialMapForAllSides :: Material -> M.Map Side Material
+createMaterialMapForAllSides material = M.fromList [(NegX, material), (PosX, material), (NegY, material), (PosY, material), (NegZ, material), (PosZ, material)]

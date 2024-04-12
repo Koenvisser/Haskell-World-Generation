@@ -1,13 +1,24 @@
 -- | This module contains functions to convert a world to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file can be saved, without materials, to a file using the `saveWorldToObj` function, or with materials to a folder using the `saveWorldToObjAndMtl` function.
-module Output (saveWorldToObj, saveWorldToObjAndMtl, worldToObj, worldToObjAndMtl) where
+module Output (saveHeightMapToImage, heightMapToImage, saveWorldToObj, saveWorldToObjAndMtl, worldToObj, worldToObjAndMtl) where
 
 import Internal.Def
+import Def
 
 import qualified Data.Map as M
 import Data.Maybe (maybeToList)
 import System.Directory (createDirectoryIfMissing, copyFile, doesFileExist)
 import System.FilePath.Posix (takeFileName, takeDirectory)
+import Codec.Picture
+
+saveHeightMapToImage :: HeightMap -> Int -> Int -> FilePath -> IO ()
+saveHeightMapToImage hm w h path = do
+  putStrLn $ "Writing image to " ++ path
+  writePng path $ heightMapToImage hm w h
+
+heightMapToImage :: HeightMap -> Int -> Int -> Image Pixel16
+heightMapToImage hm = generateImage (\x y -> let 
+  in round $ 65535 * hm (fromIntegral x, fromIntegral y))
 
 -- | Converts a `TileMap` to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file is saved to the given path
@@ -46,14 +57,14 @@ saveWorldToObjAndMtl tileMap path scale = do
   
 -- | Converts a world to an obj file as a string, without any materials
 worldToObj :: TileMap -> Float -> String
-worldToObj (TileMap tileMap) scale = fst $ foldl (\(accObjString, fCount) (pos, tile) -> 
+worldToObj (TileMap (tileMap, _)) scale = fst $ foldl (\(accObjString, fCount) (pos, tile) -> 
   let (objString, newfCount) = tileToObj pos tile scale fCount
   in (accObjString ++ "\n" ++ objString, newfCount)) ("", 1) $ M.toList tileMap
 
 -- | Converts a world to a tuple of strings, where the first string is the obj file, the second string is the mtl file and 
 --   the third is a list of file paths to the textures used in the mtl file
 worldToObjAndMtl :: TileMap -> Float -> (String, String, [FilePath])
-worldToObjAndMtl (TileMap tileMap) scale = 
+worldToObjAndMtl (TileMap (tileMap, _)) scale = 
   let (objString, _, mtlString, filePaths, _ ) = foldl (\(accObjString, fCount, accMtlString, accFiles, cache) (pos, tile) -> 
                                 let (newObjString, newfCount, newMtlString, files, newCache) = tileToObjAndMtl pos tile scale fCount cache
                                 in (accObjString ++ "\n" ++ newObjString, newfCount, accMtlString ++ newMtlString, accFiles ++ files, newCache)
