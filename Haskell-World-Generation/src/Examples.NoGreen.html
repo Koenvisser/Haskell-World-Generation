@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | This world becomes impossible whenever a green tile is placed. This is a useful example </span><span>
-</span><span id="line-2"></span><span class="hs-comment">--   to benchmark very difficult to create a worlds.</span><span>
+</span><span id="line-2"></span><span class="hs-comment">--   to benchmark very difficult to create worlds and test backtracking.</span><span>
 </span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Examples.NoGreen</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-4"></span><span>
 </span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Def.html"><span class="hs-identifier">Def</span></a></span><span>
@@ -90,10 +90,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-char">'g'</span></span><span>
 </span><span id="line-40"></span><span class="hs-special">}</span><span>
 </span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span class="annot"><a href="Examples.NoGreen.html#allTiles"><span class="hs-identifier hs-type">allTiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-43"></span><span id="allTiles"><span class="annot"><span class="annottext">allTiles :: [Tile]
+</span><span id="line-42"></span><span class="annot"><span class="hs-comment">-- | The tiles that will be used in the wave function collapse algorithm to generate the world</span></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Examples.NoGreen.html#allTiles"><span class="hs-identifier hs-type">allTiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-44"></span><span id="allTiles"><span class="annot"><span class="annottext">allTiles :: [Tile]
 </span><a href="Examples.NoGreen.html#allTiles"><span class="hs-identifier hs-var hs-var">allTiles</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
 </span><a href="Examples.NoGreen.html#greenTile"><span class="hs-identifier hs-var">greenTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
 </span><a href="Examples.NoGreen.html#redTile"><span class="hs-identifier hs-var">redTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
 </span><a href="Examples.NoGreen.html#blueTile"><span class="hs-identifier hs-var">blueTile</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-44"></span></pre></body></html>
+</span><span id="line-45"></span></pre></body></html>
