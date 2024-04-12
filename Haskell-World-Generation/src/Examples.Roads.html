@@ -106,10 +106,10 @@ forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
 </span><span id="line-54"></span><span id="posTopRule"><span class="annot"><span class="annottext">posTopRule :: Rule
 </span><a href="Examples.Roads.html#posTopRule"><span class="hs-identifier hs-var hs-var">posTopRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Pos -&gt; Bool) -&gt; Rule
 </span><a href="Utils.html#canExistAt"><span class="hs-identifier hs-var">canExistAt</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679066904"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679066904"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679083158"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679083158"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679066904"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679083158"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">3</span></span><span class="hs-special">)</span><span>
@@ -214,31 +214,35 @@ forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span id="line-105"></span><span>
 </span><span id="line-106"></span><span class="annot"><a href="Examples.Roads.html#upConnectionRule"><span class="hs-identifier hs-type">upConnectionRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
 </span><span id="line-107"></span><span id="upConnectionRule"><span class="annot"><span class="annottext">upConnectionRule :: Rule
-</span><a href="Examples.Roads.html#upConnectionRule"><span class="hs-identifier hs-var hs-var">upConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Rule
+</span><a href="Examples.Roads.html#upConnectionRule"><span class="hs-identifier hs-var hs-var">upConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Bool -&gt; Rule
 </span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var">allMustBe</span></a></span><span> </span><span class="annot"><span class="annottext">[Tile]
 </span><a href="Examples.Roads.html#downConnection"><span class="hs-identifier hs-var">downConnection</span></a></span><span> </span><span class="annot"><span class="annottext">Shape
-</span><a href="Utils.html#upNeighbour"><span class="hs-identifier hs-var">upNeighbour</span></a></span><span>
+</span><a href="Utils.html#upNeighbour"><span class="hs-identifier hs-var">upNeighbour</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
 </span><span id="line-108"></span><span>
 </span><span id="line-109"></span><span class="annot"><a href="Examples.Roads.html#downConnectionRule"><span class="hs-identifier hs-type">downConnectionRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
 </span><span id="line-110"></span><span id="downConnectionRule"><span class="annot"><span class="annottext">downConnectionRule :: Rule
-</span><a href="Examples.Roads.html#downConnectionRule"><span class="hs-identifier hs-var hs-var">downConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Rule
+</span><a href="Examples.Roads.html#downConnectionRule"><span class="hs-identifier hs-var hs-var">downConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Bool -&gt; Rule
 </span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var">allMustBe</span></a></span><span> </span><span class="annot"><span class="annottext">[Tile]
 </span><a href="Examples.Roads.html#upConnection"><span class="hs-identifier hs-var">upConnection</span></a></span><span> </span><span class="annot"><span class="annottext">Shape
-</span><a href="Utils.html#downNeighbour"><span class="hs-identifier hs-var">downNeighbour</span></a></span><span>
+</span><a href="Utils.html#downNeighbour"><span class="hs-identifier hs-var">downNeighbour</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
 </span><span id="line-111"></span><span>
 </span><span id="line-112"></span><span class="annot"><a href="Examples.Roads.html#rightConnectionRule"><span class="hs-identifier hs-type">rightConnectionRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
 </span><span id="line-113"></span><span id="rightConnectionRule"><span class="annot"><span class="annottext">rightConnectionRule :: Rule
-</span><a href="Examples.Roads.html#rightConnectionRule"><span class="hs-identifier hs-var hs-var">rightConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Rule
+</span><a href="Examples.Roads.html#rightConnectionRule"><span class="hs-identifier hs-var hs-var">rightConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Bool -&gt; Rule
 </span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var">allMustBe</span></a></span><span> </span><span class="annot"><span class="annottext">[Tile]
 </span><a href="Examples.Roads.html#leftConnection"><span class="hs-identifier hs-var">leftConnection</span></a></span><span> </span><span class="annot"><span class="annottext">Shape
-</span><a href="Utils.html#rightNeighbour"><span class="hs-identifier hs-var">rightNeighbour</span></a></span><span>
+</span><a href="Utils.html#rightNeighbour"><span class="hs-identifier hs-var">rightNeighbour</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
 </span><span id="line-114"></span><span>
 </span><span id="line-115"></span><span class="annot"><a href="Examples.Roads.html#leftConnectionRule"><span class="hs-identifier hs-type">leftConnectionRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
 </span><span id="line-116"></span><span id="leftConnectionRule"><span class="annot"><span class="annottext">leftConnectionRule :: Rule
-</span><a href="Examples.Roads.html#leftConnectionRule"><span class="hs-identifier hs-var hs-var">leftConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Rule
+</span><a href="Examples.Roads.html#leftConnectionRule"><span class="hs-identifier hs-var hs-var">leftConnectionRule</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Bool -&gt; Rule
 </span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var">allMustBe</span></a></span><span> </span><span class="annot"><span class="annottext">[Tile]
 </span><a href="Examples.Roads.html#rightConnection"><span class="hs-identifier hs-var">rightConnection</span></a></span><span> </span><span class="annot"><span class="annottext">Shape
-</span><a href="Utils.html#leftNeighbour"><span class="hs-identifier hs-var">leftNeighbour</span></a></span><span> </span><span>
+</span><a href="Utils.html#leftNeighbour"><span class="hs-identifier hs-var">leftNeighbour</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span>
 </span><span id="line-117"></span><span>
 </span><span id="line-118"></span><span class="annot"><a href="Examples.Roads.html#noUpConnectionRule"><span class="hs-identifier hs-type">noUpConnectionRule</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Rule"><span class="hs-identifier hs-type">Rule</span></a></span><span>
 </span><span id="line-119"></span><span id="noUpConnectionRule"><span class="annot"><span class="annottext">noUpConnectionRule :: Rule
@@ -698,10 +702,10 @@ forall a. Default a =&gt; a
 </span><span id="line-218"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Pos -&gt; Bool) -&gt; Rule
 </span><a href="Utils.html#canExistAt"><span class="hs-identifier hs-var">canExistAt</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679066947"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679066947"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679083201"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679083201"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679066947"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679083201"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&lt;=</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
@@ -717,17 +721,18 @@ forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Map Side Material
 </span><a href="Examples.Roads.html#waterBlock"><span class="hs-identifier hs-var">waterBlock</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-225"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
-</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Bool -&gt; Rule
 </span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var">allMustBe</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
 </span><a href="Examples.Roads.html#waterTile"><span class="hs-identifier hs-var">waterTile</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Shape
-</span><a href="Utils.html#aboveNeighbour"><span class="hs-identifier hs-var">aboveNeighbour</span></a></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+</span><a href="Utils.html#aboveNeighbour"><span class="hs-identifier hs-var">aboveNeighbour</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
 forall a. CompareRule a =&gt; a -&gt; a -&gt; a
 </span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">(Pos -&gt; Bool) -&gt; Rule
 </span><a href="Utils.html#canExistAt"><span class="hs-identifier hs-var">canExistAt</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679066951"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679066951"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-identifier">_</span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679083205"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679083205"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-identifier">_</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679066951"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679083205"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Ord a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">&gt;=</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span>

@@ -1,0 +1,332 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Examples.Mountains</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Examples.Mountains.html#groundTiles"><span class="hs-identifier">groundTiles</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Examples.Mountains.html#airTiles"><span class="hs-identifier">airTiles</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Default</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">def</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Def.html"><span class="hs-identifier">Def</span></a></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Utils.html"><span class="hs-identifier">Utils</span></a></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">M</span></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-comment">-------------- Air tiles --------------</span><span>
+</span><span id="line-9"></span><span class="annot"><a href="Examples.Mountains.html#airMaterial"><span class="hs-identifier hs-type">airMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-10"></span><span id="airMaterial"><span class="annot"><span class="annottext">airMaterial :: Material
+</span><a href="Examples.Mountains.html#airMaterial"><span class="hs-identifier hs-var hs-var">airMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">0.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#transparency"><span class="hs-identifier hs-var">transparency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">}</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Examples.Mountains.html#airTile"><span class="hs-identifier hs-type">airTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-13"></span><span id="airTile"><span class="annot"><span class="annottext">airTile :: Tile
+</span><a href="Examples.Mountains.html#airTile"><span class="hs-identifier hs-var hs-var">airTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-14"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#airMaterial"><span class="hs-identifier hs-var">airMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#minRelativeHeight"><span class="hs-identifier hs-var">minRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.5</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.2</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a
+</span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Bool -&gt; Rule
+</span><a href="Utils.html#allMustBe"><span class="hs-identifier hs-var">allMustBe</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#cloudTile"><span class="hs-identifier hs-var">cloudTile</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Shape
+</span><a href="Utils.html#directNeighbours"><span class="hs-identifier hs-var">directNeighbours</span></a></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'a'</span></span><span>
+</span><span id="line-17"></span><span class="hs-special">}</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Examples.Mountains.html#cloudMaterial"><span class="hs-identifier hs-type">cloudMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-20"></span><span id="cloudMaterial"><span class="annot"><span class="annottext">cloudMaterial :: Material
+</span><a href="Examples.Mountains.html#cloudMaterial"><span class="hs-identifier hs-var hs-var">cloudMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#transparency"><span class="hs-identifier hs-var">transparency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">0.6</span></span><span class="hs-special">}</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="annot"><a href="Examples.Mountains.html#cloudTile"><span class="hs-identifier hs-type">cloudTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-23"></span><span id="cloudTile"><span class="annot"><span class="annottext">cloudTile :: Tile
+</span><a href="Examples.Mountains.html#cloudTile"><span class="hs-identifier hs-var hs-var">cloudTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#cloudMaterial"><span class="hs-identifier hs-var">cloudMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-26"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#minRelativeHeight"><span class="hs-identifier hs-var">minRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.85</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.005</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Rule
+</span><a href="Utils.html#nextToAny"><span class="hs-identifier hs-var">nextToAny</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#cloudTile"><span class="hs-identifier hs-var">cloudTile</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Shape
+</span><a href="Utils.html#directNeighbours"><span class="hs-identifier hs-var">directNeighbours</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-27"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'c'</span></span><span>
+</span><span id="line-28"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Examples.Mountains.html#shallowWaterMaterial"><span class="hs-identifier hs-type">shallowWaterMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-31"></span><span id="shallowWaterMaterial"><span class="annot"><span class="annottext">shallowWaterMaterial :: Material
+</span><a href="Examples.Mountains.html#shallowWaterMaterial"><span class="hs-identifier hs-var hs-var">shallowWaterMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">0.1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#transparency"><span class="hs-identifier hs-var">transparency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">0.5</span></span><span class="hs-special">}</span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Examples.Mountains.html#shallowWaterTile"><span class="hs-identifier hs-type">shallowWaterTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-34"></span><span id="shallowWaterTile"><span class="annot"><span class="annottext">shallowWaterTile :: Tile
+</span><a href="Examples.Mountains.html#shallowWaterTile"><span class="hs-identifier hs-var hs-var">shallowWaterTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-35"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-36"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#shallowWaterMaterial"><span class="hs-identifier hs-var">shallowWaterMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-37"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.5</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#minRelativeHeight"><span class="hs-identifier hs-var">minRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.3</span></span><span class="hs-special">,</span><span>
+</span><span id="line-38"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'B'</span></span><span>
+</span><span id="line-39"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Examples.Mountains.html#deepWaterMaterial"><span class="hs-identifier hs-type">deepWaterMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-42"></span><span id="deepWaterMaterial"><span class="annot"><span class="annottext">deepWaterMaterial :: Material
+</span><a href="Examples.Mountains.html#deepWaterMaterial"><span class="hs-identifier hs-var hs-var">deepWaterMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">0.1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.6</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Internal.Def.html#transparency"><span class="hs-identifier hs-var">transparency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-number">0.8</span></span><span class="hs-special">}</span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Examples.Mountains.html#deepWaterTile"><span class="hs-identifier hs-type">deepWaterTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-45"></span><span id="deepWaterTile"><span class="annot"><span class="annottext">deepWaterTile :: Tile
+</span><a href="Examples.Mountains.html#deepWaterTile"><span class="hs-identifier hs-var hs-var">deepWaterTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-47"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#deepWaterMaterial"><span class="hs-identifier hs-var">deepWaterMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-48"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.3</span></span><span class="hs-special">,</span><span>
+</span><span id="line-49"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'d'</span></span><span>
+</span><span id="line-50"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-51"></span><span>    </span><span>
+</span><span id="line-52"></span><span class="hs-comment">-------------- Ground tiles --------------</span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span class="annot"><a href="Examples.Mountains.html#snowMaterial"><span class="hs-identifier hs-type">snowMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-55"></span><span id="snowMaterial"><span class="annot"><span class="annottext">snowMaterial :: Material
+</span><a href="Examples.Mountains.html#snowMaterial"><span class="hs-identifier hs-var hs-var">snowMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">1.0</span></span><span class="hs-special">)</span><span class="hs-special">}</span><span>
+</span><span id="line-56"></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Examples.Mountains.html#snowTile"><span class="hs-identifier hs-type">snowTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-58"></span><span id="snowTile"><span class="annot"><span class="annottext">snowTile :: Tile
+</span><a href="Examples.Mountains.html#snowTile"><span class="hs-identifier hs-var hs-var">snowTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-59"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-60"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#snowMaterial"><span class="hs-identifier hs-var">snowMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-61"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#minRelativeHeight"><span class="hs-identifier hs-var">minRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.8</span></span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'s'</span></span><span>
+</span><span id="line-63"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="annot"><a href="Examples.Mountains.html#rockMaterial"><span class="hs-identifier hs-type">rockMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-66"></span><span id="rockMaterial"><span class="annot"><span class="annottext">rockMaterial :: Material
+</span><a href="Examples.Mountains.html#rockMaterial"><span class="hs-identifier hs-var hs-var">rockMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">0.5</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.5</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.5</span></span><span class="hs-special">)</span><span class="hs-special">}</span><span>
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Examples.Mountains.html#rockTile"><span class="hs-identifier hs-type">rockTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-69"></span><span id="rockTile"><span class="annot"><span class="annottext">rockTile :: Tile
+</span><a href="Examples.Mountains.html#rockTile"><span class="hs-identifier hs-var hs-var">rockTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-70"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-71"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#rockMaterial"><span class="hs-identifier hs-var">rockMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-72"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#minRelativeHeight"><span class="hs-identifier hs-var">minRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.2</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.6</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.4</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-73"></span><span>        </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.2</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.02</span></span><span> </span><span>
+</span><span id="line-74"></span><span>        </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Tile] -&gt; Shape -&gt; Rule
+</span><a href="Utils.html#nextToAny"><span class="hs-identifier hs-var">nextToAny</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#deepRockTile"><span class="hs-identifier hs-var">deepRockTile</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Shape
+</span><a href="Utils.html#directNeighbours"><span class="hs-identifier hs-var">directNeighbours</span></a></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-75"></span><span>        </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.8</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.05</span></span><span class="hs-special">,</span><span>
+</span><span id="line-76"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'r'</span></span><span>
+</span><span id="line-77"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="annot"><a href="Examples.Mountains.html#deepRockMaterial"><span class="hs-identifier hs-type">deepRockMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-80"></span><span id="deepRockMaterial"><span class="annot"><span class="annottext">deepRockMaterial :: Material
+</span><a href="Examples.Mountains.html#deepRockMaterial"><span class="hs-identifier hs-var hs-var">deepRockMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#diffuseColor"><span class="hs-identifier hs-var">diffuseColor</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-number">0.3</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.3</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-number">0.3</span></span><span class="hs-special">)</span><span class="hs-special">}</span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span class="annot"><a href="Examples.Mountains.html#deepRockTile"><span class="hs-identifier hs-type">deepRockTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-83"></span><span id="deepRockTile"><span class="annot"><span class="annottext">deepRockTile :: Tile
+</span><a href="Examples.Mountains.html#deepRockTile"><span class="hs-identifier hs-var hs-var">deepRockTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-84"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-85"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#deepRockMaterial"><span class="hs-identifier hs-var">deepRockMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-86"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.3</span></span><span class="hs-special">,</span><span>
+</span><span id="line-87"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'R'</span></span><span>
+</span><span id="line-88"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span class="annot"><a href="Examples.Mountains.html#dirtMaterial"><span class="hs-identifier hs-type">dirtMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-91"></span><span id="dirtMaterial"><span class="annot"><span class="annottext">dirtMaterial :: Material
+</span><a href="Examples.Mountains.html#dirtMaterial"><span class="hs-identifier hs-var hs-var">dirtMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#texture"><span class="hs-identifier hs-var">texture</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><span class="hs-string">&quot;textures/side-dirt.png&quot;</span></span><span class="hs-special">}</span><span>
+</span><span id="line-92"></span><span>
+</span><span id="line-93"></span><span class="annot"><a href="Examples.Mountains.html#grassBlock"><span class="hs-identifier hs-type">grassBlock</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">M.Map</span></span><span> </span><span class="annot"><a href="Internal.Def.html#Side"><span class="hs-identifier hs-type">Side</span></a></span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-94"></span><span id="grassBlock"><span class="annot"><span class="annottext">grassBlock :: Map Side Material
+</span><a href="Examples.Mountains.html#grassBlock"><span class="hs-identifier hs-var hs-var">grassBlock</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-95"></span><span>  </span><span class="annot"><span class="annottext">[(Side, Material)] -&gt; Map Side Material
+forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
+</span><span class="hs-identifier hs-var">M.fromList</span></span><span>
+</span><span id="line-96"></span><span>    </span><span class="hs-special">[</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Side
+</span><a href="Internal.Def.html#PosY"><span class="hs-identifier hs-var">PosY</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#texture"><span class="hs-identifier hs-var">texture</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><span class="hs-string">&quot;textures/top-grass.png&quot;</span></span><span class="hs-special">}</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-97"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Side
+</span><a href="Internal.Def.html#NegY"><span class="hs-identifier hs-var">NegY</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#dirtMaterial"><span class="hs-identifier hs-var">dirtMaterial</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-98"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Side
+</span><a href="Internal.Def.html#NegX"><span class="hs-identifier hs-var">NegX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#dirtMaterial"><span class="hs-identifier hs-var">dirtMaterial</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-99"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Side
+</span><a href="Internal.Def.html#PosX"><span class="hs-identifier hs-var">PosX</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#dirtMaterial"><span class="hs-identifier hs-var">dirtMaterial</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-100"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Side
+</span><a href="Internal.Def.html#NegZ"><span class="hs-identifier hs-var">NegZ</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#dirtMaterial"><span class="hs-identifier hs-var">dirtMaterial</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-101"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Side
+</span><a href="Internal.Def.html#PosZ"><span class="hs-identifier hs-var">PosZ</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#dirtMaterial"><span class="hs-identifier hs-var">dirtMaterial</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-102"></span><span>    </span><span class="hs-special">]</span><span>
+</span><span id="line-103"></span><span>
+</span><span id="line-104"></span><span class="annot"><a href="Examples.Mountains.html#grassTile"><span class="hs-identifier hs-type">grassTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-105"></span><span id="grassTile"><span class="annot"><span class="annottext">grassTile :: Tile
+</span><a href="Examples.Mountains.html#grassTile"><span class="hs-identifier hs-var hs-var">grassTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-106"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-107"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Map Side Material
+</span><a href="Examples.Mountains.html#grassBlock"><span class="hs-identifier hs-var">grassBlock</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-108"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#minRelativeHeight"><span class="hs-identifier hs-var">minRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.4</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.7</span></span><span class="hs-special">,</span><span>
+</span><span id="line-109"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'g'</span></span><span>
+</span><span id="line-110"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-111"></span><span>
+</span><span id="line-112"></span><span class="annot"><a href="Examples.Mountains.html#groundMaterial"><span class="hs-identifier hs-type">groundMaterial</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Material"><span class="hs-identifier hs-type">Material</span></a></span><span>
+</span><span id="line-113"></span><span id="groundMaterial"><span class="annot"><span class="annottext">groundMaterial :: Material
+</span><a href="Examples.Mountains.html#groundMaterial"><span class="hs-identifier hs-var hs-var">groundMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material
+forall a. Default a =&gt; a
+</span><span class="hs-identifier hs-var">def</span></span><span> </span><span class="hs-special">{</span><span class="annot"><a href="Internal.Def.html#texture"><span class="hs-identifier hs-var">texture</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="annot"><span class="hs-string">&quot;textures/side-dirt.png&quot;</span></span><span class="hs-special">}</span><span>
+</span><span id="line-114"></span><span>
+</span><span id="line-115"></span><span class="annot"><a href="Examples.Mountains.html#groundTile"><span class="hs-identifier hs-type">groundTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-116"></span><span id="groundTile"><span class="annot"><span class="annottext">groundTile :: Tile
+</span><a href="Examples.Mountains.html#groundTile"><span class="hs-identifier hs-var hs-var">groundTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-117"></span><span>  </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
+</span><span id="line-118"></span><span>    </span><span class="hs-special">{</span><span> </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
+</span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
+</span><a href="Examples.Mountains.html#groundMaterial"><span class="hs-identifier hs-var">groundMaterial</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-119"></span><span>      </span><span class="annot"><span class="annottext">rules :: Rule
+</span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#minRelativeHeight"><span class="hs-identifier hs-var">minRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.3</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#maxRelativeHeight"><span class="hs-identifier hs-var">maxRelativeHeight</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.5</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
+forall a. CompareRule a =&gt; a -&gt; a -&gt; a
+</span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
+</span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><span class="hs-number">0.05</span></span><span class="hs-special">,</span><span>
+</span><span id="line-120"></span><span>      </span><span class="annot"><span class="annottext">charRep :: Char
+</span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
+</span><span class="hs-char">'d'</span></span><span>
+</span><span id="line-121"></span><span>    </span><span class="hs-special">}</span><span>
+</span><span id="line-122"></span><span>
+</span><span id="line-123"></span><span class="annot"><a href="Examples.Mountains.html#groundTiles"><span class="hs-identifier hs-type">groundTiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-124"></span><span id="groundTiles"><span class="annot"><span class="annottext">groundTiles :: [Tile]
+</span><a href="Examples.Mountains.html#groundTiles"><span class="hs-identifier hs-var hs-var">groundTiles</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#groundTile"><span class="hs-identifier hs-var">groundTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#grassTile"><span class="hs-identifier hs-var">grassTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#rockTile"><span class="hs-identifier hs-var">rockTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#snowTile"><span class="hs-identifier hs-var">snowTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#deepRockTile"><span class="hs-identifier hs-var">deepRockTile</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-125"></span><span>
+</span><span id="line-126"></span><span class="annot"><a href="Examples.Mountains.html#airTiles"><span class="hs-identifier hs-type">airTiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-127"></span><span id="airTiles"><span class="annot"><span class="annottext">airTiles :: [Tile]
+</span><a href="Examples.Mountains.html#airTiles"><span class="hs-identifier hs-var hs-var">airTiles</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#airTile"><span class="hs-identifier hs-var">airTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#cloudTile"><span class="hs-identifier hs-var">cloudTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#shallowWaterTile"><span class="hs-identifier hs-var">shallowWaterTile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Tile
+</span><a href="Examples.Mountains.html#deepWaterTile"><span class="hs-identifier hs-var">deepWaterTile</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-128"></span></pre></body></html>
