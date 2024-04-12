@@ -48,10 +48,13 @@ resultToFloat (ChancePlace f) = f
 class CompareRule a where
     -- | The OR operator for rules
     (<||>) :: a -> a -> a
+    infixr 2 <||>
     -- | The AND operator for rules
     (<&&>) :: a -> a -> a
+    infixr 3 <&&>
     -- | The NOT operator for rules
     (<!>) :: a -> a
+    
 
 -- | The CompareRule instance for RuleResult follows regular boolean logic. The only 
 --   notable instances are the `ChancePlace` instances. For `<||>` its calculated as the 
