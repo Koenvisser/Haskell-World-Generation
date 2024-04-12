@@ -18,6 +18,9 @@ saveHeightMapToImage :: HeightMap
                      -> FilePath  -- ^ The 'FilePath' to save the png file to
                      -> IO ()
 saveHeightMapToImage hm w h path = do
+  let directory = takeDirectory path
+  putStrLn $ "Creating directory " ++ directory ++ " if it does not exist"
+  createDirectoryIfMissing True directory
   putStrLn $ "Writing height map image to " ++ path
   writePng path $ heightMapToImage hm w h
 
