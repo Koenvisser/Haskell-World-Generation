@@ -27,7 +27,6 @@ module WorldGen.Def (
 ) where
 
 import qualified Data.Map as M
-import Data.List (union)
 
 import WorldGen.Internal.Def (RuleMonad(..), Pos, Rule(..), RuleResult(..), Tile(..), Material(..), Side(..), TileMap(..), Size)
 
