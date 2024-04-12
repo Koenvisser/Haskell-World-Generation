@@ -78,8 +78,8 @@ noiseGenerator config perms (x, y) | octaves config == 0 = 0
         (n, maxValue) = noiseGenerator' config perms 1 (x, y)
 
 -- | Helper function of the `noiseGenerator` function.
--- | This function generates the noise for the Perlin noise generator, given the Perlin configuration, the permutations, an amplitude, and a position.
--- | The function returns a tuple of the noise value and the maximum value of the noise.
+--   This function generates the noise for the Perlin noise generator, given the Perlin configuration, the permutations, an amplitude, and a position.
+--   The function returns a tuple of the noise value and the maximum value of the noise.
 noiseGenerator' :: PerlinConfig -> Permutations -> Float -> (Float, Float) -> (Float, Float)
 noiseGenerator' config perms amp (x, y) | octaves config == 0 = (0, 0)
                                         | otherwise = let
@@ -110,7 +110,7 @@ noise2D config perms (x, y) = let
     in lerp u (lerp v bottomLeftDot topLeftDot) (lerp v bottomRightDot topRightDot)
 
 -- | Generate a heightmap using Perlin noise with a random seed.
--- | The `seed` value in the `PerlinConfig` is replaced with a random seed.
+--   The `seed` value in the `PerlinConfig` is replaced with a random seed.
 perlinNoiseRandom :: PerlinConfig -> IO HeightMap
 perlinNoiseRandom config = do
     newSeed <- randomIO

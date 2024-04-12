@@ -53,8 +53,8 @@ waveFunc tiles pos size = do
 -- | Run the wave function collapse algorithm on a heightmap. The algorithm will generate a tilemap based on the heightmap
 --   and the rules of the tiles. The algorithm will return a tilemap that satisfies the rules of the tiles.
 waveFuncCollapeHeightMap :: HeightMap -- ^ The heightmap that the tilemap should be generated from
-                         -> [Tile] -- ^ The tiles that will be placed in the tilemap above the heightmap
-                         -> [Tile] -- ^ The tiles that will be placed in the tilemap below the heightmap
+                         -> [Tile] -- ^ The tiles that will be placed in the tilemap __above__ the heightmap
+                         -> [Tile] -- ^ The tiles that will be placed in the tilemap __below__ the heightmap
                          -> Size  -- ^ The size of the tilemap
                          -> IO (Either Error TileMap) -- ^ Returns an error if no possible tilemap can be generated, otherwise returns the tilemap
 waveFuncCollapeHeightMap heightMap airTiles groundTiles size@((minX, minY, minZ), (maxX, maxY, maxZ)) = do
