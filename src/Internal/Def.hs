@@ -129,10 +129,10 @@ instance Default Material where
 instance Show Tile where
   show tile = [charRep tile]
 
--- | The Eq instance of a tile is based on its texture location, since no 
---   two tiles should have the same texture
+-- | The Eq instance of a tile is based on its character representation and material, since no 
+--   two tiles should have the same character representation and material.
 instance Eq Tile where
-  (==) tile1 tile2 = charRep tile1 == charRep tile2
+  (==) tile1 tile2 = charRep tile1 == charRep tile2 && materials tile1 == materials tile2
 
 -- | A size is a 3D coordinate representing the minimum and maximum coordinates of the world
 type Size = (Pos, Pos)
