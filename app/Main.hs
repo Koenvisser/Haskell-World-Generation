@@ -9,12 +9,13 @@ import WorldGen.Output (saveWorldToObjAndMtl, saveHeightMapToImage)
 import Data.Default (def)
 
 main :: IO ()
-main = generateMountains
+main = generateRoads
 
 -- | Generate an example world with roads
 generateRoads :: IO ()
 generateRoads = do
-  result <- waveFuncCollapse Roads.allTiles ((0, 0, 0), (14, 3, 14))
+  tiles <- Roads.allTiles
+  result <- waveFuncCollapse tiles ((0, 0, 0), (5, 3, 5))
   case result of
     Left err -> putStrLn err
     Right tileMap -> do 
@@ -26,7 +27,9 @@ generateMountains :: IO ()
 generateMountains = do
   heightMap <- perlinNoiseRandom def
   saveHeightMapToImage heightMap 1000 1000 "output/image.png"
-  result <- waveFuncCollapeHeightMap heightMap Mountains.airTiles Mountains.groundTiles ((0, 0, 0), (19, 9, 19))
+  air <- Mountains.airTiles
+  ground <- Mountains.groundTiles
+  result <- waveFuncCollapeHeightMap heightMap air ground ((0, 0, 0), (19, 9, 19))
   case result of
     Left err -> putStrLn err
     Right tileMap -> do 

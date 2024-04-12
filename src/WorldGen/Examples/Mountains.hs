@@ -6,6 +6,7 @@ module WorldGen.Examples.Mountains (groundTiles, airTiles) where
 
 import WorldGen.Def
 import WorldGen.Utils
+import Paths_Haskell_World_Generation (getDataFileName)
 
 import Data.Default (def)
 import qualified Data.Map as M
@@ -101,42 +102,53 @@ deepRockTile = Tile {
 }
 
 -- | A material that represents dirt, a simple dirt texture
-dirtMaterial :: Material
-dirtMaterial = def {texture = Just "textures/side-dirt.png"}
+dirtMaterial :: IO Material
+dirtMaterial = do 
+  tex <- getDataFileName "textures/side-dirt.png"
+  return $ def {texture = Just tex}
 
 -- | A material that represents grass, with a grass texture on top and dirt on the sides
-grassBlock :: M.Map Side Material
-grassBlock = M.fromList [ 
-  (PosY, (def {texture = Just "textures/top-grass.png"})),
-  (NegY, dirtMaterial),
-  (NegX, dirtMaterial),
-  (PosX, dirtMaterial),
-  (NegZ, dirtMaterial),
-  (PosZ, dirtMaterial)
-  ]
+grassBlock :: IO (M.Map Side Material)
+grassBlock = do 
+  tex <- getDataFileName "textures/top-grass.png"
+  dirt <- dirtMaterial
+  return $ M.fromList [ 
+    (PosY, (def {texture = Just tex})),
+    (NegY, dirt),
+    (NegX, dirt),
+    (PosX, dirt),
+    (NegZ, dirt),
+    (PosZ, dirt)
+    ]
 
 -- | A tile that represents grass, must be placed between 0.4 and 0.7 height of the world
-grassTile :: Tile
-grassTile = Tile { 
-  materials = grassBlock,
-  rules = minRelativeHeight 0.4 <&&> maxRelativeHeight 0.7,
-  charRep = 'g'
-}
-
+grassTile :: IO Tile
+grassTile = do 
+  mat <- grassBlock
+  return $ Tile { 
+    materials = mat,
+    rules = minRelativeHeight 0.4 <&&> maxRelativeHeight 0.7,
+    charRep = 'g'
+  }
 
 -- | A tile that represents the ground, must be placed between 0.3 and 0.5 height of the world.
 --   Uses the `dirtMaterial` for all sides.
-groundTile :: Tile
-groundTile = Tile { 
-  materials = createMaterialMapForAllSides dirtMaterial,
-  rules = minRelativeHeight 0.3 <&&> maxRelativeHeight 0.5 <&&> weightedRule 0.05,
-  charRep = 'd'
-}
+groundTile :: IO Tile
+groundTile = do 
+  mat <- dirtMaterial
+  return $ Tile { 
+    materials = createMaterialMapForAllSides mat,
+    rules = minRelativeHeight 0.3 <&&> maxRelativeHeight 0.5 <&&> weightedRule 0.05,
+    charRep = 'd'
+  }
 
 -- | The tiles that will be placed __below__ the `HeightMap`
-groundTiles :: [Tile]
-groundTiles = [groundTile, grassTile, rockTile, snowTile, deepRockTile]
+groundTiles :: IO [Tile]
+groundTiles = do 
+  ground <- groundTile
+  grass <- grassTile  
+  return [ground, grass, rockTile, snowTile, deepRockTile]
 
 -- | The tiles that will be placed __above__ the `HeightMap`
-airTiles :: [Tile]
-airTiles = [airTile, cloudTile, shallowWaterTile, deepWaterTile]
+airTiles :: IO [Tile]
+airTiles = return [airTile, cloudTile, shallowWaterTile, deepWaterTile]

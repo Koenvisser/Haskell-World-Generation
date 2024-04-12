@@ -45,6 +45,8 @@ build-type:         Simple
 extra-doc-files:    CHANGELOG.md
                   , README.md
 
+data-files:        textures/*.png
+
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
 -- extra-source-files:
 
@@ -68,7 +70,7 @@ library
                     , WorldGen.Internal.Def
 
     -- Modules included in this library but not exported.
-    other-modules:  
+    other-modules: Paths_Haskell_World_Generation
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -76,6 +78,7 @@ library
                       , InstanceSigs
                       , DeriveGeneric
                       , DeriveAnyClass
+                      , FlexibleInstances
 
     -- Other library packages from which modules are imported.
     build-depends:    base >=4.17.2.1

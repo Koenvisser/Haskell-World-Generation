@@ -13,7 +13,9 @@ main :: IO ()
 main = defaultMain [
   bgroup "PerlinNoseCollapse" [bench "PerlinNoseCollapse" $ nfIO $ do 
     heightMap <- perlinNoiseRandom def
-    waveFuncCollapeHeightMap heightMap airTiles groundTiles ((0, 0, 0), (9, 9, 9))],
+    air <- airTiles
+    ground <- groundTiles
+    waveFuncCollapeHeightMap heightMap air ground ((0, 0, 0), (9, 9, 9))],
   bgroup "waveFuncCollapse" [bench "waveFuncCollapse" $ nfIO $ waveFuncCollapse allTiles ((0, 0, 0), (9, 9, 9))],
   bgroup "perlinNoiseRandom" [bench "perlinNoiseRandom" $ nfIO $ do 
     x <- randomIO :: IO Float
