@@ -11,159 +11,167 @@
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Random.Shuffle</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">shuffle'</span></span><span class="hs-special">)</span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Bits</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(.&amp;.)</span></span><span class="hs-special">)</span><span>
 </span><span id="line-13"></span><span>
-</span><span id="line-14"></span><span class="hs-comment">-- | The configuration for the Perlin noise generator.</span><span>
-</span><span id="line-15"></span><span class="hs-comment">--   The `seed` is the seed used to generate the permutations.</span><span>
-</span><span id="line-16"></span><span class="hs-comment">--   The `seed` can also be generated randomly using the `perlinNoiseRandom` function.</span><span>
-</span><span id="line-17"></span><span class="hs-keyword">data</span><span> </span><span id="PerlinConfig"><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-var">PerlinConfig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="PerlinConfig"><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-var">PerlinConfig</span></a></span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-18"></span><span>    </span><span id="seed"><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
-</span><a href="Gen.PerlinNoise.html#seed"><span class="hs-identifier hs-var hs-var">seed</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>
-</span><span id="line-19"></span><span>    </span><span id="permSize"><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
-</span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var hs-var">permSize</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>
-</span><span id="line-20"></span><span>    </span><span id="octaves"><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
-</span><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var hs-var">octaves</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>
-</span><span id="line-21"></span><span>    </span><span id="scale"><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
-</span><a href="Gen.PerlinNoise.html#scale"><span class="hs-identifier hs-var hs-var">scale</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span>
-</span><span id="line-22"></span><span>    </span><span id="persistence"><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
-</span><a href="Gen.PerlinNoise.html#persistence"><span class="hs-identifier hs-var hs-var">persistence</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span>
-</span><span id="line-23"></span><span>    </span><span id="frequency"><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
-</span><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var hs-var">frequency</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-24"></span><span class="hs-special">}</span><span>
-</span><span id="line-25"></span><span>
-</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-27"></span><span>    </span><span id="local-6989586621679082438"><span class="annot"><span class="annottext">def :: PerlinConfig
-</span><a href="#local-6989586621679082438"><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-28"></span><span>        </span><span class="annot"><span class="annottext">seed :: Int
+</span><span id="line-14"></span><span class="annot"><span class="hs-comment">-- | The configuration for the Perlin noise generator.</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">data</span><span> </span><span id="PerlinConfig"><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-var">PerlinConfig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="PerlinConfig"><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-var">PerlinConfig</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-16"></span><span>  </span><span id="seed"><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
+</span><a href="Gen.PerlinNoise.html#seed"><span class="hs-identifier hs-var hs-var">seed</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>          </span><span class="annot"><span class="hs-comment">-- ^ The seed used to generate the permutations. Can also be generated randomly using the `perlinNoiseRandom` function.</span></span><span>
+</span><span id="line-17"></span><span>  </span><span id="permSize"><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
+</span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var hs-var">permSize</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>      </span><span class="annot"><span class="hs-comment">-- ^ The size of the permutation table. Must be greater than 0.</span></span><span>
+</span><span id="line-18"></span><span>  </span><span id="octaves"><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
+</span><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var hs-var">octaves</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">,</span><span>       </span><span class="hs-comment">-- ^ The number of octaves used to generate the noise. Must be greater than or equal to 0. </span><span>
+</span><span id="line-19"></span><span>                        </span><span class="hs-comment">--   The higher the number of octaves, the more detailed the noise, but the slower the generation.</span><span>
+</span><span id="line-20"></span><span>  </span><span id="scale"><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
+</span><a href="Gen.PerlinNoise.html#scale"><span class="hs-identifier hs-var hs-var">scale</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span>       </span><span class="annot"><span class="hs-comment">-- ^ The scale of the noise. The higher the scale, the more zoomed in the noise.</span></span><span>
+</span><span id="line-21"></span><span>  </span><span id="persistence"><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
+</span><a href="Gen.PerlinNoise.html#persistence"><span class="hs-identifier hs-var hs-var">persistence</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-comment">-- ^ The persistence of the noise. The persistence is the factor that determines how much each octave contributes to the overall shape of the noise.</span></span><span>
+</span><span id="line-22"></span><span>  </span><span id="frequency"><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
+</span><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var hs-var">frequency</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>    </span><span class="annot"><span class="hs-comment">-- ^ The frequency of the noise. The frequency is the factor that determines how much the noise is repeated.</span></span><span>
+</span><span id="line-23"></span><span class="hs-special">}</span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Default</span></span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-26"></span><span>  </span><span id="local-6989586621679082483"><span class="annot"><span class="annottext">def :: PerlinConfig
+</span><a href="#local-6989586621679082483"><span class="hs-identifier hs-var hs-var hs-var hs-var">def</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-27"></span><span>    </span><span class="annot"><span class="annottext">seed :: Int
 </span><a href="Gen.PerlinNoise.html#seed"><span class="hs-identifier hs-var">seed</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span>
-</span><span id="line-29"></span><span>        </span><span class="annot"><span class="annottext">permSize :: Int
+</span><span id="line-28"></span><span>    </span><span class="annot"><span class="annottext">permSize :: Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">256</span></span><span class="hs-special">,</span><span>
-</span><span id="line-30"></span><span>        </span><span class="annot"><span class="annottext">octaves :: Int
+</span><span id="line-29"></span><span>    </span><span class="annot"><span class="annottext">octaves :: Int
 </span><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">8</span></span><span class="hs-special">,</span><span>
-</span><span id="line-31"></span><span>        </span><span class="annot"><span class="annottext">scale :: Float
+</span><span id="line-30"></span><span>    </span><span class="annot"><span class="annottext">scale :: Float
 </span><a href="Gen.PerlinNoise.html#scale"><span class="hs-identifier hs-var">scale</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.1</span></span><span class="hs-special">,</span><span>
-</span><span id="line-32"></span><span>        </span><span class="annot"><span class="annottext">persistence :: Float
+</span><span id="line-31"></span><span>    </span><span class="annot"><span class="annottext">persistence :: Float
 </span><a href="Gen.PerlinNoise.html#persistence"><span class="hs-identifier hs-var">persistence</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.5</span></span><span class="hs-special">,</span><span>
-</span><span id="line-33"></span><span>        </span><span class="annot"><span class="annottext">frequency :: Float
+</span><span id="line-32"></span><span>    </span><span class="annot"><span class="annottext">frequency :: Float
 </span><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.01</span></span><span>
-</span><span id="line-34"></span><span>    </span><span class="hs-special">}</span><span>
-</span><span id="line-35"></span><span>
-</span><span id="line-36"></span><span class="hs-comment">-- | The `Permutations` type is a map that maps an integer to another integer.</span><span>
-</span><span id="line-37"></span><span class="hs-comment">--   The `Permutations` type is used to generate the noise for the Perlin noise generator.</span><span>
-</span><span id="line-38"></span><span class="hs-keyword">type</span><span> </span><span id="Permutations"><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-var">Permutations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">M.Map</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
-</span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span class="annot"><span class="hs-comment">-- | Dot product of two vectors.</span></span><span>
-</span><span id="line-41"></span><span class="annot"><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-type">dotProduct</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-42"></span><span id="dotProduct"><span class="annot"><span class="annottext">dotProduct :: (Float, Float) -&gt; (Float, Float) -&gt; Float
-</span><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-var hs-var">dotProduct</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082441"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082441"><span class="hs-identifier hs-var">x1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082442"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082442"><span class="hs-identifier hs-var">y1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082443"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082443"><span class="hs-identifier hs-var">x2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082444"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082444"><span class="hs-identifier hs-var">y2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082441"><span class="hs-identifier hs-var">x1</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><span id="line-33"></span><span>  </span><span class="hs-special">}</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- | The `Permutations` type is a map that maps an integer to another integer.</span><span>
+</span><span id="line-36"></span><span class="hs-comment">--   The `Permutations` type is used to generate the noise for the Perlin noise generator.</span><span>
+</span><span id="line-37"></span><span class="hs-keyword">type</span><span> </span><span id="Permutations"><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-var">Permutations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">M.Map</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span>
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="annot"><span class="hs-comment">-- | Dot product of two vectors.</span></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-type">dotProduct</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-41"></span><span id="dotProduct"><span class="annot"><span class="annottext">dotProduct :: (Float, Float) -&gt; (Float, Float) -&gt; Float
+</span><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-var hs-var">dotProduct</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082486"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082486"><span class="hs-identifier hs-var">x1</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082487"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082487"><span class="hs-identifier hs-var">y1</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082488"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082488"><span class="hs-identifier hs-var">x2</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082489"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">y2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082486"><span class="hs-identifier hs-var">x1</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082443"><span class="hs-identifier hs-var">x2</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082488"><span class="hs-identifier hs-var">x2</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082442"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082487"><span class="hs-identifier hs-var">y1</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082444"><span class="hs-identifier hs-var">y2</span></a></span><span>
-</span><span id="line-43"></span><span>
-</span><span id="line-44"></span><span class="annot"><span class="hs-comment">-- | Get the constant vector for a permutation value.</span></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-type">constantVector</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span>
-</span><span id="line-46"></span><span id="constantVector"><span class="annot"><span class="annottext">constantVector :: Int -&gt; (Float, Float)
-</span><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-var hs-var">constantVector</span></a></span></span><span> </span><span id="local-6989586621679082448"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082448"><span class="hs-identifier hs-var">permVal</span></a></span></span><span> </span><span>
-</span><span id="line-47"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082449"><span class="hs-identifier hs-var">perm</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">y2</span></a></span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span class="annot"><span class="hs-comment">-- | Get the constant vector for a permutation value.</span></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-type">constantVector</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span>
+</span><span id="line-45"></span><span id="constantVector"><span class="annot"><span class="annottext">constantVector :: Int -&gt; (Float, Float)
+</span><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-var hs-var">constantVector</span></a></span></span><span> </span><span id="local-6989586621679082493"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082493"><span class="hs-identifier hs-var">permVal</span></a></span></span><span> </span><span>
+</span><span id="line-46"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082494"><span class="hs-identifier hs-var">perm</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-48"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082449"><span class="hs-identifier hs-var">perm</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><span id="line-47"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082494"><span class="hs-identifier hs-var">perm</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span>  </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-49"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082449"><span class="hs-identifier hs-var">perm</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><span id="line-48"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082494"><span class="hs-identifier hs-var">perm</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">2</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-50"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-49"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="hs-glyph">-</span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-51"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679082449"><span class="annot"><span class="annottext">perm :: Int
-</span><a href="#local-6989586621679082449"><span class="hs-identifier hs-var hs-var">perm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082448"><span class="hs-identifier hs-var">permVal</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><span id="line-50"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679082494"><span class="annot"><span class="annottext">perm :: Int
+</span><a href="#local-6989586621679082494"><span class="hs-identifier hs-var hs-var">perm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082493"><span class="hs-identifier hs-var">permVal</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">3</span></span><span>
-</span><span id="line-52"></span><span>
-</span><span id="line-53"></span><span class="annot"><span class="hs-comment">-- | Fade function for Perlin noise, this is used to smoothe out the curve of the noise generated.</span></span><span>
-</span><span id="line-54"></span><span class="annot"><a href="Gen.PerlinNoise.html#fade"><span class="hs-identifier hs-type">fade</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-55"></span><span id="fade"><span class="annot"><span class="annottext">fade :: Float -&gt; Float
-</span><a href="Gen.PerlinNoise.html#fade"><span class="hs-identifier hs-var hs-var">fade</span></a></span></span><span> </span><span id="local-6989586621679082454"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082454"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><span id="line-51"></span><span>
+</span><span id="line-52"></span><span class="annot"><span class="hs-comment">-- | Fade function for Perlin noise, this is used to smoothe out the curve of the noise generated.</span></span><span>
+</span><span id="line-53"></span><span class="annot"><a href="Gen.PerlinNoise.html#fade"><span class="hs-identifier hs-type">fade</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-54"></span><span id="fade"><span class="annot"><span class="annottext">fade :: Float -&gt; Float
+</span><a href="Gen.PerlinNoise.html#fade"><span class="hs-identifier hs-var hs-var">fade</span></a></span></span><span> </span><span id="local-6989586621679082499"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">6</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082454"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">15</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082454"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">10</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082454"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082454"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082454"><span class="hs-identifier hs-var">t</span></a></span><span>
-</span><span id="line-56"></span><span>
-</span><span id="line-57"></span><span class="annot"><span class="hs-comment">-- | Linear interpolation between three values.</span></span><span>
-</span><span id="line-58"></span><span class="annot"><a href="Gen.PerlinNoise.html#lerp"><span class="hs-identifier hs-type">lerp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-59"></span><span id="lerp"><span class="annot"><span class="annottext">lerp :: Float -&gt; Float -&gt; Float -&gt; Float
-</span><a href="Gen.PerlinNoise.html#lerp"><span class="hs-identifier hs-var hs-var">lerp</span></a></span></span><span> </span><span id="local-6989586621679082456"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082456"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679082457"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082457"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679082458"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082458"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082457"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span class="annot"><span class="hs-comment">-- | Linear interpolation between three values.</span></span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Gen.PerlinNoise.html#lerp"><span class="hs-identifier hs-type">lerp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-58"></span><span id="lerp"><span class="annot"><span class="annottext">lerp :: Float -&gt; Float -&gt; Float -&gt; Float
+</span><a href="Gen.PerlinNoise.html#lerp"><span class="hs-identifier hs-var hs-var">lerp</span></a></span></span><span> </span><span id="local-6989586621679082501"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082501"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679082502"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082502"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679082503"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082503"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082502"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082456"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082501"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082458"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082503"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082457"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-60"></span><span>
-</span><span id="line-61"></span><span class="annot"><span class="hs-comment">-- | Shuffle the list of integers to generate a random permutation.</span></span><span>
-</span><span id="line-62"></span><span id="local-6989586621679082351"><span class="annot"><a href="Gen.PerlinNoise.html#permutationGenerator"><span class="hs-identifier hs-type">permutationGenerator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RandomGen</span></span><span> </span><span class="annot"><a href="#local-6989586621679082351"><span class="hs-identifier hs-type">g</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679082351"><span class="hs-identifier hs-type">g</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-type">Permutations</span></a></span></span><span>
-</span><span id="line-63"></span><span id="permutationGenerator"><span class="annot"><span class="annottext">permutationGenerator :: forall g. RandomGen g =&gt; Int -&gt; g -&gt; Permutations
-</span><a href="Gen.PerlinNoise.html#permutationGenerator"><span class="hs-identifier hs-var hs-var">permutationGenerator</span></a></span></span><span> </span><span id="local-6989586621679082472"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082472"><span class="hs-identifier hs-var">size</span></a></span></span><span> </span><span id="local-6989586621679082473"><span class="annot"><span class="annottext">g
-</span><a href="#local-6989586621679082473"><span class="hs-identifier hs-var">rng</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Int, Int)] -&gt; Permutations
+</span><a href="#local-6989586621679082502"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span>
+</span><span id="line-60"></span><span class="annot"><span class="hs-comment">-- | Shuffle the list of integers to generate a random permutation.</span></span><span>
+</span><span id="line-61"></span><span id="local-6989586621679082384"><span class="annot"><a href="Gen.PerlinNoise.html#permutationGenerator"><span class="hs-identifier hs-type">permutationGenerator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RandomGen</span></span><span> </span><span class="annot"><a href="#local-6989586621679082384"><span class="hs-identifier hs-type">g</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679082384"><span class="hs-identifier hs-type">g</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-type">Permutations</span></a></span></span><span>
+</span><span id="line-62"></span><span id="permutationGenerator"><span class="annot"><span class="annottext">permutationGenerator :: forall g. RandomGen g =&gt; Int -&gt; g -&gt; Permutations
+</span><a href="Gen.PerlinNoise.html#permutationGenerator"><span class="hs-identifier hs-var hs-var">permutationGenerator</span></a></span></span><span> </span><span id="local-6989586621679082520"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082520"><span class="hs-identifier hs-var">size</span></a></span></span><span> </span><span id="local-6989586621679082521"><span class="annot"><span class="annottext">g
+</span><a href="#local-6989586621679082521"><span class="hs-identifier hs-var">rng</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082520"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">&lt;=</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Permutations
+forall a. HasCallStack =&gt; [Char] -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;Permutation size must be greater than 0&quot;</span></span><span>
+</span><span id="line-63"></span><span>                              </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(Int, Int)] -&gt; Permutations
 forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
 </span><span class="hs-identifier hs-var">M.fromList</span></span><span> </span><span class="annot"><span class="annottext">([(Int, Int)] -&gt; Permutations) -&gt; [(Int, Int)] -&gt; Permutations
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -171,7 +179,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 </span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">..</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082472"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082520"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">([Int] -&gt; [(Int, Int)]) -&gt; [Int] -&gt; [(Int, Int)]
@@ -180,67 +188,75 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall gen a. RandomGen gen =&gt; [a] -&gt; Int -&gt; gen -&gt; [a]
 </span><span class="hs-identifier hs-var">shuffle'</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">..</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082472"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082520"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082472"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">g
-</span><a href="#local-6989586621679082473"><span class="hs-identifier hs-var">rng</span></a></span><span>
+</span><a href="#local-6989586621679082520"><span class="hs-identifier hs-var">size</span></a></span><span> </span><span class="annot"><span class="annottext">g
+</span><a href="#local-6989586621679082521"><span class="hs-identifier hs-var">rng</span></a></span><span>
 </span><span id="line-64"></span><span>        </span><span>
 </span><span id="line-65"></span><span class="annot"><span class="hs-comment">-- | Generate a heightmap using Perlin noise.</span></span><span>
 </span><span id="line-66"></span><span class="annot"><a href="Gen.PerlinNoise.html#perlinNoise"><span class="hs-identifier hs-type">perlinNoise</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#HeightMap"><span class="hs-identifier hs-type">HeightMap</span></a></span><span>
 </span><span id="line-67"></span><span id="perlinNoise"><span class="annot"><span class="annottext">perlinNoise :: PerlinConfig -&gt; (Float, Float) -&gt; Float
-</span><a href="Gen.PerlinNoise.html#perlinNoise"><span class="hs-identifier hs-var hs-var">perlinNoise</span></a></span></span><span> </span><span id="local-6989586621679082475"><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082475"><span class="hs-identifier hs-var">pcf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
-</span><span id="line-68"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679082478"><span class="annot"><span class="annottext">perm :: Permutations
-</span><a href="#local-6989586621679082478"><span class="hs-identifier hs-var hs-var">perm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; StdGen -&gt; Permutations
+</span><a href="Gen.PerlinNoise.html#perlinNoise"><span class="hs-identifier hs-var hs-var">perlinNoise</span></a></span></span><span> </span><span id="local-6989586621679082525"><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082525"><span class="hs-identifier hs-var">pcf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679082528"><span class="annot"><span class="annottext">perm :: Permutations
+</span><a href="#local-6989586621679082528"><span class="hs-identifier hs-var hs-var">perm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Int -&gt; StdGen -&gt; Permutations
 forall g. RandomGen g =&gt; Int -&gt; g -&gt; Permutations
 </span><a href="Gen.PerlinNoise.html#permutationGenerator"><span class="hs-identifier hs-var">permutationGenerator</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082475"><span class="hs-identifier hs-var">pcf</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; StdGen
+</span><a href="#local-6989586621679082525"><span class="hs-identifier hs-var">pcf</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; StdGen
 </span><span class="hs-identifier hs-var">mkStdGen</span></span><span> </span><span class="annot"><span class="annottext">(Int -&gt; StdGen) -&gt; Int -&gt; StdGen
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#seed"><span class="hs-identifier hs-var">seed</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082475"><span class="hs-identifier hs-var">pcf</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-69"></span><span>    </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Permutations -&gt; (Float, Float) -&gt; Float
+</span><a href="#local-6989586621679082525"><span class="hs-identifier hs-var">pcf</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-68"></span><span>                  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Permutations -&gt; (Float, Float) -&gt; Float
 </span><a href="Gen.PerlinNoise.html#noiseGenerator"><span class="hs-identifier hs-var">noiseGenerator</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082475"><span class="hs-identifier hs-var">pcf</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082478"><span class="hs-identifier hs-var">perm</span></a></span><span>
-</span><span id="line-70"></span><span>
-</span><span id="line-71"></span><span class="annot"><span class="hs-comment">-- | Generate a heightmap using Perlin noise with a given permutation.</span></span><span>
-</span><span id="line-72"></span><span class="annot"><a href="Gen.PerlinNoise.html#noiseGenerator"><span class="hs-identifier hs-type">noiseGenerator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-type">Permutations</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#HeightMap"><span class="hs-identifier hs-type">HeightMap</span></a></span><span>
-</span><span id="line-73"></span><span id="noiseGenerator"><span class="annot"><span class="annottext">noiseGenerator :: PerlinConfig -&gt; Permutations -&gt; (Float, Float) -&gt; Float
-</span><a href="Gen.PerlinNoise.html#noiseGenerator"><span class="hs-identifier hs-var hs-var">noiseGenerator</span></a></span></span><span> </span><span id="local-6989586621679082481"><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082481"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679082482"><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082482"><span class="hs-identifier hs-var">perms</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082483"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082483"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082484"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082484"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
+</span><a href="#local-6989586621679082525"><span class="hs-identifier hs-var">pcf</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082528"><span class="hs-identifier hs-var">perm</span></a></span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span class="annot"><span class="hs-comment">-- | Generate a heightmap using Perlin noise with a given permutation.</span></span><span>
+</span><span id="line-71"></span><span class="annot"><a href="Gen.PerlinNoise.html#noiseGenerator"><span class="hs-identifier hs-type">noiseGenerator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-type">Permutations</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#HeightMap"><span class="hs-identifier hs-type">HeightMap</span></a></span><span>
+</span><span id="line-72"></span><span id="noiseGenerator"><span class="annot"><span class="annottext">noiseGenerator :: PerlinConfig -&gt; Permutations -&gt; (Float, Float) -&gt; Float
+</span><a href="Gen.PerlinNoise.html#noiseGenerator"><span class="hs-identifier hs-var hs-var">noiseGenerator</span></a></span></span><span> </span><span id="local-6989586621679082531"><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679082532"><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082532"><span class="hs-identifier hs-var">perms</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082533"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082533"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082534"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082534"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082481"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">&lt;</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Float
+forall a. HasCallStack =&gt; [Char] -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;Octaves must be greater than or equal to 0&quot;</span></span><span>
+</span><span id="line-73"></span><span>                                   </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
+</span><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0</span></span><span>
 </span><span id="line-74"></span><span>                                   </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082485"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082536"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Fractional a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">/</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082487"><span class="hs-identifier hs-var">maxValue</span></a></span><span>
-</span><span id="line-75"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span>
-</span><span id="line-76"></span><span>        </span><span class="annot"><a href="#local-6989586621679082485"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-77"></span><span>        </span><span class="annot"><a href="#local-6989586621679082487"><span class="hs-identifier hs-type">maxValue</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
-</span><span id="line-78"></span><span>        </span><span class="hs-special">(</span><span id="local-6989586621679082485"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082485"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082487"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082487"><span class="hs-identifier hs-var">maxValue</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082538"><span class="hs-identifier hs-var">maxValue</span></a></span><span>
+</span><span id="line-75"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span>
+</span><span id="line-76"></span><span>      </span><span class="annot"><a href="#local-6989586621679082536"><span class="hs-identifier hs-type">n</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-77"></span><span>      </span><span class="annot"><a href="#local-6989586621679082538"><span class="hs-identifier hs-type">maxValue</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span>
+</span><span id="line-78"></span><span>      </span><span class="hs-special">(</span><span id="local-6989586621679082536"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082536"><span class="hs-identifier hs-var">n</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082538"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082538"><span class="hs-identifier hs-var">maxValue</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PerlinConfig
 -&gt; Permutations -&gt; Float -&gt; (Float, Float) -&gt; (Float, Float)
 </span><a href="Gen.PerlinNoise.html#noiseGenerator%27"><span class="hs-identifier hs-var">noiseGenerator'</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082481"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082482"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082532"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082483"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082484"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679082533"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082534"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-79"></span><span>
 </span><span id="line-80"></span><span class="hs-comment">-- | Helper function of the `noiseGenerator` function.</span><span>
 </span><span id="line-81"></span><span class="hs-comment">--   This function generates the noise for the Perlin noise generator, given the Perlin configuration, the permutations, an amplitude, and a position.</span><span>
@@ -248,119 +264,128 @@ forall a. Fractional a =&gt; a -&gt; a -&gt; a
 </span><span id="line-83"></span><span class="annot"><a href="Gen.PerlinNoise.html#noiseGenerator%27"><span class="hs-identifier hs-type">noiseGenerator'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-type">Permutations</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Float</span></span><span class="hs-special">)</span><span>
 </span><span id="line-84"></span><span id="noiseGenerator%27"><span class="annot"><span class="annottext">noiseGenerator' :: PerlinConfig
 -&gt; Permutations -&gt; Float -&gt; (Float, Float) -&gt; (Float, Float)
-</span><a href="Gen.PerlinNoise.html#noiseGenerator%27"><span class="hs-identifier hs-var hs-var">noiseGenerator'</span></a></span></span><span> </span><span id="local-6989586621679082489"><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679082490"><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082490"><span class="hs-identifier hs-var">perms</span></a></span></span><span> </span><span id="local-6989586621679082491"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082491"><span class="hs-identifier hs-var">amp</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082492"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082492"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082493"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082493"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
+</span><a href="Gen.PerlinNoise.html#noiseGenerator%27"><span class="hs-identifier hs-var hs-var">noiseGenerator'</span></a></span></span><span> </span><span id="local-6989586621679082540"><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679082541"><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082541"><span class="hs-identifier hs-var">perms</span></a></span></span><span> </span><span id="local-6989586621679082542"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">amp</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082543"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082544"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082544"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+forall a. Ord a =&gt; a -&gt; a -&gt; Bool
+</span><span class="hs-operator hs-var">&lt;</span></span><span> </span><span class="annot"><span class="annottext">Int
+</span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; (Float, Float)
+forall a. HasCallStack =&gt; [Char] -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><span class="hs-string">&quot;Octaves must be greater than or equal to 0&quot;</span></span><span>
+</span><span id="line-85"></span><span>                                        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
+</span><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">0</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-85"></span><span>                                        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span id="line-86"></span><span>                                        </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span>
-</span><span id="line-86"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679082498"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082498"><span class="hs-identifier hs-var">x'</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082499"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">y'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082492"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><span id="line-87"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679082549"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082549"><span class="hs-identifier hs-var">x'</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082550"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082550"><span class="hs-identifier hs-var">y'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
 </span><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Fractional a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">/</span></span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
 </span><a href="Gen.PerlinNoise.html#scale"><span class="hs-identifier hs-var">scale</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082493"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082544"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
 </span><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Fractional a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">/</span></span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
 </span><a href="Gen.PerlinNoise.html#scale"><span class="hs-identifier hs-var">scale</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-87"></span><span>    </span><span id="local-6989586621679082505"><span class="annot"><span class="annottext">noise :: Float
-</span><a href="#local-6989586621679082505"><span class="hs-identifier hs-var hs-var">noise</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082491"><span class="hs-identifier hs-var">amp</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-88"></span><span>  </span><span id="local-6989586621679082556"><span class="annot"><span class="annottext">noise :: Float
+</span><a href="#local-6989586621679082556"><span class="hs-identifier hs-var hs-var">noise</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">amp</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Permutations -&gt; (Float, Float) -&gt; Float
 </span><a href="Gen.PerlinNoise.html#noise2D"><span class="hs-identifier hs-var">noise2D</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082490"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082498"><span class="hs-identifier hs-var">x'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082499"><span class="hs-identifier hs-var">y'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082541"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082549"><span class="hs-identifier hs-var">x'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082550"><span class="hs-identifier hs-var">y'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Fractional a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">/</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">2</span></span><span>
-</span><span id="line-88"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679082512"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082512"><span class="hs-identifier hs-var">noise'</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082513"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082513"><span class="hs-identifier hs-var">maxValue</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PerlinConfig
+</span><span id="line-89"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679082563"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082563"><span class="hs-identifier hs-var">noise'</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082564"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082564"><span class="hs-identifier hs-var">maxValue</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PerlinConfig
 -&gt; Permutations -&gt; Float -&gt; (Float, Float) -&gt; (Float, Float)
 </span><a href="Gen.PerlinNoise.html#noiseGenerator%27"><span class="hs-identifier hs-var">noiseGenerator'</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679082489"><span class="hs-identifier hs-type">config</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">-</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679082489"><span class="hs-identifier hs-type">config</span></a></span><span> </span><span class="annot"><span class="hs-operator hs-type">*</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="hs-special">}</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082490"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082491"><span class="hs-identifier hs-var">amp</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#octaves"><span class="hs-identifier hs-var">octaves</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679082540"><span class="hs-identifier hs-type">config</span></a></span><span> </span><span class="annot"><span class="hs-glyph hs-type">-</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#frequency"><span class="hs-identifier hs-var">frequency</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679082540"><span class="hs-identifier hs-type">config</span></a></span><span> </span><span class="annot"><span class="hs-operator hs-type">*</span></span><span> </span><span class="annot"><span class="hs-number">2</span></span><span> </span><span class="hs-special">}</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082541"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">amp</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">*</span></span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; Float
 </span><a href="Gen.PerlinNoise.html#persistence"><span class="hs-identifier hs-var">persistence</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082489"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082492"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082493"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-89"></span><span>    </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082505"><span class="hs-identifier hs-var">noise</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082540"><span class="hs-identifier hs-var">config</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082544"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-90"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082556"><span class="hs-identifier hs-var">noise</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082512"><span class="hs-identifier hs-var">noise'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082513"><span class="hs-identifier hs-var">maxValue</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082563"><span class="hs-identifier hs-var">noise'</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082564"><span class="hs-identifier hs-var">maxValue</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082491"><span class="hs-identifier hs-var">amp</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-90"></span><span>
-</span><span id="line-91"></span><span class="annot"><span class="hs-comment">-- | Generate a 2D Perlin noise Height map given its perlin configuration and a (shuffled) `permutations`.</span></span><span>
-</span><span id="line-92"></span><span class="annot"><a href="Gen.PerlinNoise.html#noise2D"><span class="hs-identifier hs-type">noise2D</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-type">Permutations</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#HeightMap"><span class="hs-identifier hs-type">HeightMap</span></a></span><span>
-</span><span id="line-93"></span><span id="noise2D"><span class="annot"><span class="annottext">noise2D :: PerlinConfig -&gt; Permutations -&gt; (Float, Float) -&gt; Float
-</span><a href="Gen.PerlinNoise.html#noise2D"><span class="hs-identifier hs-var hs-var">noise2D</span></a></span></span><span> </span><span id="local-6989586621679082514"><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679082515"><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082516"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082516"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082517"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082517"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span>
-</span><span id="line-94"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679082530"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082530"><span class="hs-identifier hs-var">x'</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082531"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">y'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Int
+</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">amp</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span class="annot"><span class="hs-comment">-- | Generate a 2D Perlin noise Height map given its perlin configuration and a (shuffled) `permutations`.</span></span><span>
+</span><span id="line-93"></span><span class="annot"><a href="Gen.PerlinNoise.html#noise2D"><span class="hs-identifier hs-type">noise2D</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#Permutations"><span class="hs-identifier hs-type">Permutations</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Def.html#HeightMap"><span class="hs-identifier hs-type">HeightMap</span></a></span><span>
+</span><span id="line-94"></span><span id="noise2D"><span class="annot"><span class="annottext">noise2D :: PerlinConfig -&gt; Permutations -&gt; (Float, Float) -&gt; Float
+</span><a href="Gen.PerlinNoise.html#noise2D"><span class="hs-identifier hs-var hs-var">noise2D</span></a></span></span><span> </span><span id="local-6989586621679082565"><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span id="local-6989586621679082566"><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679082567"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082567"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082568"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082568"><span class="hs-identifier hs-var">y</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span>
+</span><span id="line-95"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679082581"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082581"><span class="hs-identifier hs-var">x'</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082582"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082582"><span class="hs-identifier hs-var">y'</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Int
 forall b. Integral b =&gt; Float -&gt; b
 forall a b. (RealFrac a, Integral b) =&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">floor</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082516"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082567"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Int
 forall b. Integral b =&gt; Float -&gt; b
 forall a b. (RealFrac a, Integral b) =&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">floor</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082517"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082568"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-95"></span><span>    </span><span class="hs-special">(</span><span id="local-6989586621679082542"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">xf</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082543"><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">yf</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082516"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><span id="line-96"></span><span>  </span><span class="hs-special">(</span><span id="local-6989586621679082593"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082593"><span class="hs-identifier hs-var">xf</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679082594"><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var">yf</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082567"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Float
 forall a. Num a =&gt; Integer -&gt; a
@@ -368,8 +393,8 @@ forall a. Num a =&gt; Integer -&gt; a
 forall b. Integral b =&gt; Float -&gt; b
 forall a b. (RealFrac a, Integral b) =&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">floor</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082516"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082517"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082567"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082568"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Float
 forall a. Num a =&gt; Integer -&gt; a
@@ -377,206 +402,206 @@ forall a. Num a =&gt; Integer -&gt; a
 forall b. Integral b =&gt; Float -&gt; b
 forall a b. (RealFrac a, Integral b) =&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">floor</span></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082517"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-96"></span><span>    </span><span id="local-6989586621679082548"><span class="annot"><span class="annottext">topRight :: (Float, Float)
-</span><a href="#local-6989586621679082548"><span class="hs-identifier hs-var hs-var">topRight</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">xf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082568"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-97"></span><span>  </span><span id="local-6989586621679082599"><span class="annot"><span class="annottext">topRight :: (Float, Float)
+</span><a href="#local-6989586621679082599"><span class="hs-identifier hs-var hs-var">topRight</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082593"><span class="hs-identifier hs-var">xf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">yf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var">yf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-97"></span><span>    </span><span id="local-6989586621679082551"><span class="annot"><span class="annottext">topLeft :: (Float, Float)
-</span><a href="#local-6989586621679082551"><span class="hs-identifier hs-var hs-var">topLeft</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">xf</span></a></span><span class="hs-special">,</span><span>     </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">yf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><span id="line-98"></span><span>  </span><span id="local-6989586621679082602"><span class="annot"><span class="annottext">topLeft :: (Float, Float)
+</span><a href="#local-6989586621679082602"><span class="hs-identifier hs-var hs-var">topLeft</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082593"><span class="hs-identifier hs-var">xf</span></a></span><span class="hs-special">,</span><span>     </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var">yf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
-</span><span id="line-98"></span><span>    </span><span id="local-6989586621679082554"><span class="annot"><span class="annottext">bottomRight :: (Float, Float)
-</span><a href="#local-6989586621679082554"><span class="hs-identifier hs-var hs-var">bottomRight</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">xf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
+</span><span id="line-99"></span><span>  </span><span id="local-6989586621679082605"><span class="annot"><span class="annottext">bottomRight :: (Float, Float)
+</span><a href="#local-6989586621679082605"><span class="hs-identifier hs-var hs-var">bottomRight</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082593"><span class="hs-identifier hs-var">xf</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">yf</span></a></span><span>    </span><span class="hs-special">)</span><span>
-</span><span id="line-99"></span><span>    </span><span id="local-6989586621679082555"><span class="annot"><span class="annottext">bottomLeft :: (Float, Float)
-</span><a href="#local-6989586621679082555"><span class="hs-identifier hs-var hs-var">bottomLeft</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">xf</span></a></span><span class="hs-special">,</span><span>     </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">yf</span></a></span><span>    </span><span class="hs-special">)</span><span>
-</span><span id="line-100"></span><span>    </span><span id="local-6989586621679082569"><span class="annot"><span class="annottext">valueTopRight :: Int
-</span><a href="#local-6989586621679082569"><span class="hs-identifier hs-var hs-var">valueTopRight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var">yf</span></a></span><span>    </span><span class="hs-special">)</span><span>
+</span><span id="line-100"></span><span>  </span><span id="local-6989586621679082606"><span class="annot"><span class="annottext">bottomLeft :: (Float, Float)
+</span><a href="#local-6989586621679082606"><span class="hs-identifier hs-var hs-var">bottomLeft</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082593"><span class="hs-identifier hs-var">xf</span></a></span><span class="hs-special">,</span><span>     </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var">yf</span></a></span><span>    </span><span class="hs-special">)</span><span>
+</span><span id="line-101"></span><span>  </span><span id="local-6989586621679082620"><span class="annot"><span class="annottext">valueTopRight :: Int
+</span><a href="#local-6989586621679082620"><span class="hs-identifier hs-var hs-var">valueTopRight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082530"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082581"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">y'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082582"><span class="hs-identifier hs-var">y'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-101"></span><span>    </span><span id="local-6989586621679082582"><span class="annot"><span class="annottext">valueTopLeft :: Int
-</span><a href="#local-6989586621679082582"><span class="hs-identifier hs-var hs-var">valueTopLeft</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><span id="line-102"></span><span>  </span><span id="local-6989586621679082633"><span class="annot"><span class="annottext">valueTopLeft :: Int
+</span><a href="#local-6989586621679082633"><span class="hs-identifier hs-var hs-var">valueTopLeft</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082530"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082581"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">y'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082582"><span class="hs-identifier hs-var">y'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-102"></span><span>    </span><span id="local-6989586621679082594"><span class="annot"><span class="annottext">valueBottomRight :: Int
-</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var hs-var">valueBottomRight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><span id="line-103"></span><span>  </span><span id="local-6989586621679082645"><span class="annot"><span class="annottext">valueBottomRight :: Int
+</span><a href="#local-6989586621679082645"><span class="hs-identifier hs-var hs-var">valueBottomRight</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082530"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082581"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">y'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082582"><span class="hs-identifier hs-var">y'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-103"></span><span>    </span><span id="local-6989586621679082604"><span class="annot"><span class="annottext">valueBottomLeft :: Int
-</span><a href="#local-6989586621679082604"><span class="hs-identifier hs-var hs-var">valueBottomLeft</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><span id="line-104"></span><span>  </span><span id="local-6989586621679082655"><span class="annot"><span class="annottext">valueBottomLeft :: Int
+</span><a href="#local-6989586621679082655"><span class="hs-identifier hs-var hs-var">valueBottomLeft</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Permutations
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Permutations
-</span><a href="#local-6989586621679082515"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082566"><span class="hs-identifier hs-var">perms</span></a></span><span> </span><span class="annot"><span class="annottext">Permutations -&gt; Int -&gt; Int
 forall k a. Ord k =&gt; Map k a -&gt; k -&gt; a
 </span><span class="hs-operator hs-var">M.!</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082530"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082581"><span class="hs-identifier hs-var">x'</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">+</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082531"><span class="hs-identifier hs-var">y'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082582"><span class="hs-identifier hs-var">y'</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Bits a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-operator hs-var">.&amp;.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig -&gt; Int
 </span><a href="Gen.PerlinNoise.html#permSize"><span class="hs-identifier hs-var">permSize</span></a></span><span> </span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082514"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
+</span><a href="#local-6989586621679082565"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Int
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span> </span><span class="annot"><span class="annottext">Int
 </span><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-104"></span><span>    </span><span id="local-6989586621679082605"><span class="annot"><span class="annottext">topRightDot :: Float
-</span><a href="#local-6989586621679082605"><span class="hs-identifier hs-var hs-var">topRightDot</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
+</span><span id="line-105"></span><span>  </span><span id="local-6989586621679082656"><span class="annot"><span class="annottext">topRightDot :: Float
+</span><a href="#local-6989586621679082656"><span class="hs-identifier hs-var hs-var">topRightDot</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
 </span><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-var">dotProduct</span></a></span><span> </span><span class="annot"><span class="annottext">(Float, Float)
-</span><a href="#local-6989586621679082548"><span class="hs-identifier hs-var">topRight</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
+</span><a href="#local-6989586621679082599"><span class="hs-identifier hs-var">topRight</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
 </span><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-var">constantVector</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082569"><span class="hs-identifier hs-var">valueTopRight</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-105"></span><span>    </span><span id="local-6989586621679082606"><span class="annot"><span class="annottext">topLeftDot :: Float
-</span><a href="#local-6989586621679082606"><span class="hs-identifier hs-var hs-var">topLeftDot</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
+</span><a href="#local-6989586621679082620"><span class="hs-identifier hs-var">valueTopRight</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-106"></span><span>  </span><span id="local-6989586621679082657"><span class="annot"><span class="annottext">topLeftDot :: Float
+</span><a href="#local-6989586621679082657"><span class="hs-identifier hs-var hs-var">topLeftDot</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
 </span><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-var">dotProduct</span></a></span><span> </span><span class="annot"><span class="annottext">(Float, Float)
-</span><a href="#local-6989586621679082551"><span class="hs-identifier hs-var">topLeft</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
+</span><a href="#local-6989586621679082602"><span class="hs-identifier hs-var">topLeft</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
 </span><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-var">constantVector</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082582"><span class="hs-identifier hs-var">valueTopLeft</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-106"></span><span>    </span><span id="local-6989586621679082607"><span class="annot"><span class="annottext">bottomRightDot :: Float
-</span><a href="#local-6989586621679082607"><span class="hs-identifier hs-var hs-var">bottomRightDot</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
+</span><a href="#local-6989586621679082633"><span class="hs-identifier hs-var">valueTopLeft</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-107"></span><span>  </span><span id="local-6989586621679082658"><span class="annot"><span class="annottext">bottomRightDot :: Float
+</span><a href="#local-6989586621679082658"><span class="hs-identifier hs-var hs-var">bottomRightDot</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
 </span><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-var">dotProduct</span></a></span><span> </span><span class="annot"><span class="annottext">(Float, Float)
-</span><a href="#local-6989586621679082554"><span class="hs-identifier hs-var">bottomRight</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
+</span><a href="#local-6989586621679082605"><span class="hs-identifier hs-var">bottomRight</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
 </span><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-var">constantVector</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var">valueBottomRight</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-107"></span><span>    </span><span id="local-6989586621679082608"><span class="annot"><span class="annottext">bottomLeftDot :: Float
-</span><a href="#local-6989586621679082608"><span class="hs-identifier hs-var hs-var">bottomLeftDot</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
+</span><a href="#local-6989586621679082645"><span class="hs-identifier hs-var">valueBottomRight</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-108"></span><span>  </span><span id="local-6989586621679082659"><span class="annot"><span class="annottext">bottomLeftDot :: Float
+</span><a href="#local-6989586621679082659"><span class="hs-identifier hs-var hs-var">bottomLeftDot</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Float, Float) -&gt; (Float, Float) -&gt; Float
 </span><a href="Gen.PerlinNoise.html#dotProduct"><span class="hs-identifier hs-var">dotProduct</span></a></span><span> </span><span class="annot"><span class="annottext">(Float, Float)
-</span><a href="#local-6989586621679082555"><span class="hs-identifier hs-var">bottomLeft</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
+</span><a href="#local-6989586621679082606"><span class="hs-identifier hs-var">bottomLeft</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; (Float, Float)
 </span><a href="Gen.PerlinNoise.html#constantVector"><span class="hs-identifier hs-var">constantVector</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082604"><span class="hs-identifier hs-var">valueBottomLeft</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-108"></span><span>    </span><span id="local-6989586621679082609"><span class="annot"><span class="annottext">u :: Float
-</span><a href="#local-6989586621679082609"><span class="hs-identifier hs-var hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float
+</span><a href="#local-6989586621679082655"><span class="hs-identifier hs-var">valueBottomLeft</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-109"></span><span>  </span><span id="local-6989586621679082660"><span class="annot"><span class="annottext">u :: Float
+</span><a href="#local-6989586621679082660"><span class="hs-identifier hs-var hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float
 </span><a href="Gen.PerlinNoise.html#fade"><span class="hs-identifier hs-var">fade</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082542"><span class="hs-identifier hs-var">xf</span></a></span><span>
-</span><span id="line-109"></span><span>    </span><span id="local-6989586621679082610"><span class="annot"><span class="annottext">v :: Float
-</span><a href="#local-6989586621679082610"><span class="hs-identifier hs-var hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float
+</span><a href="#local-6989586621679082593"><span class="hs-identifier hs-var">xf</span></a></span><span>
+</span><span id="line-110"></span><span>  </span><span id="local-6989586621679082661"><span class="annot"><span class="annottext">v :: Float
+</span><a href="#local-6989586621679082661"><span class="hs-identifier hs-var hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float
 </span><a href="Gen.PerlinNoise.html#fade"><span class="hs-identifier hs-var">fade</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082543"><span class="hs-identifier hs-var">yf</span></a></span><span>
-</span><span id="line-110"></span><span>    </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082594"><span class="hs-identifier hs-var">yf</span></a></span><span>
+</span><span id="line-111"></span><span>  </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Float
 </span><a href="Gen.PerlinNoise.html#lerp"><span class="hs-identifier hs-var">lerp</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082609"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082660"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Float
 </span><a href="Gen.PerlinNoise.html#lerp"><span class="hs-identifier hs-var">lerp</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082610"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082608"><span class="hs-identifier hs-var">bottomLeftDot</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082606"><span class="hs-identifier hs-var">topLeftDot</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Float
+</span><a href="#local-6989586621679082661"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082659"><span class="hs-identifier hs-var">bottomLeftDot</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082657"><span class="hs-identifier hs-var">topLeftDot</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Float -&gt; Float -&gt; Float -&gt; Float
 </span><a href="Gen.PerlinNoise.html#lerp"><span class="hs-identifier hs-var">lerp</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082610"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082607"><span class="hs-identifier hs-var">bottomRightDot</span></a></span><span> </span><span class="annot"><span class="annottext">Float
-</span><a href="#local-6989586621679082605"><span class="hs-identifier hs-var">topRightDot</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-111"></span><span>
-</span><span id="line-112"></span><span class="hs-comment">-- | Generate a heightmap using Perlin noise with a random seed.</span><span>
-</span><span id="line-113"></span><span class="hs-comment">--   The `seed` value in the `PerlinConfig` is replaced with a random seed.</span><span>
-</span><span id="line-114"></span><span class="annot"><a href="Gen.PerlinNoise.html#perlinNoiseRandom"><span class="hs-identifier hs-type">perlinNoiseRandom</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="annot"><a href="Def.html#HeightMap"><span class="hs-identifier hs-type">HeightMap</span></a></span><span>
-</span><span id="line-115"></span><span id="perlinNoiseRandom"><span class="annot"><span class="annottext">perlinNoiseRandom :: PerlinConfig -&gt; IO ((Float, Float) -&gt; Float)
-</span><a href="Gen.PerlinNoise.html#perlinNoiseRandom"><span class="hs-identifier hs-var hs-var">perlinNoiseRandom</span></a></span></span><span> </span><span id="local-6989586621679082611"><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082611"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-116"></span><span>    </span><span id="local-6989586621679082612"><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679082612"><span class="hs-identifier hs-var">newSeed</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO Int
+</span><a href="#local-6989586621679082661"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082658"><span class="hs-identifier hs-var">bottomRightDot</span></a></span><span> </span><span class="annot"><span class="annottext">Float
+</span><a href="#local-6989586621679082656"><span class="hs-identifier hs-var">topRightDot</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span class="hs-comment">-- | Generate a heightmap using Perlin noise with a random seed.</span><span>
+</span><span id="line-114"></span><span class="hs-comment">--   The `seed` value in the `PerlinConfig` is replaced with a random seed.</span><span>
+</span><span id="line-115"></span><span class="annot"><a href="Gen.PerlinNoise.html#perlinNoiseRandom"><span class="hs-identifier hs-type">perlinNoiseRandom</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#PerlinConfig"><span class="hs-identifier hs-type">PerlinConfig</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="annot"><a href="Def.html#HeightMap"><span class="hs-identifier hs-type">HeightMap</span></a></span><span>
+</span><span id="line-116"></span><span id="perlinNoiseRandom"><span class="annot"><span class="annottext">perlinNoiseRandom :: PerlinConfig -&gt; IO ((Float, Float) -&gt; Float)
+</span><a href="Gen.PerlinNoise.html#perlinNoiseRandom"><span class="hs-identifier hs-var hs-var">perlinNoiseRandom</span></a></span></span><span> </span><span id="local-6989586621679082662"><span class="annot"><span class="annottext">PerlinConfig
+</span><a href="#local-6989586621679082662"><span class="hs-identifier hs-var">config</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-117"></span><span>  </span><span id="local-6989586621679082663"><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679082663"><span class="hs-identifier hs-var">newSeed</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO Int
 forall a (m :: * -&gt; *). (Random a, MonadIO m) =&gt; m a
 </span><span class="hs-identifier hs-var">randomIO</span></span><span>
-</span><span id="line-117"></span><span>    </span><span class="annot"><span class="annottext">((Float, Float) -&gt; Float) -&gt; IO ((Float, Float) -&gt; Float)
+</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">((Float, Float) -&gt; Float) -&gt; IO ((Float, Float) -&gt; Float)
 forall a. a -&gt; IO a
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(((Float, Float) -&gt; Float) -&gt; IO ((Float, Float) -&gt; Float))
@@ -584,5 +609,5 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PerlinConfig -&gt; (Float, Float) -&gt; Float
 </span><a href="Gen.PerlinNoise.html#perlinNoise"><span class="hs-identifier hs-var">perlinNoise</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">PerlinConfig
-</span><a href="#local-6989586621679082611"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#seed"><span class="hs-identifier hs-var">seed</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="#local-6989586621679082612"><span class="hs-identifier hs-type">newSeed</span></a></span><span> </span><span class="hs-special">}</span><span class="hs-special">)</span><span>
-</span><span id="line-118"></span></pre></body></html>
+</span><a href="#local-6989586621679082662"><span class="hs-identifier hs-var">config</span></a></span><span> </span><span class="hs-special">{</span><span> </span><span class="annot"><a href="Gen.PerlinNoise.html#seed"><span class="hs-identifier hs-var">seed</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="#local-6989586621679082663"><span class="hs-identifier hs-type">newSeed</span></a></span><span> </span><span class="hs-special">}</span><span class="hs-special">)</span><span>
+</span><span id="line-119"></span></pre></body></html>

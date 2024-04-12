@@ -16,11 +16,11 @@ forall a. Default a =&gt; a
 </span><span id="line-13"></span><span class="annot"><a href="Examples.NoGreen.html#redTile"><span class="hs-identifier hs-type">redTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
 </span><span id="line-14"></span><span id="redTile"><span class="annot"><span class="annottext">redTile :: Tile
 </span><a href="Examples.NoGreen.html#redTile"><span class="hs-identifier hs-var hs-var">redTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-15"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">materials :: Map Side Material
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
 </span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
 </span><a href="Examples.NoGreen.html#redMaterial"><span class="hs-identifier hs-var">redMaterial</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule
 forall a. CompareRule a =&gt; a -&gt; a
 </span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="annot"><span class="annottext">(Rule -&gt; Rule) -&gt; Rule -&gt; Rule
@@ -29,7 +29,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Utils.html#nextToAny"><span class="hs-identifier hs-var">nextToAny</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
 </span><a href="Examples.NoGreen.html#greenTile"><span class="hs-identifier hs-var">greenTile</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Shape
 </span><a href="Utils.html#allNeighbours"><span class="hs-identifier hs-var">allNeighbours</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-17"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">charRep :: Char
 </span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'r'</span></span><span>
 </span><span id="line-18"></span><span class="hs-special">}</span><span>
@@ -44,11 +44,11 @@ forall a. Default a =&gt; a
 </span><span id="line-24"></span><span class="annot"><a href="Examples.NoGreen.html#blueTile"><span class="hs-identifier hs-type">blueTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
 </span><span id="line-25"></span><span id="blueTile"><span class="annot"><span class="annottext">blueTile :: Tile
 </span><a href="Examples.NoGreen.html#blueTile"><span class="hs-identifier hs-var hs-var">blueTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-26"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">materials :: Map Side Material
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
 </span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
 </span><a href="Examples.NoGreen.html#blueMaterial"><span class="hs-identifier hs-var">blueMaterial</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-27"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule
 forall a. CompareRule a =&gt; a -&gt; a
 </span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="annot"><span class="annottext">(Rule -&gt; Rule) -&gt; Rule -&gt; Rule
@@ -57,7 +57,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Utils.html#nextToAny"><span class="hs-identifier hs-var">nextToAny</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
 </span><a href="Examples.NoGreen.html#greenTile"><span class="hs-identifier hs-var">greenTile</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Shape
 </span><a href="Utils.html#allNeighbours"><span class="hs-identifier hs-var">allNeighbours</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-28"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">charRep :: Char
 </span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'b'</span></span><span>
 </span><span id="line-29"></span><span class="hs-special">}</span><span>
@@ -72,11 +72,11 @@ forall a. Default a =&gt; a
 </span><span id="line-35"></span><span class="annot"><a href="Examples.NoGreen.html#greenTile"><span class="hs-identifier hs-type">greenTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
 </span><span id="line-36"></span><span id="greenTile"><span class="annot"><span class="annottext">greenTile :: Tile
 </span><a href="Examples.NoGreen.html#greenTile"><span class="hs-identifier hs-var hs-var">greenTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-37"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">materials :: Map Side Material
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
 </span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
 </span><a href="Examples.NoGreen.html#greenMaterial"><span class="hs-identifier hs-var">greenMaterial</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-38"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule
 forall a. CompareRule a =&gt; a -&gt; a
 </span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="annot"><span class="annottext">(Rule -&gt; Rule) -&gt; Rule -&gt; Rule
@@ -85,7 +85,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Utils.html#nextToAny"><span class="hs-identifier hs-var">nextToAny</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Tile
 </span><a href="Examples.NoGreen.html#greenTile"><span class="hs-identifier hs-var">greenTile</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Shape
 </span><a href="Utils.html#allNeighbours"><span class="hs-identifier hs-var">allNeighbours</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">charRep :: Char
 </span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'g'</span></span><span>
 </span><span id="line-40"></span><span class="hs-special">}</span><span>

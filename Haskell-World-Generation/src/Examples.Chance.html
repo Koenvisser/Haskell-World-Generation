@@ -15,11 +15,11 @@ forall a. Default a =&gt; a
 </span><span id="line-12"></span><span class="annot"><a href="Examples.Chance.html#redTile"><span class="hs-identifier hs-type">redTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
 </span><span id="line-13"></span><span id="redTile"><span class="annot"><span class="annottext">redTile :: Tile
 </span><a href="Examples.Chance.html#redTile"><span class="hs-identifier hs-var hs-var">redTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-14"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><span id="line-14"></span><span>  </span><span class="annot"><span class="annottext">materials :: Map Side Material
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
 </span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
 </span><a href="Examples.Chance.html#redMaterial"><span class="hs-identifier hs-var">redMaterial</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-15"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule
 forall a. CompareRule a =&gt; a -&gt; a
 </span><a href="Def.html#%3C%21%3E"><span class="hs-operator hs-var">(&lt;!&gt;)</span></a></span><span> </span><span class="annot"><span class="annottext">(Rule -&gt; Rule) -&gt; Rule -&gt; Rule
@@ -27,7 +27,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
 </span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.90</span></span><span class="hs-special">,</span><span>
-</span><span id="line-16"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">charRep :: Char
 </span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'r'</span></span><span>
 </span><span id="line-17"></span><span class="hs-special">}</span><span>
@@ -42,11 +42,11 @@ forall a. Default a =&gt; a
 </span><span id="line-23"></span><span class="annot"><a href="Examples.Chance.html#blueTile"><span class="hs-identifier hs-type">blueTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
 </span><span id="line-24"></span><span id="blueTile"><span class="annot"><span class="annottext">blueTile :: Tile
 </span><a href="Examples.Chance.html#blueTile"><span class="hs-identifier hs-var hs-var">blueTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-25"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">materials :: Map Side Material
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
 </span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
 </span><a href="Examples.Chance.html#blueMaterial"><span class="hs-identifier hs-var">blueMaterial</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-26"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
 </span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.3</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
@@ -54,7 +54,7 @@ forall a. CompareRule a =&gt; a -&gt; a -&gt; a
 </span><a href="Def.html#%3C%26%26%3E"><span class="hs-operator hs-var">&lt;&amp;&amp;&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
 </span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.3</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-27"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">charRep :: Char
 </span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'b'</span></span><span>
 </span><span id="line-28"></span><span class="hs-special">}</span><span>
@@ -70,11 +70,11 @@ forall a. Default a =&gt; a
 </span><span id="line-35"></span><span class="annot"><a href="Examples.Chance.html#greenTile"><span class="hs-identifier hs-type">greenTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
 </span><span id="line-36"></span><span id="greenTile"><span class="annot"><span class="annottext">greenTile :: Tile
 </span><a href="Examples.Chance.html#greenTile"><span class="hs-identifier hs-var hs-var">greenTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-37"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">materials :: Map Side Material
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
 </span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
 </span><a href="Examples.Chance.html#greenMaterial"><span class="hs-identifier hs-var">greenMaterial</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-38"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
 </span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.1</span></span><span> </span><span class="annot"><span class="annottext">Rule -&gt; Rule -&gt; Rule
@@ -82,7 +82,7 @@ forall a. CompareRule a =&gt; a -&gt; a -&gt; a
 </span><a href="Def.html#%3C%7C%7C%3E"><span class="hs-operator hs-var">&lt;||&gt;</span></a></span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
 </span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.001</span></span><span class="hs-special">,</span><span>
-</span><span id="line-39"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">charRep :: Char
 </span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'g'</span></span><span>
 </span><span id="line-40"></span><span class="hs-special">}</span><span>
@@ -96,15 +96,15 @@ forall a. Default a =&gt; a
 </span><span id="line-45"></span><span class="annot"><a href="Examples.Chance.html#airTile"><span class="hs-identifier hs-type">airTile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span>
 </span><span id="line-46"></span><span id="airTile"><span class="annot"><span class="annottext">airTile :: Tile
 </span><a href="Examples.Chance.html#airTile"><span class="hs-identifier hs-var hs-var">airTile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><a href="Internal.Def.html#Tile"><span class="hs-identifier hs-type">Tile</span></a></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-47"></span><span>    </span><span class="annot"><span class="annottext">materials :: Map Side Material
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">materials :: Map Side Material
 </span><a href="Internal.Def.html#materials"><span class="hs-identifier hs-var">materials</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Material -&gt; Map Side Material
 </span><a href="Utils.html#createMaterialMapForAllSides"><span class="hs-identifier hs-var">createMaterialMapForAllSides</span></a></span><span> </span><span class="annot"><span class="annottext">Material
 </span><a href="Examples.Chance.html#airMaterial"><span class="hs-identifier hs-var">airMaterial</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-48"></span><span>    </span><span class="annot"><span class="annottext">rules :: Rule
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">rules :: Rule
 </span><a href="Internal.Def.html#rules"><span class="hs-identifier hs-var">rules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Float -&gt; Rule
 </span><a href="Utils.html#weightedRule"><span class="hs-identifier hs-var">weightedRule</span></a></span><span> </span><span class="annot"><span class="annottext">Float
 </span><span class="hs-number">0.3</span></span><span class="hs-special">,</span><span>
-</span><span id="line-49"></span><span>    </span><span class="annot"><span class="annottext">charRep :: Char
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">charRep :: Char
 </span><a href="Internal.Def.html#charRep"><span class="hs-identifier hs-var">charRep</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Char
 </span><span class="hs-char">'a'</span></span><span>
 </span><span id="line-50"></span><span class="hs-special">}</span><span>
