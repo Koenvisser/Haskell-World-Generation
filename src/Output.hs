@@ -18,7 +18,7 @@ saveHeightMapToImage hm w h path = do
 
 heightMapToImage :: HeightMap -> Int -> Int -> Image Pixel16
 heightMapToImage hm = generateImage (\x y -> let 
-  in round $ hm (fromIntegral x, fromIntegral y))
+  in round $ 65535 * hm (fromIntegral x, fromIntegral y))
 
 -- | Converts a `TileMap` to an obj file, which can be used to render the world in a 3D renderer.
 --   The obj file is saved to the given path
