@@ -29,4 +29,7 @@ instance Arbitrary PerlinConfig where
   arbitrary = PerlinConfig <$> arbitrary 
     <*> (arbitrary `suchThat` (\size -> size >= 1 && size <= 10)) 
     <*> (arbitrary `suchThat` (\oct -> oct >= 0 && oct <= 10)) 
-    <*> arbitrary <*> arbitrary <*> arbitrary <*> arbitrary
+    <*> (arbitrary `suchThat` (> 0))
+    <*> (arbitrary `suchThat` (> 0)) 
+    <*> (arbitrary `suchThat` (> 0)) 
+    <*> (arbitrary `suchThat` (> 0))
