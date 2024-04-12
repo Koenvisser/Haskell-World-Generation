@@ -46,26 +46,26 @@ belowNeighbour = listToShape [(0, -1, 0)]
 --   tile are within the shape at the given position. 
 nextToAny :: [Tile] -> Shape -> Rule
 nextToAny tiles shape = Rule (\tileMap pos -> 
-    CanPlace <$> anyRule (\nPos ->
-      do 
-        value <- lookupTileMap nPos tileMap
-        case value of
-            Just tile -> return $ tile `elem` tiles
-            _ -> return False
-        ) (shape pos))
+  CanPlace <$> anyRule (\nPos ->
+    do 
+      value <- lookupTileMap nPos tileMap
+      case value of
+          Just tile -> return $ tile `elem` tiles
+          _ -> return False
+      ) (shape pos))
 
 -- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles defined in the list
 --   tile are within the shape at the given position. 
 nextToAll :: [Tile] -> Shape -> Rule
 nextToAll tiles shape = Rule (\tileMap pos -> 
-    CanPlace <$> allRule (\tile -> 
-        anyRule (\nPos ->
-          do 
-            value <- lookupTileMap nPos tileMap
-            case value of
-                Just tile' -> return $ tile == tile'
-                _ -> return False
-        ) (shape pos)) tiles)
+  CanPlace <$> allRule (\tile -> 
+      anyRule (\nPos ->
+        do 
+          value <- lookupTileMap nPos tileMap
+          case value of
+              Just tile' -> return $ tile == tile'
+              _ -> return False
+      ) (shape pos)) tiles)
 
 -- | A rule that takes a list of tiles and a shape, and returns True if all of the tiles in the shape are 
 --   within the list of tiles at the given position. The boolean parameter determines if an empty tile 
@@ -80,10 +80,12 @@ allMustBe tiles shape notPlaced = Rule (\tileMap pos ->
           _ -> return notPlaced
       ) (shape pos))
 
+-- | A rule that applies a function to a list of rules, and returns True if the function returns True for any of the rules
 anyRule :: (a -> RuleMonad Bool) -> [a] -> RuleMonad Bool
 anyRule _ [] = return False
 anyRule f (m:ms) = (||) <$> f m <*> anyRule f ms 
 
+-- | A rule that applies a function to a list of rules, and returns True if the function returns True for all of the rules
 allRule :: (a -> RuleMonad Bool) -> [a] -> RuleMonad Bool
 allRule _ [] = return True
 allRule f (m:ms) = (&&) <$> f m <*> allRule f ms

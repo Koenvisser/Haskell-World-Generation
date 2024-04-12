@@ -183,4 +183,6 @@ benchmark Haskell-World-Generation-bench
       , containers
       , criterion
       , deepseq
+      , data-default
+      , random
       , Haskell-World-Generation
