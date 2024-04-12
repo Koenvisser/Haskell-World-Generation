@@ -141,7 +141,8 @@ test-suite Haskell-World-Generation-test
     -- The entrypoint to the test suite.
     main-is:          Driver.hs
 
-    other-modules:    Gen
+    other-modules:    WFC
+                    , Perlin
 
     -- Test dependencies.
     build-depends:

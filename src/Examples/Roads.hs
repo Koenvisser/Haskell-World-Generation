@@ -8,10 +8,6 @@ import Utils
 import Data.Default (def)
 import qualified Data.Map as M
 
--- dirt on all sides
-
--- Top level blocks grass-dirt side, dirt bottom, grass/road top
-
 dirtMaterial :: Material
 dirtMaterial = def {texture = Just "textures/side-dirt.png"}
 

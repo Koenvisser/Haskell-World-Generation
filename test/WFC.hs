@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
-module Gen where
+module WFC where
 
 import Test.Tasty
 import Test.Tasty.QuickCheck
